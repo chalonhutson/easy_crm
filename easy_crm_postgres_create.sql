@@ -1,7 +1,7 @@
 CREATE TABLE user_info (
 	user_info_id SERIAL PRIMARY KEY NOT NULL,
-	first_name varchar(15) NOT NULL,
-	last_name varchar(15) NOT NULL,
+	first_name varchar(25) NOT NULL,
+	last_name varchar(25) NOT NULL,
 	email varchar(99) NOT NULL UNIQUE,
 	password varchar NOT NULL
 );
@@ -9,9 +9,9 @@ CREATE TABLE user_info (
 CREATE TABLE contacts (
 	contact_id serial PRIMARY KEY NOT NULL,
 	user_info_id integer NOT NULL,
-	first_name varchar(15),
-	last_name varchar(15),
-	job_title varchar(20),
+	first_name varchar(25),
+	last_name varchar(25),
+	job_title varchar(50),
 	company varchar(50),
 	bio varchar(2000),
 	FOREIGN KEY(user_info_id) REFERENCES user_info(user_info_id)
@@ -62,7 +62,7 @@ CREATE TABLE contacts_notes (
 CREATE TABLE meetings (
 	meeting_id serial PRIMARY KEY NOT NULL,
 	contact_id integer,
-	user_info_id integer,
+	user_info_id integer NOT NULL,
 	meeting_title varchar(150),
 	meeting_method varchar(50),
 	meeting_place varchar(100),
