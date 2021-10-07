@@ -18,14 +18,14 @@ CREATE TABLE contacts (
 	);
 
 CREATE TABLE contacts_phone_numbers (
-	phone_number_id serial PRIMARY KEY NOT NULL,
+	contact_phone_number_id serial PRIMARY KEY NOT NULL,
 	contact_id integer NOT NULL,
 	phone_number varchar(10) NOT NULL,
 	FOREIGN KEY(contact_id) REFERENCES contacts(contact_id)
 	);
 
 CREATE TABLE contacts_emails (
-	email_id serial PRIMARY KEY NOT NULL,
+	contact_email_id serial PRIMARY KEY NOT NULL,
 	contact_id integer NOT NULL,
 	email varchar(100) NOT NULL,
 	FOREIGN KEY(contact_id) REFERENCES contacts(contact_id)
@@ -61,14 +61,14 @@ CREATE TABLE contacts_notes (
 
 CREATE TABLE meetings (
 	meeting_id serial PRIMARY KEY NOT NULL,
-	contact_id integer,
 	user_info_id integer NOT NULL,
+	contact_id integer,
 	meeting_title varchar(150),
 	meeting_method varchar(50),
 	meeting_place varchar(100),
 	meeting_datetime timestamp,
-	FOREIGN KEY(contact_id) REFERENCES contacts(contact_id),
 	FOREIGN KEY(user_info_id) REFERENCES user_info(user_info_id)
+	FOREIGN KEY(contact_id) REFERENCES contacts(contact_id),
 	);
 
 CREATE TABLE meetings_notes (
