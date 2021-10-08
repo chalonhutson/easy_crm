@@ -115,3 +115,19 @@ class Meetings_notes(db.Model):
 
     def __repr__(self):
         return f"Meeting Note Row || id={self.meeting_note_id}, meeting_id={self.meeting_id}, note={self.note}"
+
+
+# Helper functions
+
+def connect_to_db(app):
+    app.config["SQLALCHEMY_DATABASE_URI"] = environ["POSTGRES_URI"]
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.app = app
+    db.init_app(app)
+
+
+# Allows us to run code interactively and work with the database directly.
+if __name__ == "__main__":
+    from server import app
+    connect_to_db(app)
+    print("Connected to Easy CRM database.")
