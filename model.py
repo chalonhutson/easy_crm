@@ -14,18 +14,21 @@ db = SQLAlchemy()
 class User_info(db.Model):
 
     __tablename__ = 'user_info'
+    __table_args__ = {'extend_existing': True}
 
     user_info_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     first_name = db.Column(db.String(25), nullable = False)
     last_name = db.Column(db.String(25), nullable = False)
-    email = db.Column(db.String(9), nullable = False)
+    email = db.Column(db.String(9), nullable = False, unique = True)
 
     def __repr__(self):
         return f"User Info Row || user_info_aid={self.user_info_id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
 
+
 class Contacts(db.Model):
 
     __tablename__ = 'contacts'
+    __table_args__ = {'extend_existing': True}
 
     contact_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     user_info_id = db.Column(db.Integer, db.ForeignKey("user_info.user_info_id"))
@@ -41,6 +44,7 @@ class Contacts(db.Model):
 class Contacts_phone_numbers(db.Model):
 
     __tablename__ = 'contact_phone_numbers'
+    __table_args__ = {'extend_existing': True}
 
     contact_phone_number_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
@@ -52,6 +56,7 @@ class Contacts_phone_numbers(db.Model):
 class Contacts_social_medias(db.Model):
 
     __tablename__ = 'contacts_social_medias'
+    __table_args__ = {'extend_existing': True}
 
     contact_social_media_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
@@ -64,6 +69,7 @@ class Contacts_social_medias(db.Model):
 class Contacts_addresses(db.Model):
 
     __tablename__ = 'contacts_social_medias'
+    __table_args__ = {'extend_existing': True}
 
     contact_address_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
@@ -81,6 +87,7 @@ class Contacts_addresses(db.Model):
 class Contacts_notes(db.Model):
 
     __tablename__ = 'contacts_notes'
+    __table_args__ = {'extend_existing': True}
 
     contact_note_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
@@ -92,6 +99,7 @@ class Contacts_notes(db.Model):
 class Meetings(db.Model):
 
     __tablename__ = "meetings"
+    __table_args__ = {'extend_existing': True}
 
     meeting_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     user_info_id = db.Column(db.Integer, db.ForeignKey("user_info.user_info_id"), nullable = False)
@@ -108,6 +116,7 @@ class Meetings(db.Model):
 class Meetings_notes(db.Model):
 
     __tablename__ = "meetings_notes"
+    __table_args__ = {'extend_existing': True}
 
     meeting_note_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     meeting_id = db.Column(db.Integer, db.ForeignKey("meetings.meeting_id"), nullable = False)
