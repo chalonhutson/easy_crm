@@ -27,7 +27,7 @@ CREATE TABLE contacts_phone_numbers (
 CREATE TABLE contacts_emails (
 	contact_email_id serial PRIMARY KEY NOT NULL,
 	contact_id integer NOT NULL,
-	email varchar(100) NOT NULL,
+	email varchar(99) NOT NULL,
 	FOREIGN KEY(contact_id) REFERENCES contacts(contact_id)
 	);
 

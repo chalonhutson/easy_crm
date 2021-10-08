@@ -7,7 +7,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import User_info, Contacts, Contacts_phone_numbers, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
+from model import User_info, Contacts
+
 ######### IMPORT END ###############
 
 # Invokes the main Flask class and sets it to variable app.
