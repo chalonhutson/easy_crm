@@ -20,6 +20,7 @@ class User_info(db.Model):
     first_name = db.Column(db.String(25), nullable = False)
     last_name = db.Column(db.String(25), nullable = False)
     email = db.Column(db.String(9), nullable = False, unique = True)
+    password = db.Column(db.String, nullable = False)
 
     def __repr__(self):
         return f"User Info Row || user_info_aid={self.user_info_id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
