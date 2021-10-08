@@ -22,14 +22,6 @@ app.secret_key = environ["SESSION_SECRET_KEY"]
 
 app.jinja_env.undefined = StrictUndefined
 
-'''
-Helpful syntax to remember
-User_info.query.filter(User_info.user_info_id == 3).first()
->>> Gandalf gets returned
-
-User_info.query.filter(User_info.user_info_id == 3).count()
->>> 1 (or at least it should be 1 for a unique key)
-'''
 
 # Main run script
 if __name__ == "__main__":
