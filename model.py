@@ -20,7 +20,10 @@ class User_info(db.Model):
     last_name = db.Column(db.String(25), nullable = False)
     email = db.Column(db.String(9), nullable = False)
 
-class Rating(db.Model):
+    def __repr__(self):
+        return f"User Info Row || user_info_aid={self.user_info_id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
+
+class Contacts(db.Model):
 
     __tablename__ = 'contacts'
 
@@ -32,6 +35,9 @@ class Rating(db.Model):
     company = db.Column(db.String(50), nullable = True)
     bio = db.Column(db.String(2000), nullable = True)
 
+    def __repr__(self):
+        return f"Contact Row || contact_id={self.contact_id}, user_info_id={self.user_info_id}, fname={self.first_name}, lname={self.last_name}"
+
 class Contacts_phone_numbers(db.Model):
 
     __tablename__ = 'contact_phone_numbers'
@@ -39,6 +45,9 @@ class Contacts_phone_numbers(db.Model):
     contact_phone_number_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
     phone_number = db.Column(db.String(10), nullable = False)
+
+    def __repr__(self):
+        return f"Contact Phone # Row || phone_id={self.contact_phone_number_id}, contact_id={self.contact_id}, phone={self.phone_number}"
 
 class Contacts_social_medias(db.Model):
 
@@ -48,6 +57,9 @@ class Contacts_social_medias(db.Model):
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
     social_media = db.Column(db.String(50), nullable = False)
     social_media_address = db.Column(db.String(200), nullable = False)
+
+    def __repr__(self):
+        return f"Contact Social Media Row || id={self.contact_social_media_id}, contact_id={self.contact_id}, social_media={self.social_media}, social_media_address={self.social_media_address}"
 
 class Contacts_addresses(db.Model):
 
@@ -63,6 +75,9 @@ class Contacts_addresses(db.Model):
     country = db.Column(db.String(50), nullable = True)
     zip = db.Column(db.String(9), nullable = True)
 
+    def __repr__(self):
+        return f"Contact Address Row || id={self.contact_address_id}, contact_id={self.contact_id}, street1={self.street_address_1}, street2={self.street_address_2}, city={self.city}, county={self.county}, state={self.state}, country={self.country}, zip={self.zip}"
+
 class Contacts_notes(db.Model):
 
     __tablename__ = 'contacts_notes'
@@ -70,6 +85,9 @@ class Contacts_notes(db.Model):
     contact_note_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
     note = db.Column(db.String(5000), nullable = False)
+
+    def __repr__(self):
+        return f"Contact Note Row || id={self.contact_note_id}, contact_id={self.contact_id}, note={self.note}"
 
 class Meetings(db.Model):
 
@@ -83,6 +101,10 @@ class Meetings(db.Model):
     meeting_place = db.Column(db.String(100), nullable = True)
     meeting_datetime = db.Column(db.DateTime, nullable = True)
 
+    def __repr__(self):
+        return f"Meetings Row || id={self.meeting_id}, user_id={self.user_info_id}, contact_id={self.contact_id}, title={self.meeting_title}, method={self.meeting_method}, place={self.meeting_place}, datetime={self.meeting_datetime}"
+
+
 class Meetings_notes(db.Model):
 
     __tablename__ = "meetings_notes"
@@ -90,3 +112,6 @@ class Meetings_notes(db.Model):
     meeting_note_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     meeting_id = db.Column(db.Integer, db.ForeignKey("meetings.meeting_id"), nullable = False)
     note = db.Column(db.String(5000), nullable = False)
+
+    def __repr__(self):
+        return f"Meeting Note Row || id={self.meeting_note_id}, meeting_id={self.meeting_id}, note={self.note}"
