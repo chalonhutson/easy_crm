@@ -137,39 +137,39 @@ class Meetings_notes(db.Model):
         return f"Meeting Note Row || id={self.meeting_note_id}, meeting_id={self.meeting_id}, note={self.note}"
 
 
-def add_contact(user_id, fname, lname, title, company, bio):
-    new_c = Contacts(first_name = fname, last_name = lname, job_title = title, company = company, bio = bio)
-    db.session.add(new_c)
-    db.session.commit()
+# def add_contact(user_id, fname, lname, title, company, bio):
+#     new_c = Contacts(first_name = fname, last_name = lname, job_title = title, company = company, bio = bio)
+#     db.session.add(new_c)
+#     db.session.commit()
 
-def find_contact_by_fname(user_id, name):
-    name = name.lower()
-    q = Contacts.query.filter(func.lower(Contacts.first_name) == name)
-    qcount = q.count()
+# def find_contact_by_fname(user_id, name):
+#     name = name.lower()
+#     q = Contacts.query.filter(func.lower(Contacts.first_name) == name)
+#     qcount = q.count()
 
-    if qcount == 0:
-        return "No results."
-    if qcount == 1:
-        qresult = q.first()
-        full_name = f"{qr.first_name} {qr.last_name}"
-        return full_name
-    if qcount > 1:
-        qresult = q.all()
-        return qresult
+#     if qcount == 0:
+#         return "No results."
+#     if qcount == 1:
+#         qresult = q.first()
+#         full_name = f"{qr.first_name} {qr.last_name}"
+#         return full_name
+#     if qcount > 1:
+#         qresult = q.all()
+#         return qresult
 
-def get_all_contacts_page(user_id, per_page, page_offset):
-    page_offset = page_offset * per_page
-    query = Contacts.query.filter(Contacts.user_info_id == user_id).limit(per_page).offset(page_offset)
+# def get_all_contacts_page(user_id, per_page, page_offset):
+#     page_offset = page_offset * per_page
+#     query = Contacts.query.filter(Contacts.user_info_id == user_id).limit(per_page).offset(page_offset)
 
-    if query.count() >= per_page:
-        for i in query:
-            print(i.first_name)
-    elif query.count() > 0:
-        for i in query:
-            print(i.first_name)
-            print("End of contacts.")
-    else:
-        print("No more contacts.")
+#     if query.count() >= per_page:
+#         for i in query:
+#             print(i.first_name)
+#     elif query.count() > 0:
+#         for i in query:
+#             print(i.first_name)
+#             print("End of contacts.")
+#     else:
+#         print("No more contacts.")
     
 
 

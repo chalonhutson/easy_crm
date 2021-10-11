@@ -7,7 +7,9 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, User_info, Contacts, Contacts_phone_numbers, Contacts_emails, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
+from model import connect_to_db
+# User_info, Contacts, Contacts_phone_numbers, Contacts_emails, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
+from controller import add_contact, find_contact_by_fname, get_all_contacts_page
 
 ######### IMPORT END ###############
 
@@ -29,15 +31,20 @@ app.jinja_env.undefined = StrictUndefined
 @app.route("/home")
 def home():
     user_dict = {"first_name": "My name is Jeff"}
-    return render_template("index.html", page_title = "Home", first_name = "My name is Jeff")
+    return render_template("index.html", page_title = "Home")
 
 @app.route("/contacts")
 def contacts():
-    return render_template("contacts.html", page_title = "Contacts", first_name = "My name is Jeff")
+    contacts = get_all_contacts_page(1, 25, 0)
+    return render_template("contacts.html", page_title = "Contacts", contacts = contacts)
+
+@app.route("/add_contact")
+def add_contact():
+    return render_template("add-contact.html", page_title = "Add Contact")
 
 @app.route("/meetings")
 def meetings():
-    return render_template("meetings.html", page_title = "Meetings", first_name = "My name is Jeff")
+    return render_template("meetings.html", page_title = "Meetings")
 
 
 # Main run script

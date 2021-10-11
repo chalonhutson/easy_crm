@@ -2,5 +2,26 @@
 {% block body %}
 
 <h1>Contacts!</h1>
+<button><a href="{{ url_for('add_contact') }}">Create New Contact</a></button>
+
+    {% for contact in contacts %}
+        <div class = "row">
+            <div class = "contact-info" class = "first-name">
+                {{ contact.first_name }}
+            </div>
+            <div class = "contact-info" class = "last-name">
+                {{ contact.last_name }}
+            </div>
+            <div class = "contact-info" class = "email">
+                {{ contact.email }}
+            </div>
+            
+            <div class = "contact-info" class = "phone">
+                {{ contact.phone }}
+            </div>
+
+        </div>
+
+    {% endfor %}
 
 {% endblock %}

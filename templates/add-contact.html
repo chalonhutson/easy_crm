@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Add Contact</h1>
+
+<form>
+    <label for="fname">First name:</label><br>
+    <input type="text" id="fname" name="fname"><br>
+    <label for="lname">Last name:</label><br>
+    <input type="text" id="lname" name="lname"><br>
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title"><br>
+    <label for="company">Company:</label><br>
+    <input type="text" id="company" name="company"><br>
+    <label for="bio">Bio:</label><br>
+    <textarea id="bio" name="bio" rows="4" cols="20" maxlength=2000></textarea><br>
+  </form>
+
+
+{% endblock %}
