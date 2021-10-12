@@ -9,7 +9,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db
 
-import controller
+import sql_controller
+import app_forms
 
 ######### IMPORT END ###############
 
@@ -28,27 +29,49 @@ app.jinja_env.undefined = StrictUndefined
 # Endpoint functions
 
 @app.errorhandler(404)
-def page_not_found(error):
+def page_not_found(e):
     return render_template('page_not_found.html'), 404
 
-@app.route("/")
 @app.route("/home")
+@app.route("/")
 def home():
+    login = app_forms.LoginForm()
+    register = app_forms.RegisterForm()
     user_dict = {"first_name": "My name is Jeff"}
-    return render_template("index.html", page_title = "Home")
+    return render_template("index.html", page_title = "Home", login=login, register=register)
+
+@app.route("/login", methods = ["GET", "POST"])
+def login():
+    login = app_forms.LoginForm()
+    if login.validate_on_submit():
+        return f"user={login.email.data} pass={login.password.data}"
+    else:
+        flash("Something went wrong. Please double check the your username/password and try again.", "danger")
+        return redirect(url_for("home"))
+
+    
+    
+@app.route("/register", methods = ["GET", "POST"])
+def register():
+    register = app_forms.RegisterForm()
+    if register.validate_on_submit():
+        return f"email={register.email.data} pass={register.password.data}"
+    else:
+        flash("Something went wrong. Please double check the registration specifications and try again.", "danger")
+        return redirect(url_for("home"))
 
 @app.route("/contacts")
 def contacts():
-    contacts = controller.get_all_contacts_page(1, 25, 0)
+    contacts = sql_controller.get_all_contacts_page(1, 25, 0)
     return render_template("contacts.html", page_title = "Contacts", contacts = contacts)
 
 @app.route("/contacts/<contact_id>")
 def individual_contact(contact_id):
-    contact = controller.get_contact_by_id(contact_id)
-    contact_phones = controller.get_phones_for_contact(contact_id)
-    contact_phones = controller.get_phones_as_list(contact_phones)
-    contact_emails = controller.get_emails_for_contact(contact_id)
-    contact_emails = controller.get_emails_as_list(contact_emails)
+    contact = sql_controller.get_contact_by_id(contact_id)
+    contact_phones = sql_controller.get_phones_for_contact(contact_id)
+    contact_phones = sql_controller.get_phones_as_list(contact_phones)
+    contact_emails = sql_controller.get_emails_for_contact(contact_id)
+    contact_emails = sql_controller.get_emails_as_list(contact_emails)
 
     return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = contact_phones, emails = contact_emails)
 
@@ -62,7 +85,7 @@ def add_contact():
         company = request.form["company"]
         bio = request.form["bio"]
 
-        post_result = controller.add_contact(1, fname, lname, title, company, bio)
+        post_result = sql_controller.add_contact(1, fname, lname, title, company, bio)
 
         if post_result == True:
             flash("Contact created successfully.", "success")
@@ -78,12 +101,12 @@ def add_contact():
 
 @app.route("/add-email/<contact_id>", methods = ["GET", "POST"])
 def add_email(contact_id):
-    contact = controller.get_contact_by_id(contact_id)
+    contact = sql_controller.get_contact_by_id(contact_id)
 
     if request.method == "POST":
         print(request.form)
         new_email = request.form["new_email"]
-        if controller.add_email(1, contact_id, new_email):
+        if sql_controller.add_email(1, contact_id, new_email):
             flash("Email added to contact.")
         else:
             flash("Something went wrong. Ensure you are meeting the email requirements.")
@@ -94,12 +117,12 @@ def add_email(contact_id):
 
 @app.route("/add-phone/<contact_id>", methods = ["GET", "POST"])
 def add_phone(contact_id):
-    contact = controller.get_contact_by_id(contact_id)
+    contact = sql_controller.get_contact_by_id(contact_id)
 
     if request.method == "POST":
         print(request.form)
         new_phone = request.form["new_phone"]
-        if controller.add_phone(1, contact_id, new_phone):
+        if sql_controller.add_phone(1, contact_id, new_phone):
             flash("Phone number added to contact.")
         else:
             flash("Something went wrong. Ensure you are meeting the phone number requirements.")
@@ -117,7 +140,7 @@ def meetings():
 
 # Main run script
 if __name__ == "__main__":
-    app.debug = True
+    app.debug = False
     app.jinja_env.auto_reload = app.debug
 
     connect_to_db(app)

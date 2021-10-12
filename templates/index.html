@@ -3,4 +3,31 @@
 
 <h1>Welcome!</h1>
 
+<h2>Login</h2>
+<form method="POST" action="{{ url_for('login') }}">
+    {{ login.hidden_tag() }}
+    {{ login.email.label }}
+    {{ login.email }}
+    {{ login.password.label }}
+    {{ login.password }}
+    {{ login.remember.label }}
+    {{ login.remember }}
+    {{ login.submit }}
+</form>
+
+<h2>Register</h2>
+<form method="POST" action="{{ url_for('register') }}">
+    {{ register.hidden_tag() }}
+    {{ register.first_name.label }}
+    {{ register.first_name }}
+    {{ register.last_name.label }}
+    {{ register.last_name }}
+    {{ register.email.label }}
+    {{ register.email }}
+    {{ register.password.label }}
+    {{ register.password }}
+    {{ register.submit }}
+</form>
+
+
 {% endblock %}
