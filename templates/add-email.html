@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Add Email for {{ contact.first_name }} {{ contact.last_name }}</h1>
+
+<form action="{{ url_for('add_email', contact_id = contact.contact_id) }}" method="post">
+    <label for="new_email">New Email Address:</label><br>
+    <input type="text" id="new_email" name="new_email"><br>
+    <button type="submit">Submit</button>
+  </form>
+
+
+{% endblock %}

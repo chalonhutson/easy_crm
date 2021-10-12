@@ -4,12 +4,12 @@
 from os import environ
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session, url_for
+from flask import Flask, render_template, redirect, request, flash, session, url_for, abort
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db
-# User_info, Contacts, Contacts_phone_numbers, Contacts_emails, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
-from controller import add_contact, find_contact_by_fname, get_all_contacts_page
+
+import controller
 
 ######### IMPORT END ###############
 
@@ -27,6 +27,10 @@ app.jinja_env.undefined = StrictUndefined
 
 # Endpoint functions
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -35,12 +39,76 @@ def home():
 
 @app.route("/contacts")
 def contacts():
-    contacts = get_all_contacts_page(1, 25, 0)
+    contacts = controller.get_all_contacts_page(1, 25, 0)
     return render_template("contacts.html", page_title = "Contacts", contacts = contacts)
 
-@app.route("/add_contact")
+@app.route("/contacts/<contact_id>")
+def individual_contact(contact_id):
+    contact = controller.get_contact_by_id(contact_id)
+    contact_phones = controller.get_phones_for_contact(contact_id)
+    contact_phones = controller.get_phones_as_list(contact_phones)
+    contact_emails = controller.get_emails_for_contact(contact_id)
+    contact_emails = controller.get_emails_as_list(contact_emails)
+
+    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = contact_phones, emails = contact_emails)
+
+@app.route("/add_contact", methods = ["GET", "POST"])
 def add_contact():
-    return render_template("add-contact.html", page_title = "Add Contact")
+    if request.method == "POST":
+        print(request.form)
+        fname = request.form["fname"]
+        lname = request.form["lname"]
+        title = request.form["title"]
+        company = request.form["company"]
+        bio = request.form["bio"]
+
+        post_result = controller.add_contact(1, fname, lname, title, company, bio)
+
+        if post_result == True:
+            flash("Contact created successfully.", "success")
+        else:
+            flash("Something went wrong, please check your contact meets the requirements.", "error")
+            
+        return render_template("add-contact.html", page_title = "Add Contact")
+
+
+    else:
+        return render_template("add-contact.html", page_title = "Add Contact")
+
+
+@app.route("/add-email/<contact_id>", methods = ["GET", "POST"])
+def add_email(contact_id):
+    contact = controller.get_contact_by_id(contact_id)
+
+    if request.method == "POST":
+        print(request.form)
+        new_email = request.form["new_email"]
+        if controller.add_email(1, contact_id, new_email):
+            flash("Email added to contact.")
+        else:
+            flash("Something went wrong. Ensure you are meeting the email requirements.")
+        return render_template("add-email.html", page_title = "Add Email", contact = contact)
+    else:
+        return render_template("add-email.html", page_title = "Add Email", contact = contact)
+
+
+@app.route("/add-phone/<contact_id>", methods = ["GET", "POST"])
+def add_phone(contact_id):
+    contact = controller.get_contact_by_id(contact_id)
+
+    if request.method == "POST":
+        print(request.form)
+        new_phone = request.form["new_phone"]
+        if controller.add_phone(1, contact_id, new_phone):
+            flash("Phone number added to contact.")
+        else:
+            flash("Something went wrong. Ensure you are meeting the phone number requirements.")
+        return render_template("add-phone.html", page_title = "Add Phone", contact = contact)
+    else:
+        return render_template("add-phone.html", page_title = "Add Phone", contact = contact)
+
+
+
 
 @app.route("/meetings")
 def meetings():

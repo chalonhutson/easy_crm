@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Add Phone for {{ contact.first_name }} {{ contact.last_name }}</h1>
+
+<form action="{{ url_for('add_phone', contact_id = contact.contact_id) }}" method="post">
+    <label for="new_phone">New Phone Number:</label><br>
+    <input type="text" id="new_phone" name="new_phone"><br>
+    <button type="submit">Submit</button>
+  </form>
+
+
+{% endblock %}

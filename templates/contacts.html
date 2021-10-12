@@ -4,24 +4,38 @@
 <h1>Contacts!</h1>
 <button><a href="{{ url_for('add_contact') }}">Create New Contact</a></button>
 
-    {% for contact in contacts %}
+    <div id="contacts-container">
+        {% for contact in contacts %}
+
+        <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
+            
         <div class = "row">
             <div class = "contact-info" class = "first-name">
+
                 {{ contact.first_name }}
+                </div>
+                <div class = "contact-info" class = "last-name">
+                    {{ contact.last_name }}
+                </div>
+        </a>
+                <div class = "contact-info" class = "email">
+                    {% if contact.email is not none %}
+                        {{ contact.email }}
+                    {% else %}
+                        No Email
+                    {% endif %}
+                </div>
+                
+                <div class = "contact-info" class = "phone">
+                    {% if contact.phone is not none %}
+                        {{ contact.phone }}
+                    {% else %}
+                        No Phone
+                    {% endif %}
+                </div>
             </div>
-            <div class = "contact-info" class = "last-name">
-                {{ contact.last_name }}
-            </div>
-            <div class = "contact-info" class = "email">
-                {{ contact.email }}
-            </div>
-            
-            <div class = "contact-info" class = "phone">
-                {{ contact.phone }}
-            </div>
-
-        </div>
-
-    {% endfor %}
+            <br>
+        {% endfor %}
+    </div>
 
 {% endblock %}

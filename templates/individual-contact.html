@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ contact.first_name }} {{ contact.last_name }}</h1>
+
+<h2>Title</h2>
+<p>{{ contact.job_title }}</p>
+
+<h2>Company</h2>
+<p>{{ contact.company }}</p>
+
+<h2>Bio</h2>
+<p>{{ contact.bio }}</p>
+
+<div id="phone-container">
+    <h2>Phone Numbers</h2>
+    <button><a href="{{ url_for('add_phone', contact_id = contact.contact_id) }}">Add Phone Number to {{ contact.first_name}} {{ contact.last_name }}</a></button>
+
+    {% if phones|length > 0 %}
+        {% for phone in phones %}
+            <div class="phone-number">
+                {{ phone }}
+            </div>
+        {% endfor %}
+    
+    {% else %}
+        <div class="phone-number">
+            No phone numbers for this contact
+        </div>
+
+    {% endif %}
+
+</div>
+
+<div id="email-container">
+    <h2>Emails</h2>
+    <button><a href="{{ url_for('add_email', contact_id = contact.contact_id) }}">Add Email to {{ contact.first_name}} {{ contact.last_name }}</a></button>
+
+    {% if emails|length > 0 %}
+        {% for email in emails %}
+            <div class="emails">
+                {{ email }}
+            </div>
+        {% endfor %}
+    
+    {% else %}
+        <div class="emails">
+            No emails for this contact
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}
