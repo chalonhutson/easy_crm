@@ -1,8 +1,9 @@
 INSERT INTO user_info (first_name, last_name, email, password)
 VALUES
-('Frodo', 'Baggins', 'myburden@email.com', 'icantdothissam'),
-('Samwise', 'Gamgee', 'gardener@email.com', 'illcarryitforyou'),
-('Gandalf', 'the White', 'mithrandir@email.com', 'flyyoufools');
+('Frodo', 'Baggins', 'myburden@email.com', 'pbkdf2:sha256:260000$Cd165fpj3npLMdNW$0013a81442a9fd95785b0a55ae46a0c8acd6d6b56013669ea65745290e423615'),
+('Samwise', 'Gamgee', 'gardener@email.com', 'pbkdf2:sha256:260000$5JpU4zj0T06QJIpB$23a14b87f02e2e354a1287f0c860340a5032915fe7002f7dd24041fd64ca3c95'),
+('Gandalf', 'the White', 'mithrandir@email.com', 'pbkdf2:sha256:260000$adRxHi5Y7ynp66wW$8174ea9f16e7cb4c9a5a320c10b07ca6e67fe54f3d2b0e8c1451b47c26a27cd0')
+('C', 'H', 'ch@em.co', 'pbkdf2:sha256:260000$8gl4nLAWfwR4M1HA$4ac39021f6243b81a60989d0ea9d6f51ea8dd3865aea6bebbae4ac4a98f50ec3');
 
 
 INSERT INTO contacts (user_info_id, first_name, last_name, job_title, company, bio)
