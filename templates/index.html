@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block header %}{% endblock %}
 {% block body %}
 
 <h1>Welcome!</h1>
@@ -26,6 +27,8 @@
     {{ register.email }}
     {{ register.password.label }}
     {{ register.password }}
+    {{ register.confirm_password.label }}
+    {{ register.confirm_password }}
     {{ register.submit }}
 </form>
 

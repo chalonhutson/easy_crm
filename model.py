@@ -6,25 +6,28 @@ from os import environ
 #Import SQLAlchemy to build out database.
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
+from flask_login import LoginManager, UserMixin, login_user
 
 db = SQLAlchemy()
 
 
 #Model definition of tables for Easy CRM database.
 
-class User_info(db.Model):
+class User_info(UserMixin, db.Model):
 
     __tablename__ = "user_info"
     __table_args__ = {"extend_existing": True}
 
-    user_info_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
+    id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     first_name = db.Column(db.String(25), nullable = False)
     last_name = db.Column(db.String(25), nullable = False)
     email = db.Column(db.String(99), nullable = False, unique = True)
     password = db.Column(db.String, nullable = False)
 
     def __repr__(self):
-        return f"User Info Row || user_info_aid={self.user_info_id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
+        return f"User Info Row || user_info_aid={self.user_info_quitid}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
+
+
 
 
 class Contacts(db.Model):
@@ -33,7 +36,7 @@ class Contacts(db.Model):
     __table_args__ = {"extend_existing": True}
 
     contact_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    user_info_id = db.Column(db.Integer, db.ForeignKey("user_info.user_info_id"))
+    user_info_id = db.Column(db.Integer, db.ForeignKey("user_info.id"))
     first_name = db.Column(db.String(25), nullable = True)
     last_name = db.Column(db.String(25), nullable = True)
     job_title = db.Column(db.String(50), nullable = True)
@@ -41,7 +44,7 @@ class Contacts(db.Model):
     bio = db.Column(db.String(2000), nullable = True)
 
     def __repr__(self):
-        return f"Contact Row || contact_id={self.contact_id}, user_info_id={self.user_info_id}, fname={self.first_name}, lname={self.last_name}"
+        return f"Contact Row || contact_id={self.contact_id}, id={self.id}, fname={self.first_name}, lname={self.last_name}"
 
 class Contacts_phone_numbers(db.Model):
 
@@ -113,7 +116,7 @@ class Meetings(db.Model):
     __table_args__ = {"extend_existing": True}
 
     meeting_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    user_info_id = db.Column(db.Integer, db.ForeignKey("user_info.user_info_id"), nullable = False)
+    user_info_id = db.Column(db.Integer, db.ForeignKey("user_info.id"), nullable = False)
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"), nullable = True)
     meeting_title = db.Column(db.String(150), nullable = True)
     meeting_method = db.Column(db.String(50), nullable = True)
@@ -121,7 +124,7 @@ class Meetings(db.Model):
     meeting_datetime = db.Column(db.DateTime, nullable = True)
 
     def __repr__(self):
-        return f"Meetings Row || id={self.meeting_id}, user_id={self.user_info_id}, contact_id={self.contact_id}, title={self.meeting_title}, method={self.meeting_method}, place={self.meeting_place}, datetime={self.meeting_datetime}"
+        return f"Meetings Row || meeting_id={self.meeting_id}, user_id={self.user_info_id}, contact_id={self.contact_id}, title={self.meeting_title}, method={self.meeting_method}, place={self.meeting_place}, datetime={self.meeting_datetime}"
 
 
 class Meetings_notes(db.Model):

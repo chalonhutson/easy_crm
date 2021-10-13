@@ -1,11 +1,66 @@
+from datetime import datetime
+
 from model import connect_to_db, db, User_info, Contacts, Contacts_phone_numbers, Contacts_emails, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
 
+# from flask_login import LoginManager, UserMixin
+
+
+
+def get_user_by_id(user_id):
+    try:
+        query = User_info.query.filter(User_info.id == user_id).one()
+        return query
+    except:
+        return False
+
+
+def get_user_by_email(email):
+
+    try:
+        user = User_info.query.filter(User_info.email==email).one()
+        return user
+    except:
+        return False
+
+
+def attempt_login(email, password):
+    
+    user = get_user_by_email(email)
+
+    if user:
+        if password == user.password:
+            return user
+        else:
+            return False
+    else:
+        return False
+
+def attempt_registration(first_name, last_name, email, password):
+    new_user = User_info(first_name = first_name, last_name = last_name, email = email, password = password)
+    db.session.add(new_user)
+    db.session.commit()
+    success = attempt_login(email, password)
+    if success:
+        return success
+    else:
+        return False
+
+
+def return_count_contacts(user_id):
+    count = Contacts.query.filter(Contacts.user_info_id == user_id).count()
+    return count
+
+def return_count_meetings(user_id):
+    count = Meetings.query.filter(Meetings.user_info_id == user_id).count()
+    return count
 
 
 def get_contact_by_id(contact_id):
-    query = Contacts.query.filter(Contacts.contact_id == contact_id).one()
-    return query
-
+    try:
+        query = Contacts.query.filter(Contacts.contact_id == contact_id).one()
+        return query
+    except:
+        return False
 
 
 def add_contact(user_id, fname, lname, title, company, bio):
@@ -90,6 +145,11 @@ def get_readable_phone_number(phone):
     new_phone = f"({phone[0:3]}) {phone[3:6]}-{phone[6:]}"
     return new_phone
 
+def make_readable_date_time(datetime):
+    date = datetime.strftime("%B, %d, %Y")
+    time = datetime.strftime("%I:%M")
+    return date, time
+
 def get_phones_as_list(phone_object):
     phones = []
     for phone in phone_object:
@@ -140,6 +200,27 @@ def get_all_contacts_page(user_id, per_page, page_offset):
         contacts.append(contact)
 
     return contacts
+
+
+def get_all_meetings_page(user_id, per_page, page_offset):
+    page_offset = page_offset * per_page
+    query = Meetings.query.filter(Meetings.user_info_id == user_id).limit(per_page).offset(page_offset)
+
+    meetings = []
+
+    for meeting in query:
+        meeting_id = meeting.meeting_id
+        meeting_contact = get_contact_by_id(meeting.contact_id)
+        meeting_title = meeting.meeting_title
+        meeting_method = meeting.meeting_method
+        meeting_place = meeting.meeting_place
+        meeting_date, meeting_time = make_readable_date_time(meeting.meeting_datetime)
+
+        meeting = {"meeting_id": meeting_id, "meeting_contact": meeting_contact, "meeting_title": meeting_title, "meeting_method": meeting_method, "meeting_place": meeting_place, "meeting_date": meeting_date, "meeting_time": meeting_time}
+
+        meetings.append(meeting)
+
+    return meetings
 
 
 

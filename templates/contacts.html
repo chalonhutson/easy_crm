@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 
+
 <h1>Contacts!</h1>
 <button><a href="{{ url_for('add_contact') }}">Create New Contact</a></button>
 
@@ -9,7 +10,7 @@
 
         <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
             
-        <div class = "row">
+        <div class = "contact-row">
             <div class = "contact-info" class = "first-name">
 
                 {{ contact.first_name }}
