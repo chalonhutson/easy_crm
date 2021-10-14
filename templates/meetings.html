@@ -5,57 +5,64 @@
 <button><a href="{{ url_for('add_meeting') }}">Create New Meeting</a></button>
 
     <div id="meetings-container">
+        <table>
+            <tr>
+                <th>title</th>
+                <th>contact</th>
+                <th>method</th>
+                <th>place</th>
+                <th>time</th>
+            </tr>
         {% for meeting in meetings %}
 
-        <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
-            
-        <div class = "meeting-row">
-            <div class = "meeting-info" class = "first-name">
-                {% if meeting.meeting_title is not none %}
-                    {{ meeting.meeting_title }}
-                {% else %}
-                    No Meeting Title
-                {% endif %}
-                </div>
-        </a>
-                <div class = "meeting-info" class = "contact">
+        
+        <tr class = "meeting-row">
+                <td class = "meeting-info" class = "first-name">
+                    <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
+                    {% if meeting.meeting_title is not none %}
+                        {{ meeting.meeting_title }}
+                    {% else %}
+                        No Meeting Title
+                    {% endif %}
+                </td>
+                    </a>
+                <td class = "meeting-info" class = "contact">
                     {% if meeting.meeting_contact is not none %}
                         {{ meeting.meeting_contact.first_name }} {{ meeting.meeting_contact.last_name }}
                     {% else %}
                         No Contact
                     {% endif %}
-                </div>
-                <div class = "meeting-info" class = "method">
+                </td>
+                <td class = "meeting-info" class = "method">
                     {% if meeting.meeting_method is not none %}
                         {{ meeting.meeting_method }} 
                     {% else %}
                         No Method
                     {% endif %}
-                </div>
-                <div class = "meeting-info" class = "place">
+                </td>
+                <td class = "meeting-info" class = "place">
                     {% if meeting.meeting_place is not none %}
                         {{ meeting.meeting_place }} 
                     {% else %}
                         No Place
                     {% endif %}
-                </div>
-                <div class = "meeting-info" class = "date">
+                </td>
+                <td class = "meeting-info" class = "date">
                     {% if meeting.meeting_date is not none %}
                         {{ meeting.meeting_date }} 
                     {% else %}
                         No Place
                     {% endif %}
-                </div>
-                <div class = "meeting-info" class = "time">
+                </td>
+                <td class = "meeting-info" class = "time">
                     {% if meeting.meeting_time is not none %}
                         {{ meeting.meeting_time }} 
                     {% else %}
                         No Place
                     {% endif %}
-                </div>
+                </td>
 
-            </div>
-            <br>
+        </tr>
         {% endfor %}
     </div>
 

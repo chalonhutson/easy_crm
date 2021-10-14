@@ -6,62 +6,61 @@
 <button><a href="{{ url_for('add_contact') }}">Create New Contact</a></button>
 
     <div id="contacts-container">
-        {% for contact in contacts %}
+        <table>
+            <tr>
+                <th>name</th>
+                <th>email</th>
+                <th>phone</th>
+                <th>title</th>
+                <th>company</th>
+            </tr>
 
-        <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
-            
-        <div class = "contact-row">
-            <div class = "contact-info" class = "first-name">
-                    {% if contact.first_name is not none %}
-                        {{ contact.first_name }}
-                    {% else %}
-                        no first name
-                    {% endif %}
-                </div>
+            {% for contact in contacts %}
+            <tr class = "contact-row">
                 
-                <div class = "contact-info" class = "last-name">
-                    {% if contact.last_name is not none %}
-                        {{ contact.last_name }}
-                    {% else %}
-                        no last name
-                    {% endif %}
-                </div>
-            </a>
-                <div class = "contact-info" class = "email">
+                <td class = "contact-info" class = "first-name">
+                        <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
+                        {% if contact.first_name or contact.last_name is not none %}
+                        {{ contact.first_name }} {{ contact.last_name }}
+                        {% else %}
+                        no name
+                        {% endif %}
+                        </a>
+                    </td>
+                <td class = "contact-info" class = "email">
                     {% if contact.email is not none %}
-                        {{ contact.email }}
+                    {{ contact.email }}
                     {% else %}
-                        no Email
+                    no Email
                     {% endif %}
-                </div>
+                </td>
                 
-                <div class = "contact-info" class = "phone">
+                <td class = "contact-info" class = "phone">
                     {% if contact.phone is not none %}
-                        {{ contact.phone }}
+                    {{ contact.phone }}
                     {% else %}
-                        no Phone
+                    no Phone
                     {% endif %}
-                </div>
-
-                <div class = "contact-info" class = "job_title">
+                </td>
+                
+                <td class = "contact-info" class = "job_title">
                     {% if contact.job_title is not none %}
-                        {{ contact.job_title }}
+                    {{ contact.job_title }}
                     {% else %}
-                        no title
+                    no title
                     {% endif %}
-                </div>
-            
-                <div class = "contact-info" class = "job_title">
-                    {% if contact.job_title is not none %}
-                        {{ contact.company }}
+                </td>
+                
+                <td class = "contact-info" class = "company">
+                    {% if contact.company is not none %}
+                    {{ contact.company }}
                     {% else %}
-                        no company
+                    no company
                     {% endif %}
-                </div>
-            
-            </div>
-            <br>
-        {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
-
-{% endblock %}
+        
+        {% endblock %}

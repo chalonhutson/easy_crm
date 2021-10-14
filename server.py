@@ -13,7 +13,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from model import connect_to_db
 
-import sql_controller
+import sql_controller as ctrl
 import app_forms
 
 ######### IMPORT END ###############
@@ -37,7 +37,7 @@ app.jinja_env.undefined = StrictUndefined
 
 @login_manager.user_loader
 def load_user(user_id):
-    return sql_controller.get_user_by_id(user_id)
+    return ctrl.get_user_by_id(user_id)
 
 
 # Endpoint functions
@@ -50,8 +50,8 @@ def page_not_found(e):
 @app.route("/")
 def home():
     if current_user.is_authenticated:
-        c_count = sql_controller.return_count_contacts(current_user.id)
-        m_count = sql_controller.return_count_meetings(current_user.id)
+        c_count = ctrl.return_count_contacts(current_user.id)
+        m_count = ctrl.return_count_meetings(current_user.id)
         return render_template("home.html", page_title = "Overview", first_name = current_user.first_name, last_name = current_user.last_name, contacts_count = c_count, meetings_count = m_count)
     else:
         login = app_forms.LoginForm()
@@ -63,7 +63,7 @@ def home():
 def login():
     login = app_forms.LoginForm()
     if login.validate_on_submit():
-        user = sql_controller.attempt_login(login.email.data, login.password.data)
+        user = ctrl.attempt_login(login.email.data, login.password.data)
         
         if user:
             login_user(user, remember=login.remember.data)
@@ -92,9 +92,9 @@ def register():
         last_name = register.last_name.data
         email = register.email.data
         password = register.password.data
-        if not sql_controller.get_user_by_email(email):
+        if not ctrl.get_user_by_email(email):
             pass_hash = generate_password_hash(password)
-            registeration = sql_controller.attempt_registration(first_name, last_name, email, pass_hash)
+            registeration = ctrl.attempt_registration(first_name, last_name, email, pass_hash)
             if registeration:
                 login_user(registeration)
                 flash("You have successfully registered and are now logged in.", "success")
@@ -111,20 +111,20 @@ def register():
 @app.route("/contacts")
 @login_required
 def contacts():
-    contacts = sql_controller.get_all_contacts_page(current_user.id, 25, 0)
+    contacts = ctrl.get_all_contacts_page(current_user.id, 25, 0)
     return render_template("contacts.html", page_title = "Contacts", contacts = contacts)
 
 @app.route("/meetings")
 @login_required
 def meetings():
-    meetings = sql_controller.get_all_meetings_page(current_user.id, 25, 0)
+    meetings = ctrl.get_all_meetings_page(current_user.id, 25, 0)
     return render_template("meetings.html", page_title = "Meetings", meetings = meetings)
 
 @app.route("/add-meeting", methods = ["GET", "POST"])
 @login_required
 def add_meeting():
     if request.method == "POST":
-        if sql_controller.add_meeting(current_user.id, request.form):
+        if ctrl.add_meeting(current_user.id, request.form):
             flash("Meeting added successfully.","success")
         else:
             flash("Something went wrong with adding your meeting, please try again.", "danger")
@@ -138,29 +138,31 @@ def add_meeting():
 @app.route("/meetings/<meeting_id>")
 @login_required
 def individual_meeting(meeting_id):
-    meeting = sql_controller.get_meeting_by_id(meeting_id)
+    meeting = ctrl.get_meeting_by_id(meeting_id)
+    notes = ctrl.get_all_notes_meeting(meeting_id)
     if meeting.meeting_datetime:
-        date, time = sql_controller.get_readable_date_time(meeting.meeting_datetime)
+        date, time = ctrl.get_readable_date_time(meeting.meeting_datetime)
     else:
-        date = None
-        time = None
-    contact = sql_controller.get_contact_by_id(meeting.contact_id)
+        date, time = None, None
+    contact = ctrl.get_contact_by_id(meeting.contact_id)
     if contact:
         contact = contact
     else:
         contact = None
-    return render_template("individual-meeting.html", page_title = meeting.meeting_title, meeting = meeting, contact = contact, date = date, time = time)
+    return render_template("individual-meeting.html", page_title = meeting.meeting_title, meeting = meeting, contact = contact, date = date, time = time, notes = notes)
 
 @app.route("/contacts/<contact_id>")
 @login_required
 def individual_contact(contact_id):
-    contact = sql_controller.get_contact_by_id(contact_id)
-    contact_phones = sql_controller.get_phones_for_contact(contact_id)
-    contact_phones = sql_controller.get_phones_as_list(contact_phones)
-    contact_emails = sql_controller.get_emails_for_contact(contact_id)
-    contact_emails = sql_controller.get_emails_as_list(contact_emails)
-
-    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = contact_phones, emails = contact_emails)
+    contact = ctrl.get_contact_by_id(contact_id)
+    contact_phones = ctrl.get_phones_for_contact(contact_id)
+    contact_phones = ctrl.get_phones_as_list(contact_phones)
+    contact_emails = ctrl.get_emails_for_contact(contact_id)
+    contact_emails = ctrl.get_emails_as_list(contact_emails)
+    addresses = ctrl.get_addresses_for_contact(contact_id)
+    notes = ctrl.get_all_notes_contact(contact_id)
+    socials = ctrl.get_socials_for_contact(contact_id)
+    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = contact_phones, emails = contact_emails, addresses = addresses, socials = socials, notes = notes)
 
 @app.route("/add_contact", methods = ["GET", "POST"])
 @login_required
@@ -173,7 +175,7 @@ def add_contact():
         company = request.form["company"]
         bio = request.form["bio"]
 
-        post_result = sql_controller.add_contact(current_user.id, fname, lname, title, company, bio)
+        post_result = ctrl.add_contact(current_user.id, fname, lname, title, company, bio)
 
         if post_result == True:
             flash("Contact created successfully.", "success")
@@ -190,12 +192,12 @@ def add_contact():
 @app.route("/add-email/<contact_id>", methods = ["GET", "POST"])
 @login_required
 def add_email(contact_id):
-    contact = sql_controller.get_contact_by_id(contact_id)
+    contact = ctrl.get_contact_by_id(contact_id)
 
     if request.method == "POST":
         print(request.form)
         new_email = request.form["new_email"]
-        if sql_controller.add_email(current_user.id, contact_id, new_email):
+        if ctrl.add_email(current_user.id, contact_id, new_email):
             flash("Email added to contact.", "success")
         else:
             flash("Something went wrong. Ensure you are meeting the email requirements.", "danger")
@@ -207,12 +209,12 @@ def add_email(contact_id):
 @app.route("/add-phone/<contact_id>", methods = ["GET", "POST"])
 @login_required
 def add_phone(contact_id):
-    contact = sql_controller.get_contact_by_id(contact_id)
+    contact = ctrl.get_contact_by_id(contact_id)
 
     if request.method == "POST":
         print(request.form)
         new_phone = request.form["new_phone"]
-        if sql_controller.add_phone(current_user.id, contact_id, new_phone):
+        if ctrl.add_phone(current_user.id, contact_id, new_phone):
             flash("Phone number added to contact.", "success")
         else:
             flash("Something went wrong. Ensure you are meeting the phone number requirements.", "danger")

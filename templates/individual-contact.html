@@ -48,9 +48,67 @@
         </div>
 
     {% endif %}
-
-
 </div>
+
+
+<h2>Addresses</h2>
+{% if addresses is not none %}
+    <table>
+        <tr>
+            <th>address 1</th>
+            <th>address 2</th>
+            <th>city</th>
+            <th>county</th>
+            <th>state</th>
+            <th>country</th>
+            <th>zip</th>
+        </tr>
+        {% for address in addresses %}
+            <td>{{ address.street_address_1 }}</td>
+            <td>{{ address.street_address_2 }}</td>
+            <td>{{ address.city }}</td>
+            <td>{{ address.county }}</td>
+            <td>{{ address.state }}</td>
+            <td>{{ address.country }}</td>
+            <td>{{ address.zip }}</td>
+        {% endfor %}
+    </table>
+{% else %}
+    no addresses
+{% endif %}
+
+<h2>Socials</h2>
+{% if socials is not none %}
+    <table>
+        <tr>
+            <th>platform</th>
+            <th>address</th>
+        </tr>
+        {% for social in socials %}
+        <tr>
+            <td>{{ social.social_media }}</td>
+            <td>{{ social.social_media_address }}</td>
+        </tr>
+        {% endfor %}
+
+
+    </table>
+{% else %}
+    no socials
+{% endif %}
+
+
+
+<h2>Notes</h2>
+    {% if notes is not none %}
+        {% for note in notes %}
+            {{ note.note }}
+        {% endfor %}
+    {% else %}
+        no notes
+    {% endif %}
+
+
 
 
 {% endblock %}

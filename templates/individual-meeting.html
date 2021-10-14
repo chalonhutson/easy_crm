@@ -33,19 +33,17 @@
         no date set
     {% endif %}
 
-<h2>place</h2>
-    {% if meeting.meeting_place is not none %}
-        <p>{{ meeting.meeting_place }}</p>
+<h2>notes</h2>
+    {% if notes is not none %}
+        {% for note in notes %}
+            <p>{{ note.note }}</p>
+        {% endfor %}
     {% else %}
-        no date set
+        no notes
     {% endif %}
 
 
-</div>
 
-
-
-</div>
 
 
 {% endblock %}

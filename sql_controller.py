@@ -167,10 +167,24 @@ def find_contact_by_fname(user_id, name):
         return qresult
 
 
+
 def get_emails_for_contact(contact_id):
     query = Contacts_emails.query.filter(Contacts_emails.contact_id == contact_id)
 
     return query
+
+def get_addresses_for_contact(contact_id):
+    addresses = Contacts_addresses.query.filter(Contacts_addresses.contact_id == contact_id).all()
+    if len(addresses) == 0:
+        addresses = None
+    return addresses
+
+def get_socials_for_contact(contact_id):
+    socials = Contacts_social_medias.query.filter(Contacts_social_medias.contact_id == contact_id).all()
+    if len(socials) == 0:
+        socials = None
+    return socials
+    
 
 def get_emails_as_list(email_object):
     emails = []
@@ -189,7 +203,7 @@ def get_readable_phone_number(phone):
     return new_phone
 
 def get_readable_date_time(datetime):
-    date = datetime.strftime("%B, %d, %Y")
+    date = datetime.strftime("%B %d, %Y")
     time = datetime.strftime("%I:%M")
     return date, time
 
@@ -301,6 +315,20 @@ def get_all_meetings_page(user_id, per_page, page_offset):
     return meetings
 
 
+
+
+def get_all_notes_meeting(meeting_id):
+    notes = Meetings_notes.query.filter(Meetings_notes.meeting_id == meeting_id).all()
+    if len(notes) == 0:
+        notes = None
+    return notes
+
+def get_all_notes_contact(contact_id):
+    notes = Contacts_notes.query.filter(Contacts_notes.contact_id == contact_id).all()
+    if len(notes) == 0:
+        notes = None
+    return notes
+  
 
 
 
