@@ -12,18 +12,26 @@
             
         <div class = "contact-row">
             <div class = "contact-info" class = "first-name">
-
-                {{ contact.first_name }}
+                    {% if contact.first_name is not none %}
+                        {{ contact.first_name }}
+                    {% else %}
+                        no first name
+                    {% endif %}
                 </div>
+                
                 <div class = "contact-info" class = "last-name">
-                    {{ contact.last_name }}
+                    {% if contact.last_name is not none %}
+                        {{ contact.last_name }}
+                    {% else %}
+                        no last name
+                    {% endif %}
                 </div>
-        </a>
+            </a>
                 <div class = "contact-info" class = "email">
                     {% if contact.email is not none %}
                         {{ contact.email }}
                     {% else %}
-                        No Email
+                        no Email
                     {% endif %}
                 </div>
                 
@@ -31,9 +39,26 @@
                     {% if contact.phone is not none %}
                         {{ contact.phone }}
                     {% else %}
-                        No Phone
+                        no Phone
                     {% endif %}
                 </div>
+
+                <div class = "contact-info" class = "job_title">
+                    {% if contact.job_title is not none %}
+                        {{ contact.job_title }}
+                    {% else %}
+                        no title
+                    {% endif %}
+                </div>
+            
+                <div class = "contact-info" class = "job_title">
+                    {% if contact.job_title is not none %}
+                        {{ contact.company }}
+                    {% else %}
+                        no company
+                    {% endif %}
+                </div>
+            
             </div>
             <br>
         {% endfor %}

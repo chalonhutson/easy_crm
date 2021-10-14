@@ -8,27 +8,27 @@
 <form method="POST" action="{{ url_for('login') }}">
     {{ login.hidden_tag() }}
     {{ login.email.label }}
-    {{ login.email }}
+    {{ login.email }}<br>
     {{ login.password.label }}
-    {{ login.password }}
+    {{ login.password }}<br>
     {{ login.remember.label }}
     {{ login.remember }}
     {{ login.submit }}
-</form>
+</form><br>
 
 <h2>Register</h2>
 <form method="POST" action="{{ url_for('register') }}">
     {{ register.hidden_tag() }}
     {{ register.first_name.label }}
-    {{ register.first_name }}
+    {{ register.first_name }}<br>
     {{ register.last_name.label }}
-    {{ register.last_name }}
+    {{ register.last_name }}<br>
     {{ register.email.label }}
-    {{ register.email }}
+    {{ register.email }}<br>
     {{ register.password.label }}
-    {{ register.password }}
+    {{ register.password }}<br>
     {{ register.confirm_password.label }}
-    {{ register.confirm_password }}
+    {{ register.confirm_password }}<br>
     {{ register.submit }}
 </form>
 

@@ -44,7 +44,7 @@ class Contacts(db.Model):
     bio = db.Column(db.String(2000), nullable = True)
 
     def __repr__(self):
-        return f"Contact Row || contact_id={self.contact_id}, id={self.id}, fname={self.first_name}, lname={self.last_name}"
+        return f"Contact Row || contact_id={self.contact_id}, id={self.user_info_id}, fname={self.first_name}, lname={self.last_name}"
 
 class Contacts_phone_numbers(db.Model):
 

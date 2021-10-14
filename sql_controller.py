@@ -2,6 +2,8 @@ from datetime import datetime
 
 from model import connect_to_db, db, User_info, Contacts, Contacts_phone_numbers, Contacts_emails, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
 
+from werkzeug.security import check_password_hash
+
 # from flask_login import LoginManager, UserMixin
 
 
@@ -28,7 +30,7 @@ def attempt_login(email, password):
     user = get_user_by_email(email)
 
     if user:
-        if password == user.password:
+        if check_password_hash(user.password, password):
             return user
         else:
             return False
@@ -62,6 +64,13 @@ def get_contact_by_id(contact_id):
     except:
         return False
 
+def get_meeting_by_id(meeting_id):
+    try:
+        query = Meetings.query.filter(Meetings.meeting_id == meeting_id).one()
+        return query
+    except:
+        return False
+
 
 def add_contact(user_id, fname, lname, title, company, bio):
 
@@ -71,6 +80,40 @@ def add_contact(user_id, fname, lname, title, company, bio):
         db.session.commit()
         return True
     else:
+        return False
+
+
+def add_meeting(user_id, form):
+    
+    user_id = user_id
+    if form["contact"] == "None" or None:
+        contact_id = None
+    else:
+        contact_id = form["contact"]
+    if form["title"]:
+        title = form["title"]
+    else:
+        title = None
+    if form["method"]:
+        method = form["method"]
+    else:
+        method = None
+    if form["place"]:
+        place = form["place"]
+    else:
+        place = None
+    if form["datetime"]:
+        datetime = form["datetime"]
+    else:
+        datetime = None
+    print(f"user={user_id} cont={contact_id} t={title} m={method} p={place} d={datetime}")
+    meeting = Meetings(user_info_id = user_id, contact_id = contact_id, meeting_title = title, meeting_method = method, meeting_place = place, meeting_datetime = datetime)
+
+    try:
+        db.session.add(meeting)
+        db.session.commit()
+        return meeting
+    except:
         return False
 
 
@@ -145,7 +188,7 @@ def get_readable_phone_number(phone):
     new_phone = f"({phone[0:3]}) {phone[3:6]}-{phone[6:]}"
     return new_phone
 
-def make_readable_date_time(datetime):
+def get_readable_date_time(datetime):
     date = datetime.strftime("%B, %d, %Y")
     time = datetime.strftime("%I:%M")
     return date, time
@@ -155,6 +198,13 @@ def get_phones_as_list(phone_object):
     for phone in phone_object:
         phones.append(get_readable_phone_number(phone.phone_number))
     return phones
+
+def get_all_contacts_by_user(user_id, alphabetical):
+    if alphabetical == True:
+        contacts = Contacts.query.filter(Contacts.user_info_id == user_id).order_by(Contacts.first_name).all()
+    else:
+        contacts = Contacts.query.filter(Contacts.user_info_id == user_id).all()
+    return contacts
 
 def get_all_contacts_page(user_id, per_page, page_offset):
     page_offset = page_offset * per_page
@@ -190,12 +240,24 @@ def get_all_contacts_page(user_id, per_page, page_offset):
         else:
             contact_phone = None
 
+        if contact.first_name:
+            first_name = contact.first_name
+        else:
+            first_name = None
+        if contact.last_name:
+            last_name = contact.last_name
+        else:
+            last_name = None
+        if contact.job_title:
+            job_title = contact.job_title
+        else:
+            job_title = None
+        if contact.company:
+            company = contact.company
+        else:
+            company = None
 
-        first_name = contact.first_name
-        last_name = contact.last_name
-        job_title = contact.job_title
-
-        contact = {"contact_id": contact_id, "first_name": first_name, "last_name": last_name, "email": contact_email, "phone": contact_phone}
+        contact = {"contact_id": contact_id, "first_name": first_name, "last_name": last_name, "email": contact_email, "phone": contact_phone, "job_title": job_title, "company": company}
 
         contacts.append(contact)
 
@@ -210,11 +272,27 @@ def get_all_meetings_page(user_id, per_page, page_offset):
 
     for meeting in query:
         meeting_id = meeting.meeting_id
-        meeting_contact = get_contact_by_id(meeting.contact_id)
-        meeting_title = meeting.meeting_title
-        meeting_method = meeting.meeting_method
-        meeting_place = meeting.meeting_place
-        meeting_date, meeting_time = make_readable_date_time(meeting.meeting_datetime)
+        if meeting.contact_id:
+            meeting_contact = get_contact_by_id(meeting.contact_id)
+        else:
+            meeting_contact = None
+        if meeting.meeting_title:
+            meeting_title = meeting.meeting_title
+        else:
+            meeting_title = None
+        if meeting.meeting_method:
+            meeting_method = meeting.meeting_method
+        else:
+            meeting_method = None
+        if meeting.meeting_place:
+            meeting_place = meeting.meeting_place
+        else:
+            meeting_place = None
+        if meeting.meeting_datetime:
+            meeting_date, meeting_time = get_readable_date_time(meeting.meeting_datetime)
+        else:
+            meeting_date = None
+            meeting_time = None
 
         meeting = {"meeting_id": meeting_id, "meeting_contact": meeting_contact, "meeting_title": meeting_title, "meeting_method": meeting_method, "meeting_place": meeting_place, "meeting_date": meeting_date, "meeting_time": meeting_time}
 

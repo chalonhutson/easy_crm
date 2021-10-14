@@ -8,6 +8,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, url_for, abort
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 from model import connect_to_db
 
@@ -91,7 +93,8 @@ def register():
         email = register.email.data
         password = register.password.data
         if not sql_controller.get_user_by_email(email):
-            registeration = sql_controller.attempt_registration(first_name, last_name, email, password)
+            pass_hash = generate_password_hash(password)
+            registeration = sql_controller.attempt_registration(first_name, last_name, email, pass_hash)
             if registeration:
                 login_user(registeration)
                 flash("You have successfully registered and are now logged in.", "success")
@@ -117,15 +120,36 @@ def meetings():
     meetings = sql_controller.get_all_meetings_page(current_user.id, 25, 0)
     return render_template("meetings.html", page_title = "Meetings", meetings = meetings)
 
-@app.route("/add-meeting")
+@app.route("/add-meeting", methods = ["GET", "POST"])
 @login_required
 def add_meeting():
-    return "working on it"
+    if request.method == "POST":
+        if sql_controller.add_meeting(current_user.id, request.form):
+            flash("Meeting added successfully.","success")
+        else:
+            flash("Something went wrong with adding your meeting, please try again.", "danger")
+        return redirect(url_for("add_meeting"))
+
+    else:
+        form = app_forms.MeetingForm()
+        form.edit_contact_list(current_user.id)
+        return render_template("add-meeting.html", page_title="Add Meeting", form = form)
 
 @app.route("/meetings/<meeting_id>")
 @login_required
 def individual_meeting(meeting_id):
-    return "working on it"
+    meeting = sql_controller.get_meeting_by_id(meeting_id)
+    if meeting.meeting_datetime:
+        date, time = sql_controller.get_readable_date_time(meeting.meeting_datetime)
+    else:
+        date = None
+        time = None
+    contact = sql_controller.get_contact_by_id(meeting.contact_id)
+    if contact:
+        contact = contact
+    else:
+        contact = None
+    return render_template("individual-meeting.html", page_title = meeting.meeting_title, meeting = meeting, contact = contact, date = date, time = time)
 
 @app.route("/contacts/<contact_id>")
 @login_required

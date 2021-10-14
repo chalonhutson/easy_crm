@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ contact.first_name }} {{ contact.last_name }}</h1>
+
+<h2>title</h2>
+    {% if meeting.title is not none %}
+        <p>{{ meeting.meeting_title }}</p>
+    {% else %}
+        no meeting title
+    {% endif %}
+
+<h2>contact</h2>
+    {% if contact is not none %}
+        <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
+            <p>{{ contact.first_name }} {{ contact.last_name }}</p>
+        </a>
+    {% else %}
+        no contact for meeting
+    {% endif %}
+
+<h2>time</h2>
+    {% if date is not none %}
+        <p>{{ date }}</p>
+        <p>{{ time }}</p>
+    {% else %}
+        no date set
+    {% endif %}
+
+<h2>method</h2>
+    {% if meeting.meeting_method is not none %}
+        <p>{{ meeting.meeting_method }}</p>
+    {% else %}
+        no date set
+    {% endif %}
+
+<h2>place</h2>
+    {% if meeting.meeting_place is not none %}
+        <p>{{ meeting.meeting_place }}</p>
+    {% else %}
+        no date set
+    {% endif %}
+
+
+</div>
+
+
+
+</div>
+
+
+{% endblock %}

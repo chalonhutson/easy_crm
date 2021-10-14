@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Add A Meeting</h1>
+
+    <form action="{{ url_for('add_meeting') }}" method="post">
+        {{ form.title.label }}
+        {{ form.title }}<br>
+        {{ form.contact.label }}
+        {{ form.contact }}<br>
+        {{ form.method.label }}
+        {{ form.method }}<br>
+        {{ form.place.label }}
+        {{ form.place }}<br>
+        <label for="datetime">date and time</label>
+  <input type="datetime-local" id="datetime" name="datetime"><br>
+        {{ form.submit }}
+    </form>
+
+
+{% endblock %}
