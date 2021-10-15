@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
+{% from 'macros.html' import back_to_contact %}
+
+{{ back_to_contact(contact) }}
 
 <h1>Add Email for {{ contact.first_name }} {{ contact.last_name }}</h1>
 

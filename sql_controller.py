@@ -58,12 +58,7 @@ def return_count_meetings(user_id):
     return count
 
 
-def get_contact_by_id(contact_id):
-    try:
-        query = Contacts.query.filter(Contacts.contact_id == contact_id).one()
-        return query
-    except:
-        return False
+
 
 def get_meeting_by_id(meeting_id):
     try:
@@ -187,12 +182,11 @@ def add_social(user_id, contact_id, social):
     is_correct_user = get_contact.user_info_id == user_id
     if is_correct_user == False:
         return False
-
-    validation_1 = len(social["social"]) <= 50
-    validation_1 = len(social["social_address"]) <= 200
+    validation_1 = len(social["social_media"]) <= 50
+    validation_2 = len(social["social_media_address"]) <= 200
 
     if validation_1 and validation_2:
-        new_social = Contacts_social_medias(contact_id = contact_id, social_medial = social["social"], social_media_address = social["social_address"])
+        new_social = Contacts_social_medias(contact_id = contact_id, social_media = social["social_media"], social_media_address = social["social_media_address"])
         try:
             db.session.add(new_social)
             db.session.commit()
@@ -225,24 +219,79 @@ def find_contact_by_fname(user_id, name):
         return qresult
 
 
+######## Begin Get Contact Info ############
+######## Begin Get Contact Info ############
+######## Begin Get Contact Info ############
+
+def get_contact_by_id(contact_id):
+    try:
+        contact = Contacts.query.filter(Contacts.contact_id == contact_id).one()
+        return contact
+    except:
+        return None
+
+def get_name_for_contact(contact_id):
+    contact = Contacts.query.get(contact_id)
+    if not contact.first_name and not contact.last_name:
+        return None
+    return f"{contact.first_name} {contact.last_name}"
+
+def get_phones_for_contact(contact_id):
+    phones = Contacts_phone_numbers.query.filter(Contacts_phone_numbers.contact_id == contact_id).all()
+    if len(phones) == 0:
+        return None
+    return phones
+
+def get_first_phone_contact(contact_id):
+    phone= Contacts_phone_numbers.query.filter(Contacts_phone_numbers.contact_id == contact_id).first()
+    if not phone:
+        return None
+    return phone
 
 def get_emails_for_contact(contact_id):
-    query = Contacts_emails.query.filter(Contacts_emails.contact_id == contact_id)
+    emails = Contacts_emails.query.filter(Contacts_emails.contact_id == contact_id).all()
+    if len(emails) == 0:
+        return None
+    return emails
 
-    return query
+def get_first_email_contact(contact_id):
+    email = Contacts_emails.query.filter(Contacts_emails.contact_id == contact_id).first()
+    if not email:
+        return None
+    return email
 
 def get_addresses_for_contact(contact_id):
     addresses = Contacts_addresses.query.filter(Contacts_addresses.contact_id == contact_id).all()
     if len(addresses) == 0:
-        addresses = None
+        return None
     return addresses
 
 def get_socials_for_contact(contact_id):
     socials = Contacts_social_medias.query.filter(Contacts_social_medias.contact_id == contact_id).all()
     if len(socials) == 0:
-        socials = None
+        return None
     return socials
-    
+
+def get_all_notes_contact(contact_id):
+    notes = Contacts_notes.query.filter(Contacts_notes.contact_id == contact_id).all()
+    if len(notes) == 0:
+        return None
+    return notes
+
+def get_all_for_contact(contact_id):
+    contact = get_contact_by_id(contact_id)
+    phones = get_phones_for_contact(contact_id)
+    emails = get_emails_for_contact(contact_id)
+    addresses = get_addresses_for_contact(contact_id)
+    socials = get_socials_for_contact(contact_id)
+    notes = get_all_notes_contact(contact_id)
+    return contact, phones, emails, addresses, socials, notes
+
+######## End Get Contact Info ############
+######## End Get Contact Info ############
+######## End Get Contact Info ############
+
+
 
 def get_emails_as_list(email_object):
     emails = []
@@ -251,10 +300,6 @@ def get_emails_as_list(email_object):
     return emails
 
 
-def get_phones_for_contact(contact_id):
-    query = Contacts_phone_numbers.query.filter(Contacts_phone_numbers.contact_id == contact_id)
-
-    return query
 
 def get_readable_phone_number(phone):
     new_phone = f"({phone[0:3]}) {phone[3:6]}-{phone[6:]}"
@@ -286,50 +331,12 @@ def get_all_contacts_page(user_id, per_page, page_offset):
 
     for contact in query:
         contact_id = contact.contact_id
-
-        # This code sends only the first email to display on the All Contacts page.
-        emails = []
-        email_object = get_emails_for_contact(contact_id)
-        for email in email_object:
-            if len(emails) < 1:
-                emails.append(email.email)
-                break
-        
-        if len(emails) > 0:
-            contact_email = emails[0]
-        else:
-            contact_email = None
-        
-        # This code sends only the first phone number to display on the All Contacts page.
-        phones = []
-        phone_object = get_phones_for_contact(contact_id)
-        for phone in phone_object:
-            phones.append(phone.phone_number)
-            break
-        
-        if len(phones) > 0:
-            contact_phone = get_readable_phone_number(phones[0])
-        else:
-            contact_phone = None
-
-        if contact.first_name:
-            first_name = contact.first_name
-        else:
-            first_name = None
-        if contact.last_name:
-            last_name = contact.last_name
-        else:
-            last_name = None
-        if contact.job_title:
-            job_title = contact.job_title
-        else:
-            job_title = None
-        if contact.company:
-            company = contact.company
-        else:
-            company = None
-
-        contact = {"contact_id": contact_id, "first_name": first_name, "last_name": last_name, "email": contact_email, "phone": contact_phone, "job_title": job_title, "company": company}
+        name = get_name_for_contact(contact_id)
+        phone = get_first_phone_contact(contact_id)
+        email = get_first_email_contact(contact_id)
+        job_title = contact.job_title
+        company = contact.company
+        contact = {"contact_id": contact_id, "name": name, "email": email, "phone": phone, "job_title": job_title, "company": company}
 
         contacts.append(contact)
 
@@ -381,17 +388,96 @@ def get_all_notes_meeting(meeting_id):
         notes = None
     return notes
 
-def get_all_notes_contact(contact_id):
-    notes = Contacts_notes.query.filter(Contacts_notes.contact_id == contact_id).all()
-    if len(notes) == 0:
-        notes = None
-    return notes
+
   
+def get_contact_by_address(addresses_id):
+    try:
+        address = Contacts_addresses.query.get(addresses_id)
+        contact_id = address.contact_id
+        return contact_id
+    except:
+        return False
+
+def get_contact_by_social(social_id):
+    try:
+        social = Contacts_social_medias.query.get(social_id)
+        contact_id = social.contact_id
+        return contact_id
+    except:
+        return False
+
+def get_contact_by_phone(phone_id):
+    try:
+        phone = Contacts_phone_numbers.query.get(phone_id)
+        contact_id = phone.contact_id
+        return contact_id
+    except:
+        return False
+
+def get_contact_by_email(email_id):
+    try:
+        email = Contacts_emails.query.get(email_id)
+        contact_id = email.contact_id
+        return contact_id
+    except:
+        return False
 
 
+def delete_address(user_id, address_id):
+    address = Contacts_addresses.query.get(address_id)
+    contact_owner = Contacts.query.get(address.contact_id)
+    if user_id == contact_owner.user_info_id:
+        try:
+            db.session.delete(address)
+            db.session.commit()
+            return True
+        except:
+            return False
+    else:
+        return False
 
 def delete_social(user_id, social_id):
-    print(user_id, social_id)
+    social = Contacts_social_medias.query.get(social_id)
+    contact_owner = Contacts.query.get(social.contact_id)
+    if user_id == contact_owner.user_info_id:
+        try:
+            db.session.delete(social)
+            db.session.commit()
+            return True
+        except:
+            return False
+    else:
+        return False
+        
+def delete_phone(user_id, phone_id):
+    phone = Contacts_phone_numbers.query.get(phone_id)
+    contact_owner = Contacts.query.get(phone.contact_id)
+    if user_id == contact_owner.user_info_id:
+        try:
+            db.session.delete(phone)
+            db.session.commit()
+            return True
+        except:
+            return False
+    else:
+        return False
+
+
+def delete_email(user_id, email_id):
+    email = Contacts_emails.query.get(email_id)
+    contact_owner = Contacts.query.get(email.contact_id)
+    if user_id == contact_owner.user_info_id:
+        try:
+            db.session.delete(email)
+            db.session.commit()
+            return True
+        except:
+            return False
+    else:
+        return False
+
+
+
 
 
 

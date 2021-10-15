@@ -20,24 +20,25 @@
                 
                 <td class = "contact-info" class = "first-name">
                         <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
-                        {% if contact.first_name or contact.last_name is not none %}
-                        {{ contact.first_name }} {{ contact.last_name }}
+                        {% if contact.name is not none %}
+                        {{ contact.name }}
                         {% else %}
                         no name
                         {% endif %}
                         </a>
                     </td>
+                    
                 <td class = "contact-info" class = "email">
                     {% if contact.email is not none %}
-                    {{ contact.email }}
+                        {{ contact.email.email }}
                     {% else %}
-                    no Email
+                        no Email
                     {% endif %}
                 </td>
                 
                 <td class = "contact-info" class = "phone">
                     {% if contact.phone is not none %}
-                    {{ contact.phone }}
+                    ({{ contact.phone.phone_number[0:3] }}) {{ contact.phone.phone_number[3:6] }}-{{ contact.phone.phone_number[6:10] }}
                     {% else %}
                     no Phone
                     {% endif %}

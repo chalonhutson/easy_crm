@@ -154,21 +154,13 @@ def individual_meeting(meeting_id):
 @app.route("/contacts/<contact_id>")
 @login_required
 def individual_contact(contact_id):
-    contact = ctrl.get_contact_by_id(contact_id)
-    contact_phones = ctrl.get_phones_for_contact(contact_id)
-    contact_phones = ctrl.get_phones_as_list(contact_phones)
-    contact_emails = ctrl.get_emails_for_contact(contact_id)
-    contact_emails = ctrl.get_emails_as_list(contact_emails)
-    addresses = ctrl.get_addresses_for_contact(contact_id)
-    notes = ctrl.get_all_notes_contact(contact_id)
-    socials = ctrl.get_socials_for_contact(contact_id)
-    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = contact_phones, emails = contact_emails, addresses = addresses, socials = socials, notes = notes)
+    contact, phones, emails, addresses, socials, notes = ctrl.get_all_for_contact(contact_id)
+    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = phones, emails = emails, addresses = addresses, socials = socials, notes = notes)
 
 @app.route("/add_contact", methods = ["GET", "POST"])
 @login_required
 def add_contact():
     if request.method == "POST":
-        print(request.form)
         fname = request.form["fname"]
         lname = request.form["lname"]
         title = request.form["title"]
@@ -195,7 +187,6 @@ def add_email(contact_id):
     contact = ctrl.get_contact_by_id(contact_id)
 
     if request.method == "POST":
-        print(request.form)
         new_email = request.form["new_email"]
         if ctrl.add_email(current_user.id, contact_id, new_email):
             flash("Email added to contact.", "success")
@@ -249,23 +240,78 @@ def add_social(contact_id):
             flash("Social added to contact.", "success")
         else:
             flash("Something went wrong. Ensure you are meeting the social requirements.", "danger")
-        return render_template("add-social.html", page_title = "Add Social", contact = contact)
+        return redirect(url_for("add_social", contact_id = contact_id))
     else:
         form = app_forms.ContactSocial()
         return render_template("add-social.html", page_title = "Add Social", contact = contact, form=form)
 
 
+@app.route("/delete_address", methods=["POST"])
+@login_required
+def delete_address():
+    if request.method == "POST":
+        address_id = request.form["delete_address"]
+        contact_id = ctrl.get_contact_by_address(address_id)
+        if ctrl.delete_address(current_user.id, address_id):
+            flash("Address deleted from contact.", "success")  
+            if contact_id:
+                return redirect(url_for("individual_contact", contact_id = contact_id))
+            flash("Something went wrong. Please try again.", "danger")
+            return redirect(url_for("contacts"))
+    else:
+        abort(404)
+
 @app.route("/delete_social", methods=["POST"])
 @login_required
 def delete_social():
     if request.method == "POST":
-        if ctrl.delete_social(current_user.id, request.form["delete_social"]):
-            flash("Social added to contact.", "success")    
+        social_id = request.form["delete_social"]
+        contact_id = ctrl.get_contact_by_social(social_id)
+        if ctrl.delete_social(current_user.id, social_id):
+            flash("Social deleted from contact.", "success")  
+            if contact_id:
+                return redirect(url_for("individual_contact", contact_id = contact_id))
         else:
-            flash("Something went wrong. Ensure you are meeting the address requirements.", "danger")
+            flash("Something went wrong. Please try again.", "danger")
         return redirect(url_for("contacts"))
     else:
         abort(404)
+
+
+@app.route("/delete_phone", methods=["POST"])
+@login_required
+def delete_phone():
+    if request.method == "POST":
+        phone_id = request.form["delete_phone"]
+        contact_id = ctrl.get_contact_by_phone(phone_id)
+        if ctrl.delete_phone(current_user.id, phone_id):
+            flash("phone deleted from contact.", "success")  
+            if contact_id:
+                return redirect(url_for("individual_contact", contact_id = contact_id))
+        else:
+            flash("Something went wrong. Please try again.", "danger")
+        return redirect(url_for("contacts"))
+    else:
+        abort(404)
+
+
+@app.route("/delete_email", methods=["POST"])
+@login_required
+def delete_email():
+    if request.method == "POST":
+        email_id = request.form["delete_email"]
+        contact_id = ctrl.get_contact_by_email(email_id)
+        if ctrl.delete_email(current_user.id, email_id):
+            flash("email deleted from contact.", "success")  
+            if contact_id:
+                return redirect(url_for("individual_contact", contact_id = contact_id))
+        else:
+            flash("Something went wrong. Please try again.", "danger")
+        return redirect(url_for("contacts"))
+    else:
+        abort(404)
+
+
 
 
 

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
+
+<a href="{{ url_for('contacts') }}">back to contacts</a>
+
+
 <h1>{{ contact.first_name }} {{ contact.last_name }}</h1>
 
 <h2>Title</h2>
@@ -15,10 +19,11 @@
     <h2>Phone Numbers</h2>
     <button><a href="{{ url_for('add_phone', contact_id = contact.contact_id) }}">add phone number to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a></button>
 
-    {% if phones|length > 0 %}
+    {% if phones is not none %}
         {% for phone in phones %}
             <div class="phone-number">
-                {{ phone }}
+                ({{ phone.phone_number[0:3] }}) {{ phone.phone_number[3:6] }}-{{ phone.phone_number[6:10] }}
+                <td><form action="{{ url_for('delete_phone') }}" method="POST"><button name="delete_phone" value="{{ phone.contact_phone_number_id }}">delete</button></form></td>
             </div>
         {% endfor %}
     
@@ -35,11 +40,12 @@
     <h2>Emails</h2>
     <button><a href="{{ url_for('add_email', contact_id = contact.contact_id) }}">add email to {{ contact.first_name.lower()}} {{ contact.last_name.lower() }}</a></button>
 
-    {% if emails|length > 0 %}
+    {% if emails is not none %}
         {% for email in emails %}
             <div class="emails">
-                {{ email }}
+                {{ email.email }}
             </div>
+            <td><form action="{{ url_for('delete_email') }}" method="POST"><button name="delete_email" value="{{ email.contact_email_id }}">delete</button></form></td>
         {% endfor %}
     
     {% else %}
@@ -65,6 +71,7 @@
             <th>zip</th>
         </tr>
         {% for address in addresses %}
+        <tr>
             <td>{{ address.street_address_1 }}</td>
             <td>{{ address.street_address_2 }}</td>
             <td>{{ address.city }}</td>
@@ -72,6 +79,8 @@
             <td>{{ address.state }}</td>
             <td>{{ address.country }}</td>
             <td>{{ address.zip }}</td>
+            <td><form action="{{ url_for('delete_address') }}" method="POST"><button name="delete_address" value='{{ address.contact_address_id }}'>delete</button></form></td>
+        </tr>
         {% endfor %}
     </table>
 {% else %}

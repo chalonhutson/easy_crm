@@ -1,0 +1,5 @@
+{% macro back_to_contact(contact) %}
+<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a>
+{% endmacro %}
+
+

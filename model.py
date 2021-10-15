@@ -67,6 +67,9 @@ class Contacts_emails(db.Model):
     contact_id = db.Column(db.Integer, db.ForeignKey("contacts.contact_id"))
     email = db.Column(db.String(99), nullable = False)
 
+    def __repr__(self):
+        return f"Contact Email Row || id={self.contact_email_id}, contact_id={self.contact_id}, email={self.email}"
+
 class Contacts_social_medias(db.Model):
 
     __tablename__ = "contacts_social_medias"
