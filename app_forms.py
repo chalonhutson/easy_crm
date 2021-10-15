@@ -36,3 +36,20 @@ class MeetingForm(FlaskForm):
 
         self.contact.choices = contacts_list
 
+
+class ContactAddress(FlaskForm):
+    address_1 = StringField("address 1", validators=[Length(max=150)])
+    address_2 = StringField("address 2", validators=[Length(max=150)])
+    city = StringField("city", validators=[Length(max=50)])
+    county = StringField("county", validators=[Length(max=50)])
+    state = StringField("state", validators=[Length(max=50)])
+    country = StringField("country", validators=[Length(max=50)])
+    zip = StringField("zip", validators=[Length(max=9)])
+    submit = SubmitField("add address")
+
+
+class ContactSocial(FlaskForm):
+    social_media = StringField("platform", validators=[Length(max=50)])
+    social_media_address = StringField("address", validators=[Length(max=200)])
+    submit = SubmitField("add social")
+

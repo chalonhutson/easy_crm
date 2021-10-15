@@ -5,7 +5,7 @@ from os import environ
 from datetime import timedelta
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session, url_for, abort
+from flask import Flask, render_template, redirect, request, flash, session, url_for, abort, Response, make_response
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -185,9 +185,9 @@ def add_contact():
         return render_template("add-contact.html", page_title = "Add Contact")
 
 
+
     else:
         return render_template("add-contact.html", page_title = "Add Contact")
-
 
 @app.route("/add-email/<contact_id>", methods = ["GET", "POST"])
 @login_required
@@ -222,7 +222,50 @@ def add_phone(contact_id):
     else:
         return render_template("add-phone.html", page_title = "Add Phone", contact = contact)
 
+@app.route("/add-address/<contact_id>", methods = ["GET", "POST"])
+@login_required
+def add_address(contact_id):
+    contact = ctrl.get_contact_by_id(contact_id)
 
+    if request.method == "POST":
+        new_address = request.form
+        if ctrl.add_address(current_user.id, contact_id, new_address):
+            flash("Address added to contact.", "success")
+        else:
+            flash("Something went wrong. Ensure you are meeting the address requirements.", "danger")
+        return redirect(url_for("add_address", contact_id = contact_id))
+    else:
+        form = app_forms.ContactAddress()
+        return render_template("add-address.html", page_title = "Add Address", contact = contact, form=form)
+
+@app.route("/add-social/<contact_id>", methods = ["GET", "POST"])
+@login_required
+def add_social(contact_id):
+    contact = ctrl.get_contact_by_id(contact_id)
+
+    if request.method == "POST":
+        new_social = request.form
+        if ctrl.add_social(current_user.id, contact_id, new_social):
+            flash("Social added to contact.", "success")
+        else:
+            flash("Something went wrong. Ensure you are meeting the social requirements.", "danger")
+        return render_template("add-social.html", page_title = "Add Social", contact = contact)
+    else:
+        form = app_forms.ContactSocial()
+        return render_template("add-social.html", page_title = "Add Social", contact = contact, form=form)
+
+
+@app.route("/delete_social", methods=["POST"])
+@login_required
+def delete_social():
+    if request.method == "POST":
+        if ctrl.delete_social(current_user.id, request.form["delete_social"]):
+            flash("Social added to contact.", "success")    
+        else:
+            flash("Something went wrong. Ensure you are meeting the address requirements.", "danger")
+        return redirect(url_for("contacts"))
+    else:
+        abort(404)
 
 
 

@@ -13,7 +13,7 @@
 
 <div id="phone-container">
     <h2>Phone Numbers</h2>
-    <button><a href="{{ url_for('add_phone', contact_id = contact.contact_id) }}">Add Phone Number to {{ contact.first_name}} {{ contact.last_name }}</a></button>
+    <button><a href="{{ url_for('add_phone', contact_id = contact.contact_id) }}">add phone number to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a></button>
 
     {% if phones|length > 0 %}
         {% for phone in phones %}
@@ -33,7 +33,7 @@
 
 <div id="email-container">
     <h2>Emails</h2>
-    <button><a href="{{ url_for('add_email', contact_id = contact.contact_id) }}">Add Email to {{ contact.first_name}} {{ contact.last_name }}</a></button>
+    <button><a href="{{ url_for('add_email', contact_id = contact.contact_id) }}">add email to {{ contact.first_name.lower()}} {{ contact.last_name.lower() }}</a></button>
 
     {% if emails|length > 0 %}
         {% for email in emails %}
@@ -52,6 +52,7 @@
 
 
 <h2>Addresses</h2>
+<button><a href="{{ url_for('add_address', contact_id = contact.contact_id) }}">add address to {{ contact.first_name.lower()}} {{ contact.last_name.lower() }}</a></button><br>
 {% if addresses is not none %}
     <table>
         <tr>
@@ -78,6 +79,7 @@
 {% endif %}
 
 <h2>Socials</h2>
+<button><a href="{{ url_for('add_social', contact_id = contact.contact_id) }}">add address to {{ contact.first_name.lower()}} {{ contact.last_name.lower() }}</a></button><br>
 {% if socials is not none %}
     <table>
         <tr>
@@ -88,6 +90,7 @@
         <tr>
             <td>{{ social.social_media }}</td>
             <td>{{ social.social_media_address }}</td>
+            <td><form action="{{ url_for('delete_social') }}" method="POST"><button name="delete_social" value='{{ social.contact_social_media_id }}'>delete</button></form></td>
         </tr>
         {% endfor %}
 

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Add Address for {{ contact.first_name }} {{ contact.last_name }}</h1>
+
+<form method="POST" action="{{ url_for('add_address', contact_id = contact.contact_id) }}">
+  <h2>New Address:</h2><br>
+    {{ form.address_1.label }}
+    {{ form.address_1 }}
+    {{ form.address_2.label }}
+    {{ form.address_2 }}
+    {{ form.city.label }}
+    {{ form.city }}
+    {{ form.county.label }}
+    {{ form.county }}
+    {{ form.state.label }}
+    {{ form.state }}
+    {{ form.country.label }}
+    {{ form.country }}
+    {{ form.zip.label }}
+    {{ form.zip }}
+    {{ form.submit }}
+  </form>
+
+
+{% endblock %}

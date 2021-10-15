@@ -43,6 +43,7 @@ def attempt_registration(first_name, last_name, email, password):
     db.session.commit()
     success = attempt_login(email, password)
     if success:
+        print(f"New Registration || {new_user}")
         return success
     else:
         return False
@@ -78,6 +79,7 @@ def add_contact(user_id, fname, lname, title, company, bio):
         new_contact = Contacts(user_info_id = user_id, first_name = fname, last_name = lname, job_title = title, company = company, bio = bio)
         db.session.add(new_contact)
         db.session.commit()
+        print(f"Contact added || {new_contact}")
         return True
     else:
         return False
@@ -106,10 +108,10 @@ def add_meeting(user_id, form):
         datetime = form["datetime"]
     else:
         datetime = None
-    print(f"user={user_id} cont={contact_id} t={title} m={method} p={place} d={datetime}")
     meeting = Meetings(user_info_id = user_id, contact_id = contact_id, meeting_title = title, meeting_method = method, meeting_place = place, meeting_datetime = datetime)
 
     try:
+        print(f"Meeting added || {meeting}")
         db.session.add(meeting)
         db.session.commit()
         return meeting
@@ -129,6 +131,7 @@ def add_email(user_id, contact_id, email):
         new_email = Contacts_emails(contact_id = contact_id, email = email)
         db.session.add(new_email)
         db.session.commit()
+        print(f"Email added || {new_email}")
         return True
     else:
         return False
@@ -146,9 +149,64 @@ def add_phone(user_id, contact_id, phone):
         new_phone = Contacts_phone_numbers(contact_id = contact_id, phone_number = phone)
         db.session.add(new_phone)
         db.session.commit()
+        print(f"Phone added || {new_phone}")
         return True
     else:
         return False
+
+
+def add_address(user_id, contact_id, address):
+    get_contact = Contacts.query.filter(Contacts.contact_id == contact_id).one()
+    is_correct_user = get_contact.user_info_id == user_id
+    if is_correct_user == False:
+        return False
+    print(address)
+
+    validation_1 = len(address["address_1"]) <= 150
+    validation_2 = len(address["city"]) <= 50
+    validation_3 = len(address["county"]) <= 50
+    validation_4 = len(address["state"]) <= 50
+    validation_5 = len(address["country"]) <= 50
+    validation_6 = len(address["zip"]) <= 9
+
+    if validation_1 and validation_2 and  validation_3 and validation_4 and validation_5 and validation_6:
+        new_address = Contacts_addresses(contact_id = contact_id, street_address_1 = address["address_1"], street_address_2 = address["address_2"], city = address["city"], county = address["county"], state = address["state"], country = address["country"], zip = address["zip"])
+        try:
+            db.session.add(new_address)
+            db.session.commit()
+            print(f"Address added || {new_address}")
+            return True
+        except:
+            return False
+    else:
+        return False
+
+
+def add_social(user_id, contact_id, social):
+    get_contact = Contacts.query.filter(Contacts.contact_id == contact_id).one()
+    is_correct_user = get_contact.user_info_id == user_id
+    if is_correct_user == False:
+        return False
+
+    validation_1 = len(social["social"]) <= 50
+    validation_1 = len(social["social_address"]) <= 200
+
+    if validation_1 and validation_2:
+        new_social = Contacts_social_medias(contact_id = contact_id, social_medial = social["social"], social_media_address = social["social_address"])
+        try:
+            db.session.add(new_social)
+            db.session.commit()
+            print(f"Social added || {new_social}")
+            return True
+        except:
+            return False
+    else:
+        return False
+
+
+
+
+
 
 
 def find_contact_by_fname(user_id, name):
@@ -329,6 +387,15 @@ def get_all_notes_contact(contact_id):
         notes = None
     return notes
   
+
+
+
+def delete_social(user_id, social_id):
+    print(user_id, social_id)
+
+
+
+
 
 
 
