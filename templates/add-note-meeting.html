@@ -4,10 +4,9 @@
 
 <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to {{ meeting.meeting_title.lower() }}</a>
 
-<h1>Add Note for {{ meeting.meeting_title }}</h1>
-<h1>Add Note for {{ meeting.meeting_id }}</h1>
+<h1>add note for {{ meeting.meeting_title.lower() }}</h1>
 
-<form action="{{ url_for('add_note_meeting', meeting_id = 1) }}" method="post">
+<form action="{{ url_for('add_note_meeting', meeting_id = 1) }}" method="POST">
     {{ form.note.label }}
     {{ form.note }}
     {{ form.submit }}

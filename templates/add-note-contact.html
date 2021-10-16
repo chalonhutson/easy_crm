@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+{% from 'macros.html' import back_to_contact %}
+
+<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a>
+
+<h1>Add Note for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</h1>
+
+<form action="{{ url_for('add_note_contact', contact_id = 1) }}" method="POST">
+    {{ form.note.label }}
+    {{ form.note }}
+    {{ form.submit }}
+</form>
+
+{% endblock %}

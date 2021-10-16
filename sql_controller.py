@@ -219,7 +219,25 @@ def add_note_meeting(user_id, meeting_id, note):
 
 
 
-
+def add_note_contact(user_id, contact_id, note):
+    try:
+        contact = Contacts.query.get(contact_id)
+    except:
+        return False
+    if contact.user_info_id != user_id:
+        return False
+    print(note["note"])
+    if len(note["note"]) <= 5000:
+        new_note = Contacts_notes(contact_id = contact_id, note = note["note"])
+        try:
+            db.session.add(new_note)
+            db.session.commit()
+            print(f"Contact note added || {new_note}")
+            return new_note
+        except:
+            return False
+    else:
+        return False
 
 
 
@@ -445,6 +463,14 @@ def get_contact_by_email(email_id):
     except:
         return False
 
+def get_note_meeting_by_id(note_id):
+    note = Meetings_notes.query.get(note_id)
+    return note
+
+def get_note_contact_by_id(note_id):
+    note = Contacts_notes.query.get(note_id)
+    return note
+
 
 def delete_address(user_id, address_id):
     address = Contacts_addresses.query.get(address_id)
@@ -499,9 +525,38 @@ def delete_email(user_id, email_id):
     else:
         return False
 
+def delete_note_meeting(user_id, note_id):
+    note = Meetings_notes.query.get(note_id)
+    if not note:
+        return False
+    meeting = Meetings.query.get(note.meeting_id)
+    if user_id == meeting.user_info_id:
+        try:
+            db.session.delete(note)
+            db.session.commit()
+            return True
+        except:
+            print("Couldn't delete meeting from database.")
+            return False
+    else:
+        return False
 
 
-
+def delete_note_contact(user_id, note_id):
+    note = Contacts_notes.query.get(note_id)
+    if not note:
+        return False
+    contact = Contacts.query.get(note.contact_id)
+    if user_id == contact.user_info_id:
+        try:
+            db.session.delete(note)
+            db.session.commit()
+            return True
+        except:
+            print("Couldn't delete contact from database.")
+            return False
+    else:
+        return False
 
 
 

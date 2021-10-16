@@ -112,9 +112,13 @@
 
 
 <h2>Notes</h2>
+<button><a href="{{ url_for('add_note_contact', contact_id = contact.contact_id) }}">add note to {{ contact.first_name }} {{ contact.last_name }}</a></button>
     {% if notes is not none %}
         {% for note in notes %}
             {{ note.note }}
+
+            <form action="{{ url_for('delete_note_contact') }}" method="POST"><button name="delete_note_contact" value="{{ note.contact_note_id }}">delete</button></form>
+
         {% endfor %}
     {% else %}
         no notes

@@ -56,3 +56,7 @@ class ContactSocial(FlaskForm):
 class MeetingNote(FlaskForm):
     note = TextAreaField("note",validators=[Length(max=5000)])
     submit = SubmitField("add note")
+
+class ContactNote(FlaskForm):
+    note = TextAreaField("note",validators=[Length(max=5000)])
+    submit = SubmitField("add note")

@@ -68,7 +68,7 @@ def login():
         if user:
             login_user(user, remember=login.remember.data)
             flash("You are logged in.", "success")
-            return redirect(url_for("contacts"))
+            return redirect(url_for("home"))
         else:
             flash("Login failed. Please double check your email/password combo.", "danger")
             return redirect(url_for("home"))
@@ -153,6 +153,30 @@ def add_note_meeting(meeting_id):
         return render_template("add-note-meeting.html", page_title = f"Add Note to {meeting.meeting_title}", meeting = meeting, form = form)
 
 
+@app.route("/add-note-contact/<contact_id>", methods = ["GET", "POST"])
+@login_required
+def add_note_contact(contact_id):
+    contact = ctrl.get_contact_by_id(contact_id)
+    print(f"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ |||| CONTACT -->> {contact}//// id ----{contact_id}++++++++++++++")
+    contact = ctrl.get_contact_by_id(contact_id)
+    if request.method == "POST":
+        new_note = request.form
+        if ctrl.add_note_contact(current_user.id, contact_id, new_note):
+            flash("Note added to contact.", "success")
+        else:
+            flash("Something went wrong. Ensure you are contact the note requirements.", "danger")
+        return redirect(url_for("add_note_contact", contact_id = contact_id))
+    else:
+        form = app_forms.ContactNote()
+        return render_template("add-note-contact.html", page_title = f"Add Note for {contact.first_name} {contact.last_name}", contact = contact, form = form)
+
+
+
+
+
+
+
+
 @app.route("/meetings/<meeting_id>")
 @login_required
 def individual_meeting(meeting_id):
@@ -173,7 +197,7 @@ def individual_meeting(meeting_id):
 @login_required
 def individual_contact(contact_id):
     contact, phones, emails, addresses, socials, notes = ctrl.get_all_for_contact(contact_id)
-    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = phones, emails = emails, addresses = addresses, socials = socials, notes = notes)
+    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = phones, emails = emails, addresses = addresses, socials = socials, notes = notes, ynumber = 0, thing = "thing", do = "do")
 
 @app.route("/add_contact", methods = ["GET", "POST"])
 @login_required
@@ -296,7 +320,7 @@ def delete_social():
         abort(404)
 
 
-@app.route("/delete_phone", methods=["POST"])
+@app.route("/delete-phone", methods=["POST"])
 @login_required
 def delete_phone():
     if request.method == "POST":
@@ -313,7 +337,7 @@ def delete_phone():
         abort(404)
 
 
-@app.route("/delete_email", methods=["POST"])
+@app.route("/delete-email", methods=["POST"])
 @login_required
 def delete_email():
     if request.method == "POST":
@@ -329,6 +353,39 @@ def delete_email():
     else:
         abort(404)
 
+
+@app.route("/delete-note-meeting", methods = ["GET", "POST"])
+@login_required
+def delete_note_meeting():
+    if request.method == "POST":
+        note_id = request.form["delete_note_meeting"]
+        note = ctrl.get_note_meeting_by_id(note_id)
+        if ctrl.delete_note_meeting(current_user.id, note_id):
+            flash("note deleted from meeting.", "success")
+            if note:
+                return redirect(url_for("individual_meeting", meeting_id = note.meeting_id))
+        else:
+            flash("Something went wrong.", "danger")
+        return redirect(url_for("meetings"))
+    else:
+        abort(404)
+
+
+@app.route("/delete-note-contact", methods = ["GET", "POST"])
+@login_required
+def delete_note_contact():
+    if request.method == "POST":
+        note_id = request.form["delete_note_contact"]
+        note = ctrl.get_note_contact_by_id(note_id)
+        if ctrl.delete_note_contact(current_user.id, note_id):
+            flash("note deleted from contact", "success")
+            if note:
+                return redirect(url_for("individual_contact", contact_id = note.contact_id))
+        else:
+            flash("Something went wrong.", "danger")
+        return redirect(url_for("contact"))
+    else:
+        abort(404)
 
 
 

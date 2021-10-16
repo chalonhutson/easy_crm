@@ -38,6 +38,7 @@
     {% if notes is not none %}
         {% for note in notes %}
             <p>{{ note.note }}</p>
+            <form action="{{ url_for('delete_note_meeting') }}" method="POST"><button name="delete_note_meeting" value="{{ note.meeting_note_id }}">delete</button></form>
         {% endfor %}
     {% else %}
         no notes
