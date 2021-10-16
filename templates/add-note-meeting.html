@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block body %}
-{% from 'macros.html' import back_to_contact %}
 
 <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to {{ meeting.meeting_title.lower() }}</a>
 

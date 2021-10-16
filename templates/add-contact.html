@@ -2,7 +2,7 @@
 {% block body %}
 {% from 'macros.html' import back_to_contact %}
 
-{{ back_to_contact(contact) }}
+<a href="{{ url_for('contacts') }}">back to contacts</a>
 
 <h1>Add Contact</h1>
 

@@ -387,7 +387,38 @@ def delete_note_contact():
     else:
         abort(404)
 
+@app.route("/delete-meeting/<meeting_id>", methods = ["GET", "POST"])
+@login_required
+def delete_meeting(meeting_id):
+    meeting = ctrl.get_meeting_by_id(meeting_id)
+    print(f"++++++++++++++++++ meeting -->> {meeting} ---------------><<<<<<<")
+    if not meeting:
+        return abort(404)
+    if request.method == "POST":
+        if ctrl.delete_meeting(current_user.id, meeting_id):
+            flash("Meeting successfully deleted.", "success")
+        else:
+            flash("Something went wrong.", "danger")
+        return redirect(url_for("meetings"))
+    else:
+        return render_template("delete-meeting.html", page_title = f"Delete {meeting.meeting_title}?", meeting = meeting)
 
+
+@app.route("/delete-contact/<contact_id>", methods = ["GET", "POST"])
+@login_required
+def delete_contact(contact_id):
+    contact = ctrl.get_contact_by_id(contact_id)
+    print(f"++++++++++++++++++ contact -->> {contact} ---------------><<<<<<<")
+    if not contact:
+        return abort(404)
+    if request.method == "POST":
+        if ctrl.delete_contact(current_user.id, contact_id):
+            flash("contact successfully deleted.", "success")
+        else:
+            flash("Something went wrong.", "danger")
+        return redirect(url_for("contacts"))
+    else:
+        return render_template("delete-contact.html", page_title = f"Delete {contact.first_name} {contact.last_name}?", contact = contact)
 
 
 

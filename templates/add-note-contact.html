@@ -6,7 +6,7 @@
 
 <h1>Add Note for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</h1>
 
-<form action="{{ url_for('add_note_contact', contact_id = 1) }}" method="POST">
+<form action="{{ url_for('add_note_contact', contact_id = contact.contact_id) }}" method="POST">
     {{ form.note.label }}
     {{ form.note }}
     {{ form.submit }}

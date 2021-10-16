@@ -319,6 +319,10 @@ def get_all_notes_contact(contact_id):
         return None
     return notes
 
+def get_all_meetings_contact(contact_id):
+    meetings = Meetings.query.filter(Meetings.contact_id == contact_id).all()
+    return meetings
+
 def get_all_for_contact(contact_id):
     contact = get_contact_by_id(contact_id)
     phones = get_phones_for_contact(contact_id)
@@ -559,6 +563,56 @@ def delete_note_contact(user_id, note_id):
         return False
 
 
+def delete_meeting(user_id, meeting_id):
+    meeting = get_meeting_by_id(meeting_id)
+    if not meeting:
+        return False
+    if user_id != meeting.user_info_id:
+        return False
+    notes = get_all_notes_meeting(meeting_id)
+    try:
+        if notes is not None:
+            for note in notes:
+                db.session.delete(note)
+        db.session.delete(meeting)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+def delete_contact(user_id, contact_id):
+    contact, phones, emails, addresses, socials, notes = get_all_for_contact(contact_id)
+    meetings = get_all_meetings_contact(contact_id)
+    if not contact:
+        return False
+    if user_id != contact.user_info_id:
+        return False
+    
+    try:
+        if phones is not None:
+            for phone in phones:
+                db.session.delete(phone)
+        if emails is not None:
+            for email in emails:
+                db.session.delete(email)
+        if addresses is not None:
+            for address in addresses:
+                db.session.delete(address)
+        if socials is not None:
+            for social in socials:
+                db.session.delete(social)
+        if notes is not None:
+            for note in notes:
+                db.session.delete(note)
+        if meetings is not None:
+            for meeting in meetings:
+                delete_meeting(user_id, meeting.meeting_id)
+        db.session.delete(contact)
+        db.session.commit()
+        return True
+    except:
+        return False
 
 
 

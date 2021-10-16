@@ -61,6 +61,11 @@
                         No Place
                     {% endif %}
                 </td>
+                <td>
+                    <a href="{{ url_for('delete_meeting', meeting_id = meeting.meeting_id) }}">
+                        <button name="delete_meeting" value="{{ meeting.meeting_id }}">delete</button>
+                    </a>
+                </td>
 
         </tr>
         {% endfor %}
