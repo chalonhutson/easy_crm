@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
 
 from sql_controller import get_all_contacts_by_user
@@ -53,3 +53,6 @@ class ContactSocial(FlaskForm):
     social_media_address = StringField("address", validators=[Length(max=200)])
     submit = SubmitField("add social")
 
+class MeetingNote(FlaskForm):
+    note = TextAreaField("note",validators=[Length(max=5000)])
+    submit = SubmitField("add note")

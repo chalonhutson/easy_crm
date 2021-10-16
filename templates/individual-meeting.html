@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>{{ contact.first_name }} {{ contact.last_name }}</h1>
 
-<h2>title</h2>
-    {% if meeting.title is not none %}
-        <p>{{ meeting.meeting_title }}</p>
-    {% else %}
-        no meeting title
-    {% endif %}
+<a href="{{ url_for('meetings') }}">back to meetings</a>
+
+{% if meeting.title is not none %}
+    <h1>{{ meeting.meeting_title }}</h1>
+{% else %}
+    <h1>no meeting title</h1>
+{% endif %}
 
 <h2>contact</h2>
     {% if contact is not none %}
@@ -34,6 +34,7 @@
     {% endif %}
 
 <h2>notes</h2>
+    <button><a href="{{ url_for('add_note_meeting', meeting_id = meeting.meeting_id) }}">add note to meeting</a></button>
     {% if notes is not none %}
         {% for note in notes %}
             <p>{{ note.note }}</p>

@@ -62,8 +62,8 @@ def return_count_meetings(user_id):
 
 def get_meeting_by_id(meeting_id):
     try:
-        query = Meetings.query.filter(Meetings.meeting_id == meeting_id).one()
-        return query
+        meeting = Meetings.query.get(meeting_id)
+        return meeting
     except:
         return False
 
@@ -196,6 +196,29 @@ def add_social(user_id, contact_id, social):
             return False
     else:
         return False
+
+def add_note_meeting(user_id, meeting_id, note):
+    try:
+        meeting = Meetings.query.get(meeting_id)
+    except:
+        return False
+    if meeting.user_info_id != user_id:
+        return False
+    print(note["note"])
+    if len(note["note"]) <= 5000:
+        new_note = Meetings_notes(meeting_id = meeting_id, note = note["note"])
+        try:
+            db.session.add(new_note)
+            db.session.commit()
+            print(f"Meeting note added || {new_note}")
+            return new_note
+        except:
+            return False
+    else:
+        return False
+
+
+
 
 
 

@@ -135,6 +135,24 @@ def add_meeting():
         form.edit_contact_list(current_user.id)
         return render_template("add-meeting.html", page_title="Add Meeting", form = form)
 
+@app.route("/add-note-meeting/<meeting_id>", methods = ["GET", "POST"])
+@login_required
+def add_note_meeting(meeting_id):
+    meeting = ctrl.get_meeting_by_id(meeting_id)
+    print(f"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ |||| MEETING -->> {meeting}//// id ----{meeting_id}++++++++++++++")
+    contact = ctrl.get_contact_by_id(meeting_id)
+    if request.method == "POST":
+        new_note = request.form
+        if ctrl.add_note_meeting(current_user.id, meeting_id, new_note):
+            flash("Note added to meeting.", "success")
+        else:
+            flash("Something went wrong. Ensure you are meeting the note requirements.", "danger")
+        return redirect(url_for("add_note_meeting", meeting_id = meeting_id))
+    else:
+        form = app_forms.MeetingNote()
+        return render_template("add-note-meeting.html", page_title = f"Add Note to {meeting.meeting_title}", meeting = meeting, form = form)
+
+
 @app.route("/meetings/<meeting_id>")
 @login_required
 def individual_meeting(meeting_id):
