@@ -2,9 +2,9 @@
 {% block body %}
 <h1>Welcome, {{ first_name }} {{ last_name }}!</h1>
 <h2>{{ contacts_count }}</h2>
-<h3>total number of contacts</h3>
+<h3>total number of <a href="{{ url_for('contacts') }}">contacts</a></h3>
 <h2>{{ meetings_count }}</h2>
-<h3>total number of meetings</h3>
+<h3>total number of <a href="{{ url_for('meetings') }}">meetings</a></h3>
 
 
 {% endblock %}
