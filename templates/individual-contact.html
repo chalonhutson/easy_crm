@@ -1,20 +1,48 @@
 {% extends "base.html" %}
 {% block body %}
+{% from 'macros.html' import update_button %}
 
 <a href="{{ url_for('contacts') }}">back to contacts</a>
 
+<div id="contact-name">
+    {% if contact.first_name|length != 0 and contact.last_name|length != 0 %}
+        <h1>{{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</h1>
+    {% else %}
+        <h1>no name for contact</h1>
+    {% endif %}
+        {{  update_button("update_contact", "contact_id", contact.contact_id, "name", "POST")}}
+</div>
 
-<h1>{{ contact.first_name }} {{ contact.last_name }}</h1>
-
-<h2>Title</h2>
-<p>{{ contact.job_title }}</p>
-
-<h2>Company</h2>
-<p>{{ contact.company }}</p>
-
-<h2>Bio</h2>
-<p>{{ contact.bio }}</p>
-
+<div id="contact-title">
+    <h2>Title</h2>
+    {% if contact.job_title|length > 0 %}
+        {{ contact.job_title }}
+    {% else %}
+        no job title
+    {% endif %}
+        {{ update_button("update_contact", "contact_id", contact.contact_id, "title", "POST")}} 
+    </div>
+    
+    <div id="contact-company">
+    <h2>Company</h2>
+    {% if contact.company|length > 0 %}
+        {{ contact.company }}
+    {% else %}
+        no company
+    {% endif %}
+        {{  update_button("update_contact", "contact_id", contact.contact_id, "company", "POST")}} 
+    </div>
+    
+<div id="contact-bio">
+    <h2>Bio</h2>
+    {% if contact.bio|length > 0 %}
+        {{ contact.bio }}
+    {% else %}
+        no contact
+    {% endif %}
+        {{  update_button("update_contact", "contact_id", contact.contact_id, "bio", "POST")}} 
+</div>
+    
 <div id="phone-container">
     <h2>Phone Numbers</h2>
     <button><a href="{{ url_for('add_phone', contact_id = contact.contact_id) }}">add phone number to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a></button>

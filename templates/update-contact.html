@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block body %}
+{% from 'macros.html' import back_to_contact %}
+
+
+{{ back_to_contact(contact) }}
+
+<form action="{{ url_for('update_contact') }}" method="POST">
+    <input type="hidden" name="_method" value="PUT"/>
+    <input type="hidden" name="contact_id" value="{{ contact.contact_id }}"/>
+    {{ form.csrf_token() }}
+    {% if info == "name" %}
+        <input type="hidden" name="info" value="name"/>
+        <h2>change name for {{ contact.first_name }} {{ contact.last_name }}</h2>
+        {{ form.first_name.label }}
+        {{ form.first_name }}
+        {{ form.last_name.label }}
+        {{ form.last_name }}
+        
+        {% elif info == "title" %}
+        <input type="hidden" name="info" value="job_title"/>
+        <h2>change title for {{ contact.first_name }} {{ contact.last_name }}</h2>
+        <h3>current title = {{ contact.job_title }}</h3>
+        {{ form.job_title.label }}
+        {{ form.job_title }}
+        
+        {% elif info == "company" %}
+        <input type="hidden" name="info" value="company"/>
+        <h2>change company for {{ contact.first_name }} {{ contact.last_name }}</h2>
+        <h3>current company = {{ contact.company }}</h3>
+        {{ form.company.label }}
+        {{ form.company }}
+        
+        {% elif info == "bio" %}
+        <input type="hidden" name="info" value="bio"/>
+        <h2>change bio for {{ contact.first_name }} {{ contact.last_name }}</h2>
+        <h3>current bio = {{ contact.bio }}</h3>
+        {{ form.bio.label }}
+        {{ form.bio }}
+        
+
+
+    {% endif %}
+    {{ form.submit2 }}
+</form>
+
+{% endblock %}

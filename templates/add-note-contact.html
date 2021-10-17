@@ -2,7 +2,8 @@
 {% block body %}
 {% from 'macros.html' import back_to_contact %}
 
-<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a>
+{{ back_to_contact(contact) }}
+
 
 <h1>Add Note for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</h1>
 

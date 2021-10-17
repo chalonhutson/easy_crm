@@ -18,6 +18,15 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField("confirm password", validators=[DataRequired(), Length(min=8, max=99), EqualTo("password")])
     submit = SubmitField("register")
 
+class ContactForm(FlaskForm):
+    first_name = StringField("first name", validators=[Length(max=25), Optional()])
+    last_name = StringField("last name", validators=[Length(max=25), Optional()])
+    job_title = StringField("title", validators=[Length(max=50), Optional()])
+    company = StringField("company", validators=[Length(max=50), Optional()])
+    bio = TextAreaField("bio",validators=[Length(max=2000), Optional()])
+    submit = SubmitField("add contact")
+    submit2 = SubmitField("update contact")
+
 class MeetingForm(FlaskForm):
     title = StringField("meeting title", validators=[Length(max=150), Optional()])
     contact = SelectField("contact", validators=[Optional()])

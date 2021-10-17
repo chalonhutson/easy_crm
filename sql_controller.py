@@ -321,7 +321,10 @@ def get_all_notes_contact(contact_id):
 
 def get_all_meetings_contact(contact_id):
     meetings = Meetings.query.filter(Meetings.contact_id == contact_id).all()
-    return meetings
+    if len(meetings) != 0:
+        return meetings
+    else:
+        return None
 
 def get_all_for_contact(contact_id):
     contact = get_contact_by_id(contact_id)
@@ -574,7 +577,9 @@ def delete_meeting(user_id, meeting_id):
         if notes is not None:
             for note in notes:
                 db.session.delete(note)
+                db.session.flush()
         db.session.delete(meeting)
+        db.session.flush()
         db.session.commit()
         return True
     except:
@@ -593,22 +598,29 @@ def delete_contact(user_id, contact_id):
         if phones is not None:
             for phone in phones:
                 db.session.delete(phone)
+                db.session.flush()
         if emails is not None:
             for email in emails:
                 db.session.delete(email)
+                db.session.flush()
         if addresses is not None:
             for address in addresses:
                 db.session.delete(address)
+                db.session.flush()
         if socials is not None:
             for social in socials:
                 db.session.delete(social)
+                db.session.flush()
         if notes is not None:
             for note in notes:
                 db.session.delete(note)
+                db.session.flush()
         if meetings is not None:
             for meeting in meetings:
                 delete_meeting(user_id, meeting.meeting_id)
+                db.session.flush()
         db.session.delete(contact)
+        db.session.flush()
         db.session.commit()
         return True
     except:
@@ -656,7 +668,44 @@ def update_meeting(user_id, form):
         return False
 
 
+def update_contact(user_id, form):
+    contact = get_contact_by_id(form["contact_id"])
 
+    if user_id != contact.user_info_id:
+        return False
+
+    info = form["info"]
+
+    if info == "name":
+        if form["first_name"]:
+            contact.first_name = form["first_name"]
+        else:
+            contact.first_name = None
+        if form["last_name"]:
+            contact.last_name = form["last_name"]
+        else:
+            contact.last_name = None
+    elif info == "job_title":
+        if form["job_title"]:
+            contact.job_title = form["job_title"]
+        else:
+            contact.job_title = None
+    elif info == "company":
+        if form["company"]:
+            contact.company = form["company"]
+        else:
+            contact.company = None
+    elif info == "bio":
+        if form["bio"]:
+            contact.bio = form["bio"]
+        else:
+            contact.bio = None
+
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
 
 
 

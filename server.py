@@ -16,6 +16,8 @@ from model import connect_to_db
 import sql_controller as ctrl
 import app_forms
 
+
+
 ######### IMPORT END ###############
 
 # Invokes the main Flask class and sets it to variable app.
@@ -421,13 +423,13 @@ def delete_contact(contact_id):
         return render_template("delete-contact.html", page_title = f"Delete {contact.first_name} {contact.last_name}?", contact = contact)
 
 
-@app.route("/update-meeting/", methods = ["POST", "GET", "PUT"])
+@app.route("/update-meeting/", methods = ["POST", "GET"])
 @login_required
 def update_meeting():
     if request.method == "POST":
         meeting = ctrl.get_meeting_by_id(request.form["meeting_id"])
-        if request.form["_method"] == "PUT":
-            form = request.form
+        form = request.form
+        if form["_method"] == "PUT":
             if ctrl.update_meeting(current_user.id, form):
                 flash("Meeting updated successfully.", "success")
             else:
@@ -443,6 +445,25 @@ def update_meeting():
     flash("Something went wrong.", "danger")
     return redirect(url_for("meetings"))
 
+
+@app.route("/update-contact", methods = ["POST", "GET"])
+@login_required
+def update_contact():
+    if request.method == "POST":
+        form = request.form
+        info = request.form["info"]
+        contact = ctrl.get_contact_by_id(form["contact_id"])
+        if form["_method"] == "PUT":
+            if ctrl.update_contact(current_user.id, form):
+                flash("Contact updated successfully", "success")
+                return redirect(url_for("individual_contact", contact_id = contact.contact_id))
+            else:
+                flash("Something went wrong.", "danger")
+        else:
+            app_form = app_forms.ContactForm()
+            return render_template("update-contact.html", page_title = f"Update {contact.first_name} {contact.last_name}'s {info}", contact = contact, info = info, form = app_form)
+    flash("Something went wrong.", "danger")
+    return redirect(url_for("contacts"))
 
 
 

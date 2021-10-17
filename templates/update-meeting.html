@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% block body %}
 
+{% if meeting.meeting_title|length != 0 %}
 <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to {{ meeting.meeting_title }}</a>
+{% else %}
+<a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to meeting</a>
+{% endif %}
 
 <form action="{{ url_for('update_meeting') }}" method="POST">
     <input type="hidden" name="_method" value="PUT"/>
