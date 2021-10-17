@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block body %}
+
+<a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to {{ meeting.meeting_title }}</a>
+
+<form action="{{ url_for('update_meeting') }}" method="POST">
+    <input type="hidden" name="_method" value="PUT"/>
+    <input type="hidden" name="meeting_id" value="{{ meeting.meeting_id }}"/>
+    {{ form.csrf_token() }}
+    {% if info == "method" %}
+        <input type="hidden" name="info" value="method"/>
+        <h2>change method for {{ meeting.meeting_title }}</h2>
+        <h3>current method = {{ meeting.meeting_method }}</h3>
+        {{ form.method.label }}
+        {{ form.method }}
+    
+    {% elif info == "time" %}
+        <input type="hidden" name="info" value="datetime"/>
+        <h2>change time for {{ meeting.meeting_title }}</h2>
+        <h3>current time = {{ date }} @ {{ time }}</h3>
+        <label for="datetime">date and time</label>
+  <input type="datetime-local" id="datetime" name="datetime"><br>
+    
+    {% elif info == "contact" %}
+        <input type="hidden" name="info" value="contact"/>
+        <h2>change contact for {{ meeting.meeting_title }}</h2>
+        {{ form.contact.label }}
+        {{ form.contact }}
+        
+        {% elif info == "title" %}
+        <input type="hidden" name="info" value="title"/>
+        <h2>change title for {{ meeting.meeting_title }}</h2>
+        {{ form.title.label }}
+        {{ form.title }}
+        
+
+
+    {% endif %}
+    {{ form.submit2 }}
+</form>
+
+{% endblock %}

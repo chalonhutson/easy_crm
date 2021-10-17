@@ -12,6 +12,7 @@
                 <th>method</th>
                 <th>place</th>
                 <th>time</th>
+                <th>delete</th>
             </tr>
         {% for meeting in meetings %}
 
@@ -22,7 +23,7 @@
                     {% if meeting.meeting_title is not none %}
                         {{ meeting.meeting_title }}
                     {% else %}
-                        No Meeting Title
+                        no meeting title
                     {% endif %}
                 </td>
                     </a>
@@ -30,35 +31,29 @@
                     {% if meeting.meeting_contact is not none %}
                         {{ meeting.meeting_contact.first_name }} {{ meeting.meeting_contact.last_name }}
                     {% else %}
-                        No Contact
+                        no contact
                     {% endif %}
                 </td>
                 <td class = "meeting-info" class = "method">
                     {% if meeting.meeting_method is not none %}
                         {{ meeting.meeting_method }} 
                     {% else %}
-                        No Method
+                        no method
                     {% endif %}
                 </td>
                 <td class = "meeting-info" class = "place">
                     {% if meeting.meeting_place is not none %}
                         {{ meeting.meeting_place }} 
                     {% else %}
-                        No Place
-                    {% endif %}
-                </td>
-                <td class = "meeting-info" class = "date">
-                    {% if meeting.meeting_date is not none %}
-                        {{ meeting.meeting_date }} 
-                    {% else %}
-                        No Place
+                        no place
                     {% endif %}
                 </td>
                 <td class = "meeting-info" class = "time">
-                    {% if meeting.meeting_time is not none %}
+                    {% if meeting.meeting_date and meeting.meeting_time is not none %}
+                        {{ meeting.meeting_date }} 
                         {{ meeting.meeting_time }} 
                     {% else %}
-                        No Place
+                        no time
                     {% endif %}
                 </td>
                 <td>

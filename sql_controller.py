@@ -390,7 +390,7 @@ def get_all_contacts_page(user_id, per_page, page_offset):
 
 def get_all_meetings_page(user_id, per_page, page_offset):
     page_offset = page_offset * per_page
-    query = Meetings.query.filter(Meetings.user_info_id == user_id).limit(per_page).offset(page_offset)
+    query = Meetings.query.filter(Meetings.user_info_id == user_id).order_by(Meetings.meeting_datetime).limit(per_page).offset(page_offset)
 
     meetings = []
 
@@ -613,6 +613,53 @@ def delete_contact(user_id, contact_id):
         return True
     except:
         return False
+
+
+def update_meeting(user_id, form):
+    meeting = get_meeting_by_id(form["meeting_id"])
+
+    if user_id != meeting.user_info_id:
+        return False
+    
+    info = form["info"]
+
+    if info == "contact":
+        if form["contact"] == "None" or None:
+            meeting.contact_id = None
+        else:
+            meeting.contact_id = form["contact"]
+    elif info == "title":
+        if form["title"]:
+            meeting.meeting_title = form["title"]
+        else:
+            meeting.title = None
+    elif info == "method":
+        if form["method"]:
+            meeting.meeting_method = form["method"]
+        else:
+            meeting.meeting_method = None
+    elif info == "place":
+        if form["place"]:
+            meeting.meeting_place = form["place"]
+        else:
+            meeting.meeting_place = None
+    elif info == "datetime":
+        if form["datetime"]:
+            meeting.meeting_datetime = form["datetime"]
+        else:
+            meeting.meeting_datetime = None
+    
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+
+
+
+
 
 
 

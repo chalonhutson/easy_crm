@@ -421,6 +421,29 @@ def delete_contact(contact_id):
         return render_template("delete-contact.html", page_title = f"Delete {contact.first_name} {contact.last_name}?", contact = contact)
 
 
+@app.route("/update-meeting/", methods = ["POST", "GET", "PUT"])
+@login_required
+def update_meeting():
+    if request.method == "POST":
+        meeting = ctrl.get_meeting_by_id(request.form["meeting_id"])
+        if request.form["_method"] == "PUT":
+            form = request.form
+            if ctrl.update_meeting(current_user.id, form):
+                flash("Meeting updated successfully.", "success")
+            else:
+                flash("Something went wrong.", "danger")
+            return redirect(url_for("individual_meeting", meeting_id = meeting.meeting_id))
+        else:
+            form = app_forms.MeetingForm()
+            info = request.form["info"]
+            date, time = ctrl.get_readable_date_time(meeting.meeting_datetime)
+            if request.form["info"] == "contact":
+                form.edit_contact_list(current_user.id)                
+            return render_template("update-meeting.html", page_title = f"Update {meeting.meeting_title}'s {info}", meeting = meeting, date = date, time = time, info = info, form = form)
+    flash("Something went wrong.", "danger")
+    return redirect(url_for("meetings"))
+
+
 
 
 # Main run script

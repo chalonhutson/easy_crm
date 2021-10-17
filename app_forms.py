@@ -24,6 +24,7 @@ class MeetingForm(FlaskForm):
     method = StringField("method", validators=[Length(max=50), Optional()])
     place = StringField("place", validators=[Length(max=100), Optional()])
     submit = SubmitField("add meeting")
+    submit2 = SubmitField("update meeting")
 
     def edit_contact_list(self, user_id):
         contacts = get_all_contacts_by_user(user_id, True)

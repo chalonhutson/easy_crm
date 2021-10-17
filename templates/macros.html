@@ -2,4 +2,13 @@
 <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a>
 {% endmacro %}
 
-
+{% macro update_button(endpoint, name, value, info, _method) %}
+<div class="edit-btn">
+    <form action="{{ url_for(endpoint) }}" method="POST">
+        <input type="hidden" name="{{ name }}" value="{{ value }}"/>
+        <input type="hidden" name="info" value="{{ info }}"/>
+        <input type="hidden" name="_method" value="{{ _method }}"/>
+        <input type="image" name="submit" src="../static/icons/edit.png" alt="Submit">
+    </form>
+</div>
+{% endmacro %}
