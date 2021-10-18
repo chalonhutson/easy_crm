@@ -1,0 +1,25 @@
+#giant-number {
+    font-family: 'Teko';
+    font-size: 100pt;
+}
+
+
+.page-container {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#stats-container {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.number-container {
+    padding: 10px 20px;
+    min-width: 375px;
+}

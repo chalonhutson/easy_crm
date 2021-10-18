@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
 
-<h1>Meetings!</h1>
-<button><a href="{{ url_for('add_meeting') }}">Create New Meeting</a></button>
+<h1>MEETINGS!</h1>
+<button><a href="{{ url_for('add_meeting') }}">CREATE NEW MEETING</a></button>
 
-    <div id="meetings-container">
+    <div class="window" id="meetings-container">
         <table>
             <tr>
                 <th>title</th>
@@ -14,8 +14,8 @@
                 <th>time</th>
                 <th>delete</th>
             </tr>
-        {% for meeting in meetings %}
 
+        {% for meeting in meetings %}
         
         <tr class = "meeting-row">
                 <td class = "meeting-info" class = "first-name">
@@ -25,8 +25,8 @@
                     {% else %}
                         no meeting title
                     {% endif %}
+                </a>
                 </td>
-                    </a>
                 <td class = "meeting-info" class = "contact">
                     {% if meeting.meeting_contact is not none %}
                         {{ meeting.meeting_contact.first_name }} {{ meeting.meeting_contact.last_name }}
@@ -58,12 +58,13 @@
                 </td>
                 <td>
                     <a href="{{ url_for('delete_meeting', meeting_id = meeting.meeting_id) }}">
-                        <button name="delete_meeting" value="{{ meeting.meeting_id }}">delete</button>
+                        <button name="delete_meeting" value="{{ meeting.meeting_id }}">DELETE</button>
                     </a>
                 </td>
 
-        </tr>
-        {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 
 {% endblock %}

@@ -4,34 +4,61 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" type="image/png" href="../static/favicon.png" />
+    
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap');
+    </style>
+
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&family=Teko:wght@300;400;500;600;700&display=swap');
+    </style>
+
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/base.css">
     <title>{{ page_title }}</title>
 </head>
 <body>
     {% block header %}
     <header>
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('contacts') }}">Contacts</a>
-        <a href="{{ url_for('meetings') }}">Meetings</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <div id="header-container">
+
+            <div id="logo">
+                <a href="{{ url_for('home') }}">
+                    <img src="../static/logo.png">
+                </a>
+            </div>
+            
+            <div id="header-links-container">
+                <a class="header-link" href="{{ url_for('home') }}">HOME</a>
+                <a class="header-link" href="{{ url_for('contacts') }}">CONTACTS</a>
+                <a class="header-link" href="{{ url_for('meetings') }}">MEETINGS</a>
+                <a class="header-link" href="{{ url_for('logout') }}">LOGOUT</a>
+            </div>
+
+        </div>
     </header>
     {% endblock %}
+    
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert" id="jango">
+                    <div class="alert alert-{{ category }}" role="alert" id="alert-btn">
                         {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <button type="button" id="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <script>
-                        let jango = document.getElementById("jango");
-                        jango.addEventListener("click", () => {jango.remove()});
-                    </script>
                     {% endfor %}
+                    <script>
+                        let alert_btn = document.getElementById("alert-btn");
+                        alert_btn.addEventListener("click", () => {alert_btn.remove()});
+                    </script>
             {% endif %}
         {% endwith %}
         

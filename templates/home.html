@@ -1,10 +1,30 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Welcome, {{ first_name }} {{ last_name }}!</h1>
-<h2>{{ contacts_count }}</h2>
-<h3>total number of <a href="{{ url_for('contacts') }}">contacts</a></h3>
-<h2>{{ meetings_count }}</h2>
-<h3>total number of <a href="{{ url_for('meetings') }}">meetings</a></h3>
+
+<link rel="stylesheet" href="../static/css/home.css">
+
+<div class="page-container">
+
+    <h1>WELCOME, {{ first_name.upper() }} {{ last_name.upper() }}!</h1>
+    
+    <div id="stats-container">
+
+        <div class="window number-container">
+            <h2 id="giant-number">{{ contacts_count }}</h2>
+            <h3>total number of <a href="{{ url_for('contacts') }}">contacts</a></h3>
+        </div>
+        
+        
+        <div class="window number-container">
+            <h2 id="giant-number">{{ meetings_count }}</h2>
+            <h3>total number of <a href="{{ url_for('meetings') }}">meetings</a></h3>
+        </div>
+
+    </div>
+
+        
+</div>
+
 
 
 {% endblock %}

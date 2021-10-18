@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
 
+<link rel="stylesheet" href="../static/css/contacts.css">
 
-<h1>Contacts!</h1>
-<button><a href="{{ url_for('add_contact') }}">Create New Contact</a></button>
+<h1>CONTACTS!</h1>
+<button><a href="{{ url_for('add_contact') }}">CREATE NEW CONTACT</a></button>
 
-    <div id="contacts-container">
+    <div class="window" id="contacts-container">
         <table>
             <tr>
                 <th>name</th>
@@ -62,7 +63,7 @@
 
                 <td>
                     <a href="{{ url_for('delete_contact', contact_id = contact.contact_id) }}">
-                        <button name="delete_contact" value="{{ contact.contact_id }}">delete</button>
+                        <button name="delete_contact" value="{{ contact.contact_id }}">DELETE</button>
                     </a>
                 </td>
 
