@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
+{% from 'macros.html' import import_styles  %}
+{{ import_styles() }}
 
 <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
     {% if meeting.meeting_title != none %}
@@ -18,10 +20,14 @@
 
 </h1>
 
-<form action="{{ url_for('add_note_meeting', meeting_id = meeting.meeting_id) }}" method="POST">
-    {{ form.note.label }}
-    {{ form.note }}
-    {{ form.submit }}
-</form>
+<div class="section-container">
+
+    <form action="{{ url_for('add_note_meeting', meeting_id = meeting.meeting_id) }}" method="POST">
+        {{ form.note.label }}
+        {{ form.note }}
+        {{ form.submit(class="main-button") }}
+    </form>
+
+</div>
 
 {% endblock %}

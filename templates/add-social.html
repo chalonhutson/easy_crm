@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 {% block body %}
 {% from 'macros.html' import back_to_contact %}
+{% from 'macros.html' import import_styles %}
+
+{{ import_styles() }}
 
 {{ back_to_contact(contact) }}
 
-<h1>Add Social for {{ contact.first_name }} {{ contact.last_name }}</h1>
+<h1>
+    {% if contact.first_name|length > 0 or contact.last_name|length > 0 %}
+        add social for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
+    {% else %}
+        add social for contact
+    {% endif %}
 
+</h1>
+
+<div class="section-container">
+    
     <form action="{{ url_for('add_social', contact_id = contact.contact_id) }}" method="post">
         {{ form.social_media.label }}
         {{ form.social_media }}<br>
         {{ form.social_media_address.label }}
         {{ form.social_media_address }}<br>
-        {{ form.submit }}
+        {{ form.submit(class="main-button") }}
     </form>
-
+    
+</div>
 
 {% endblock %}

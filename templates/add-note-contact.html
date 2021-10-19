@@ -2,15 +2,27 @@
 {% block body %}
 {% from 'macros.html' import back_to_contact %}
 
+<link rel="stylesheet" href="../static/css/individual-contacts.css">
+
 {{ back_to_contact(contact) }}
 
 
-<h1>Add Note for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</h1>
+<h1>
+    {% if contact.first_name|length > 0 or contact.last_name|length > 0 %}
+        add note for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
+    {% else %}
+        add note for contact
+    {% endif %}
+</h1>
 
-<form action="{{ url_for('add_note_contact', contact_id = contact.contact_id) }}" method="POST">
-    {{ form.note.label }}
-    {{ form.note }}
-    {{ form.submit }}
-</form>
+<div class="section-container">
+    
+    <form action="{{ url_for('add_note_contact', contact_id = contact.contact_id) }}" method="POST">
+        {{ form.note.label }}
+        {{ form.note }}
+        {{ form.submit(class="main-button") }}
+    </form>
+    
+</div>
 
 {% endblock %}

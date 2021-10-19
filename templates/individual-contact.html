@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
 {% from 'macros.html' import update_button %}
+{% from 'macros.html' import import_styles %}
+{% from 'macros.html' import back_to_contacts %}
 
-<link rel="stylesheet" href="../static/css/individual-contacts.css">
+{{ import_styles() }}
+{{ back_to_contacts() }}
 
-
-<a href="{{ url_for('contacts') }}">back to contacts</a>
 
 <div class="section-container">
 
@@ -37,7 +38,7 @@
                 <h2 class="contact-header">Company</h2>
                 {{  update_button("update_contact", "contact_id", contact.contact_id, "company", "POST")}} 
             </div>
-            {% if contact.company|length > 0 %}
+            {% if contact.company is not none %}
             {{ contact.company }}
             {% else %}
             no company
@@ -179,8 +180,8 @@
             add social to contact
             {% endif %}
         </a></button><br>
-        {% if socials is not none %}
     </div>
+        {% if socials is not none %}
     <table>
         <tr>
             <th>platform</th>
@@ -193,13 +194,13 @@
             <td><form action="{{ url_for('delete_social') }}" method="POST"><button class="main-button" name="delete_social" value='{{ social.contact_social_media_id }}'>delete</button></form></td>
         </tr>
         {% endfor %}
+        {% else %}
+        no socials
+        {% endif %}
         
         
     </table>
-    {% else %}
-    no socials
-    {% endif %}
-
+    </div>
 </div>
 
 
@@ -221,7 +222,7 @@
     <div class="horizontal-section list-all-but-tables">
         {{ note.note }}
         
-        <form action="{{ url_for('delete_note_contact') }}" method="POST"><button class="main-button" name="delete_note_contact" value="{{ note.contact_note_id }}">delete</button></form>
+        <form action="{{ url_for('delete_note_contact') }}" method="POST"><button class="main-button delete-btn" name="delete_note_contact" value="{{ note.contact_note_id }}">delete</button></form>
     </div>
         
     {% endfor %}

@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% block body %}
 {% from 'macros.html' import back_to_contact %}
+{% from 'macros.html' import import_styles %}
+
+{{ import_styles() }}
 
 <a href="{{ url_for('meetings') }}">back to meetings</a>
 
 <h1>Add A Meeting</h1>
+
+<div class="section-container">
 
     <form action="{{ url_for('add_meeting') }}" method="post">
         {{ form.title.label }}
@@ -16,9 +21,10 @@
         {{ form.place.label }}
         {{ form.place }}<br>
         <label for="datetime">date and time</label>
-  <input type="datetime-local" id="datetime" name="datetime"><br>
-        {{ form.submit }}
+        <input type="datetime-local" id="datetime" name="datetime"><br>
+        {{ form.submit(class="main-button") }}
     </form>
-
+    
+</div>
 
 {% endblock %}

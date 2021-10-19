@@ -47,6 +47,14 @@ class MeetingForm(FlaskForm):
         self.contact.choices = contacts_list
 
 
+class ContactPhone(FlaskForm):
+    phone = StringField("phone", validators=[Length(min=10, max=10)])
+    submit = SubmitField("add phone")
+
+class ContactEmail(FlaskForm):
+    email = StringField("email", validators=[Length(max=99)])
+    submit = SubmitField("add email")
+
 class ContactAddress(FlaskForm):
     address_1 = StringField("address 1", validators=[Length(max=150)])
     address_2 = StringField("address 2", validators=[Length(max=150)])

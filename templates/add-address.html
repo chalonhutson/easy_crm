@@ -1,29 +1,50 @@
 {% extends "base.html" %}
 {% block body %}
 {% from 'macros.html' import back_to_contact %}
+{% from 'macros.html' import import_styles %}
+
+{{ import_styles() }}
 
 {{ back_to_contact(contact) }}
 
-<h1>Add Address for {{ contact.first_name }} {{ contact.last_name }}</h1>
+<h1>
+  {% if contact.first_name|length > 0 or contact.last_name|length > 0 %}
+    add address for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
+  {% else %}
+    add address for contact
+  {% endif %}
+</h1>
 
-<form method="POST" action="{{ url_for('add_address', contact_id = contact.contact_id) }}">
-  <h2>New Address:</h2><br>
-    {{ form.address_1.label }}
-    {{ form.address_1 }}
-    {{ form.address_2.label }}
-    {{ form.address_2 }}
-    {{ form.city.label }}
-    {{ form.city }}
-    {{ form.county.label }}
-    {{ form.county }}
-    {{ form.state.label }}
-    {{ form.state }}
-    {{ form.country.label }}
-    {{ form.country }}
-    {{ form.zip.label }}
-    {{ form.zip }}
-    {{ form.submit }}
+<div class="section-container">
+  
+  <form method="POST" action="{{ url_for('add_address', contact_id = contact.contact_id) }}">
+    <h2>New Address:</h2><br>
+
+    <div class="horizontal-section">
+      {{ form.address_1.label }}
+      {{ form.address_1 }}
+      {{ form.address_2.label(class="margin-left") }}
+      {{ form.address_2 }}
+    </div>
+
+    <div class="horizontal-section">
+      {{ form.city.label }}
+      {{ form.city }}
+      {{ form.county.label(class="margin-left") }}
+      {{ form.county }}
+      {{ form.state.label(class="margin-left") }}
+      {{ form.state }}
+    </div>
+    
+    <div class="horizontal-section">
+      {{ form.country.label }}
+      {{ form.country }}
+      {{ form.zip.label(class="margin-left") }}
+      {{ form.zip }}
+      {{ form.submit(class="main-button margin-left") }}
+    </div>
   </form>
-
+  
+</div>
 
 {% endblock %}

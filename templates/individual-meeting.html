@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
 {% from 'macros.html' import update_button %}
+{% from 'macros.html' import back_to_meetings %}
+{% from 'macros.html' import import_styles %}
 
-<link rel="stylesheet" href="../static/css/individual-contacts.css">
+{{  import_styles() }}
+{{ back_to_meetings() }}
 
-<a href="{{ url_for('meetings') }}">back to meetings</a>
+
+
 
 
 <div class="section-container">

@@ -1,46 +1,86 @@
 {% extends "base.html" %}
 {% block body %}
+{% from 'macros.html' import back_to_individual_meeting %}
 
-{% if meeting.meeting_title|length != 0 %}
-<a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to {{ meeting.meeting_title }}</a>
-{% else %}
-<a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to meeting</a>
-{% endif %}
+<link rel="stylesheet" href="../static/css/individual-contacts.css">
 
-<form action="{{ url_for('update_meeting') }}" method="POST">
-    <input type="hidden" name="_method" value="PUT"/>
-    <input type="hidden" name="meeting_id" value="{{ meeting.meeting_id }}"/>
-    {{ form.csrf_token() }}
-    {% if info == "method" %}
+
+{{ back_to_individual_meeting(meeting) }}
+
+
+
+<div class="section-container">
+
+    <form action="{{ url_for('update_meeting') }}" method="POST">
+        <input type="hidden" name="_method" value="PUT"/>
+        <input type="hidden" name="meeting_id" value="{{ meeting.meeting_id }}"/>
+        {{ form.csrf_token() }}
+        {% if info == "method" %}
         <input type="hidden" name="info" value="method"/>
-        <h2>change method for {{ meeting.meeting_title }}</h2>
-        <h3>current method = {{ meeting.meeting_method }}</h3>
+        <h2>
+            {% if meeting.meeting_title is not none %}
+                change method for {{ meeting.meeting_title.lower() }}
+                <h3>
+                    {% if meeting.meeting_method is not none %}
+                        current method = {{ meeting.meeting_method }}
+                    {% else %}
+                        current method not assigned yet
+                    {% endif %}
+                </h3>
+            {% else %}
+                change method for meeting
+            {% endif %}
+        </h2>
         {{ form.method.label }}
         {{ form.method }}
-    
-    {% elif info == "time" %}
+        
+        {% elif info == "time" %}
         <input type="hidden" name="info" value="datetime"/>
-        <h2>change time for {{ meeting.meeting_title }}</h2>
+        <h2>
+            {% if meeting.meeting_title is not none %}
+                change time for {{ meeting.meeting_title.lower() }}
+            {% else %}
+                change time for meeting    
+            {% endif %}    
+        </h2>
+        {% if date is not none %}
         <h3>current time = {{ date }} @ {{ time }}</h3>
+        {% else %}
+        <h3>current time = not time given yet</h3>
+        {% endif %}
         <label for="datetime">date and time</label>
-  <input type="datetime-local" id="datetime" name="datetime"><br>
-    
-    {% elif info == "contact" %}
+        <input type="datetime-local" id="datetime" name="datetime"><br>
+        
+        {% elif info == "contact" %}
         <input type="hidden" name="info" value="contact"/>
-        <h2>change contact for {{ meeting.meeting_title }}</h2>
+        <h2>
+            {% if meeting.meeting_title is not none %}
+                change contact for {{ meeting.meeting_title.lower() }}
+            {% else %}
+                change contact for meeting
+            {% endif %}
+        </h2>
         {{ form.contact.label }}
         {{ form.contact }}
         
         {% elif info == "title" %}
         <input type="hidden" name="info" value="title"/>
-        <h2>change title for {{ meeting.meeting_title }}</h2>
+        <h2>
+            {% if meeting.meeting_title is not none %}
+                change title for {{ meeting.meeting_title.lower() }}
+            {% else %}
+                change title for meeting
+            {% endif %}
+        </h2>
         {{ form.title.label }}
         {{ form.title }}
         
-
-
-    {% endif %}
-    {{ form.submit2 }}
-</form>
+        
+        
+        {% endif %}
+        {{ form.submit2(class="main-button") }}
+    </form>
+    
+</div>
 
 {% endblock %}

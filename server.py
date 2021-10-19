@@ -229,33 +229,35 @@ def add_contact():
 @login_required
 def add_email(contact_id):
     contact = ctrl.get_contact_by_id(contact_id)
+    form = app_forms.ContactEmail()
 
     if request.method == "POST":
-        new_email = request.form["new_email"]
+        new_email = request.form["email"]
         if ctrl.add_email(current_user.id, contact_id, new_email):
             flash("Email added to contact.", "success")
         else:
             flash("Something went wrong. Ensure you are meeting the email requirements.", "danger")
-        return render_template("add-email.html", page_title = "Add Email", contact = contact)
+        return render_template("add-email.html", page_title = "Add Email", form = form, contact = contact)
     else:
-        return render_template("add-email.html", page_title = "Add Email", contact = contact)
+        return render_template("add-email.html", page_title = "Add Email", form = form, contact = contact)
 
 
 @app.route("/add-phone/<contact_id>", methods = ["GET", "POST"])
 @login_required
 def add_phone(contact_id):
     contact = ctrl.get_contact_by_id(contact_id)
+    form = app_forms.ContactPhone()
 
     if request.method == "POST":
         print(request.form)
-        new_phone = request.form["new_phone"]
+        new_phone = request.form["phone"]
         if ctrl.add_phone(current_user.id, contact_id, new_phone):
             flash("Phone number added to contact.", "success")
         else:
             flash("Something went wrong. Ensure you are meeting the phone number requirements.", "danger")
-        return render_template("add-phone.html", page_title = "Add Phone", contact = contact)
+        return render_template("add-phone.html", page_title = "Add Phone", form = form, contact = contact)
     else:
-        return render_template("add-phone.html", page_title = "Add Phone", contact = contact)
+        return render_template("add-phone.html", page_title = "Add Phone", form = form, contact = contact)
 
 @app.route("/add-address/<contact_id>", methods = ["GET", "POST"])
 @login_required
@@ -437,7 +439,10 @@ def update_meeting():
         else:
             form = app_forms.MeetingForm()
             info = request.form["info"]
-            date, time = ctrl.get_readable_date_time(meeting.meeting_datetime)
+            if meeting.meeting_datetime is not None:
+                date, time = ctrl.get_readable_date_time(meeting.meeting_datetime)
+            else:
+                date, time = None, None
             if request.form["info"] == "contact":
                 form.edit_contact_list(current_user.id)                
             return render_template("update-meeting.html", page_title = f"Update {meeting.meeting_title}'s {info}", meeting = meeting, date = date, time = time, info = info, form = form)
@@ -452,6 +457,10 @@ def update_contact():
         form = request.form
         info = request.form["info"]
         contact = ctrl.get_contact_by_id(form["contact_id"])
+        if len(contact.first_name) > 0 or len(contact.last_name) > 0:
+            contact_full_name = f"{contact.first_name} {contact.last_name}"
+        else:
+            contact_full_name = "contact"
         if form["_method"] == "PUT":
             if ctrl.update_contact(current_user.id, form):
                 flash("Contact updated successfully", "success")
@@ -460,7 +469,7 @@ def update_contact():
                 flash("Something went wrong.", "danger")
         else:
             app_form = app_forms.ContactForm()
-            return render_template("update-contact.html", page_title = f"Update {contact.first_name} {contact.last_name}'s {info}", contact = contact, info = info, form = app_form)
+            return render_template("update-contact.html", page_title = f"Update {contact_full_name}'s {info}", contact_full_name = contact_full_name, contact = contact, info = info, form = app_form)
     flash("Something went wrong.", "danger")
     return redirect(url_for("contacts"))
 

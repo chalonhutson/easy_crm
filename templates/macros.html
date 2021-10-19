@@ -1,9 +1,19 @@
+{% macro back_to_contacts() %}
+<a href="{{ url_for('contacts') }}">
+    <button class="main-button">
+        back to contacts
+    </button>
+</a>
+{% endmacro %}
+
 {% macro back_to_contact(contact) %}
-{% if contact.first_name|length == 0 and contact.last_name|length == 0 %}
-<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">back to contact</a>
-{% else %}
-<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}</a>
-{% endif %}
+<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}"><button class="main-button">
+    {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
+    back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
+    {% else %}
+    back to contact
+    {% endif %}
+</button></a>
 {% endmacro %}
 
 {% macro update_button(endpoint, name, value, info, _method) %}
@@ -15,6 +25,17 @@
         <input class="edit-image" type="image" name="submit" src="../static/icons/edit.png" alt="Submit">
     </form>
 </div>
+{% endmacro %}
+
+
+
+{% macro import_styles() %}
+<link rel="stylesheet" href="../static/css/individual-contacts.css">
+{% endmacro %}
+
+
+{% macro back_to_meetings() %}
+<a href="{{ url_for('meetings') }}"><button class="main-button">back to meetings</button></a>
 {% endmacro %}
 
 {% macro back_to_individual_meeting(meeting) %}

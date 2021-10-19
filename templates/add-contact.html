@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 {% block body %}
-{% from 'macros.html' import back_to_contact %}
+{% from 'macros.html' import import_styles %}
+{% from 'macros.html' import back_to_contacts %}
 
-<a href="{{ url_for('contacts') }}">back to contacts</a>
+{{ import_styles() }}
+
+{{ back_to_contacts() }}
 
 <h1>Add Contact</h1>
 
-<form action="{{ url_for('add_contact') }}" method="post">
+<div class="section-container">
+  
+  <form action="{{ url_for('add_contact') }}" method="post">
     <label for="fname">First name:</label><br>
     <input type="text" id="fname" name="fname"><br>
     <label for="lname">Last name:</label><br>
@@ -17,8 +22,9 @@
     <input type="text" id="company" name="company"><br>
     <label for="bio">Bio:</label><br>
     <textarea id="bio" name="bio" rows="4" cols="20" maxlength=2000></textarea><br>
-    <button type="submit">Submit</button>
+    <button class="main-button" type="submit">Submit</button>
   </form>
-
+  
+</div>
 
 {% endblock %}

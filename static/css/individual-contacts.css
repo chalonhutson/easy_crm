@@ -13,9 +13,7 @@
 
 }
 
-h2 {
-    color: #FFEA00
-}
+
 
 * {
     color: #FFFFFF;
@@ -75,9 +73,7 @@ h2 {
     align-items: center;
 }
 
-#login-register input[type=text], input[type=password] {
-    color: black;
-}
+
 
 
 .contact-meeting-title {
@@ -86,35 +82,12 @@ h2 {
     align-items: center;
 }
 
-.contact-meeting-info {
 
-}
 
-.horizontal-section {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin-bottom: 25px;
-}
+
 
 #contact-company {
     margin-left: 100px;
 }
 
 
-.list-all-but-tables {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    border: tomato 2px solid;
-}
-
-.delete-btn {
-    margin-left: 25px;
-}
-
-.margin-left {
-    margin-left: 25px;
-}

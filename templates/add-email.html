@@ -1,16 +1,28 @@
 {% extends "base.html" %}
 {% block body %}
 {% from 'macros.html' import back_to_contact %}
+{% from 'macros.html' import import_styles %}
+
+{{ import_styles() }}
 
 {{ back_to_contact(contact) }}
 
-<h1>Add Email for {{ contact.first_name }} {{ contact.last_name }}</h1>
+<h1>
+  {% if contact.first_name|length > 0 or contact.last_name|length > 0 %}
+    add email for {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
+  {% else %}
+    add email for contact
+  {% endif %}
+</h1>
 
-<form action="{{ url_for('add_email', contact_id = contact.contact_id) }}" method="post">
-    <label for="new_email">New Email Address:</label><br>
-    <input type="text" id="new_email" name="new_email"><br>
-    <button type="submit">Submit</button>
+<div class="section-container">
+  
+  <form action="{{ url_for('add_email', contact_id = contact.contact_id) }}" method="post">
+    {{ form.email.label }}
+    {{ form.email }}
+    {{ form.submit(class="main-button") }}
   </form>
-
+  
+</div>
 
 {% endblock %}
