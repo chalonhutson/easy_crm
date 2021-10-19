@@ -1,11 +1,24 @@
 {% extends "base.html" %}
 {% block body %}
 
-<a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">back to {{ meeting.meeting_title.lower() }}</a>
+<a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
+    {% if meeting.meeting_title != none %}
+        back to {{ meeting.meeting_title.lower() }}
+    {% else %}
+        back to meeting
+    {% endif %}
+</a>
 
-<h1>add note for {{ meeting.meeting_title.lower() }}</h1>
+<h1>
+{% if meeting.meeting_title != none %}
+    add note for {{ meeting.meeting_title.lower() }}
+{% else %}
+    add note for meeting
+{% endif %}
 
-<form action="{{ url_for('add_note_meeting', meeting_id = 1) }}" method="POST">
+</h1>
+
+<form action="{{ url_for('add_note_meeting', meeting_id = meeting.meeting_id) }}" method="POST">
     {{ form.note.label }}
     {{ form.note }}
     {{ form.submit }}

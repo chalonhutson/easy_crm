@@ -393,7 +393,6 @@ def delete_note_contact():
 @login_required
 def delete_meeting(meeting_id):
     meeting = ctrl.get_meeting_by_id(meeting_id)
-    print(f"++++++++++++++++++ meeting -->> {meeting} ---------------><<<<<<<")
     if not meeting:
         return abort(404)
     if request.method == "POST":

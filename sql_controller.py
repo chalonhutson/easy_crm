@@ -432,8 +432,6 @@ def get_all_meetings_page(user_id, per_page, page_offset):
 
 def get_all_notes_meeting(meeting_id):
     notes = Meetings_notes.query.filter(Meetings_notes.meeting_id == meeting_id).all()
-    if len(notes) == 0:
-        notes = None
     return notes
 
 

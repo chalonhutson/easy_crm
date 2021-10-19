@@ -1,0 +1,120 @@
+.section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-top: 25px;
+    padding: 15px;
+
+    background-color: #210029;
+    border: #FFEA00 solid 5px;
+    border-radius: 10px;
+
+
+}
+
+h2 {
+    color: #FFEA00
+}
+
+* {
+    color: #FFFFFF;
+}
+
+.contact-header {
+    padding: 5px 10px;
+    font-family: 'Teko';
+    font-family: 700;
+    font-size: 28pt;
+    color: #FF00B7;
+}
+
+
+
+#alert-btn:hover {
+    cursor: pointer;
+}
+
+
+/* ++++++++++++++ */
+/* Login Page CSS */
+/* ++++++++++++++ */
+
+#login-register-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+#login-register {
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:stretch;
+    padding: 15px 30px 30px 30px;
+}
+
+#lr-items {
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#lr-btn {
+    width: 100px;
+}
+
+#remember-me {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#login-register input[type=text], input[type=password] {
+    color: black;
+}
+
+
+.contact-meeting-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.contact-meeting-info {
+
+}
+
+.horizontal-section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 25px;
+}
+
+#contact-company {
+    margin-left: 100px;
+}
+
+
+.list-all-but-tables {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border: tomato 2px solid;
+}
+
+.delete-btn {
+    margin-left: 25px;
+}
+
+.margin-left {
+    margin-left: 25px;
+}

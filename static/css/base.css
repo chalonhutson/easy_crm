@@ -15,9 +15,7 @@ yellow-orange-color-wheel: #ff9900ff; */
     padding: 0;
   }
   
-/* a {
-      text-decoration: none;
-  } */
+
 
 body {
     background-color: #000000;
@@ -111,27 +109,24 @@ td a {
 }
 
 
-button, button a {
+.main-button, .main-button a {
+    height: 40px;
     font-family: 'Teko';
     font-weight: 400;
-    border-radius: 10px;
+    border-radius: 7px;
     color: #000000;
     background-color: #FFEA00;
     text-decoration: none;
-    padding: 8px;
+    padding: 4px 8px;
 }
 
 
-button:hover, button:hover a {
+.main-button:hover, .main-button:hover a {
     background-color: #780096;
     text-decoration: none;
     color: #FFEA00;
 }
 
-
-.alert-btn {
-    color: black;
-}
 
 .window {
     margin-top: 25px;
@@ -156,15 +151,34 @@ th {
     font-family: 'PT Sans Narrow';
     font-weight: 700;
     font-size: 20pt;
+    padding-right: 20px;
 }
 
 td {
-    /* border: #780096 solid 1px; */
     padding: 5px 10px;
     font-family: 'PT Sans Narrow';
     font-weight: 400;
     font-size: 11pt;
 }
 
+.edit-image {
+    width: 25px;
+}
 
+.alert {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
+#alert-btn:hover {
+    cursor: pointer;
+}
+
+.giant-btns {
+    width: 225px;
+    height: 75px;
+    font-size: 35pt;
+
+}

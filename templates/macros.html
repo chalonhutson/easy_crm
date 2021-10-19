@@ -12,7 +12,17 @@
         <input type="hidden" name="{{ name }}" value="{{ value }}"/>
         <input type="hidden" name="info" value="{{ info }}"/>
         <input type="hidden" name="_method" value="{{ _method }}"/>
-        <input type="image" name="submit" src="../static/icons/edit.png" alt="Submit">
+        <input class="edit-image" type="image" name="submit" src="../static/icons/edit.png" alt="Submit">
     </form>
 </div>
+{% endmacro %}
+
+{% macro back_to_individual_meeting(meeting) %}
+        <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
+            {% if meeting.meeting_title is not none %}
+                back to {{ meeting.meeting_title }}
+            {% else %}
+                back to meeting
+            {% endif %}
+        </a>
 {% endmacro %}

@@ -2,56 +2,99 @@
 {% block body %}
 {% from 'macros.html' import update_button %}
 
+<link rel="stylesheet" href="../static/css/individual-contacts.css">
 
 <a href="{{ url_for('meetings') }}">back to meetings</a>
 
-{% if meeting.title is not none %}
-    <h1>{{ meeting.meeting_title }}</h1>
-    {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "title", "POST")}}
-    {% else %}
-    <h1>no meeting title</h1>
-    {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "title", "POST")}}
-{% endif %}
 
-<h2>contact</h2>
-    {% if contact is not none %}
-        <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
-            <p>{{ contact.first_name }} {{ contact.last_name }}</p>
-            {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "contact", "POST")}}
-        </a>
-    {% else %}
-        no contact for meeting
-    {% endif %}
+<div class="section-container">
 
-<h2>time</h2>
-    {% if date is not none %}
-        <p>{{ date }}</p>
-        <p>{{ time }}</p>
-        {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "time", "POST")}}
-    {% else %}
-        no date set
-    {% endif %}
+    <div class="contact-meeting-title horizontal-section" id="meeting-title">
+        {% if meeting.meeting_title is not none and meeting.meeting_title|length > 0 %}
+            <h1>{{ meeting.meeting_title.lower() }}</h1>
+            {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "title", "POST")}}
+            {% else %}
+            <h1>no meeting title</h1>
+            {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "title", "POST")}}
+        {% endif %}
+    </div>
 
-<h2>method</h2>
-    {% if meeting.meeting_method is not none %}
-        <p>{{ meeting.meeting_method }}</p>
-        {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "method", "POST")}}
-    {% else %}
-        no date set
-    {% endif %}
 
-<h2>notes</h2>
-    <button><a href="{{ url_for('add_note_meeting', meeting_id = meeting.meeting_id) }}">add note to meeting</a></button>
-    {% if notes is not none %}
+    <div id="meeting-contact">
+        <div class="horizontal-section">
+            <div class="contact-meeting-info contact-meeting-title">
+                <h2 class="contact-header">contact</h2>
+                {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "contact", "POST")}}
+            </div>
+        </div>
+            {% if contact is not none %}
+                <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
+                    <p>{{ contact.first_name }} {{ contact.last_name }}</p>
+                </a>
+            {% else %}
+                no contact for meeting
+            {% endif %}
+    </div>
+
+
+    <div id="meeting-coact">
+        <div class="horizontal-section">
+            <div class="contact-meeting-info contact-meeting-title">
+                <h2 class="contact-header">time</h2>
+                {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "time", "POST")}}
+            </div>
+        </div>
+            {% if date is not none %}
+            <div class="horizontal-section">
+                {{ date }}
+                <p class="margin-left">{{ time }}</p>
+            </div>    
+            {% else %}
+            no date set
+            {% endif %}
+
+    <div id="meeting-method">
+
+        <div class="horizontal-section contact-meeting-info contact-meeting-title">
+            <h2 class="contact-header">method</h2>
+            {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "method", "POST")}}
+        </div>
+            {% if meeting.meeting_method is not none %}
+                <p>{{ meeting.meeting_method }}</p>
+            {% else %}
+                no date set
+            {% endif %}
+
+        </div>
+</div>
+</div>
+
+<div class="section-container">
+
+    <div class="horizontal-section">
+        <h2 class="contact-header">notes</h2>
+        <button class="main-button"><a href="{{ url_for('add_note_meeting', meeting_id = meeting.meeting_id) }}">
+            {% if meeting.meeting_title is not none %}
+                add note to {{ meeting.meeting_title.lower() }}
+            {% else %}
+                add note to meeting
+            {% endif %}
+        
+        </a></button>
+    </div>
+    {% if notes|length > 0 %}
         {% for note in notes %}
-            <p>{{ note.note }}</p>
-            <form action="{{ url_for('delete_note_meeting') }}" method="POST"><button name="delete_note_meeting" value="{{ note.meeting_note_id }}">delete</button></form>
+        <div class="horizontal-section list-all-but-tables">
+            {{ note.note }}
+
+            <form action="{{ url_for('delete_note_meeting') }}" method="POST"><button class="main-button delete-btn" name="delete_note_meeting" value="{{ note.meeting_note_id }}">delete</button></form>
+        </div>
         {% endfor %}
     {% else %}
         no notes
     {% endif %}
 
-
+</div>
 
 
 

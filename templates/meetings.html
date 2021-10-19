@@ -2,7 +2,7 @@
 {% block body %}
 
 <h1>MEETINGS!</h1>
-<button><a href="{{ url_for('add_meeting') }}">CREATE NEW MEETING</a></button>
+<button class="main-button"><a href="{{ url_for('add_meeting') }}">CREATE NEW MEETING</a></button>
 
     <div class="window" id="meetings-container">
         <table>
@@ -58,7 +58,7 @@
                 </td>
                 <td>
                     <a href="{{ url_for('delete_meeting', meeting_id = meeting.meeting_id) }}">
-                        <button name="delete_meeting" value="{{ meeting.meeting_id }}">DELETE</button>
+                        <button class="main-button" name="delete_meeting" value="{{ meeting.meeting_id }}">DELETE</button>
                     </a>
                 </td>
 

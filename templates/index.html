@@ -1,36 +1,78 @@
 {% extends "base.html" %}
-{% block header %}{% endblock %}
+{% block header %}
+
+<link rel="stylesheet" href="../static/css/base.css">
+<link rel="stylesheet" href="../static/css/individual-contacts.css">
+
+
+<header>
+    <div id="header-container">
+
+        <div id="logo">
+            <a href="{{ url_for('home') }}">
+                <img src="../static/logo.png">
+            </a>
+        </div>
+
+    </div>
+</header>
+
+
+{% endblock %}
 {% block body %}
+
+
+
 
 <h1>Welcome!</h1>
 
-<h2>Login</h2>
-<form method="POST" action="{{ url_for('login') }}">
-    {{ login.hidden_tag() }}
-    {{ login.email.label }}
-    {{ login.email }}<br>
-    {{ login.password.label }}
-    {{ login.password }}<br>
-    {{ login.remember.label }}
-    {{ login.remember }}
-    {{ login.submit }}
-</form><br>
+<div id="login-register-container">
+    
+    <div class="section-container" id="login-register">
+        <h2>Login</h2>
+        <form method="POST" action="{{ url_for('login') }}">
+                <div id="lr-items">
+                    {{ login.hidden_tag() }}
+                    {{ login.email.label }}
+                    {{ login.email }}
+                    {{ login.password.label }}
+                    {{ login.password }}
+                    <div id="remember-me">
+                        <div>
+                            {{ login.remember.label }}
+                            {{ login.remember  }}
+                        </div>
+                        {{ login.submit(class='main-button', id="lr-btn") }}
+                    </div>
+                </div>
+            </form>
+    </div>        
 
-<h2>Register</h2>
-<form method="POST" action="{{ url_for('register') }}">
-    {{ register.hidden_tag() }}
-    {{ register.first_name.label }}
-    {{ register.first_name }}<br>
-    {{ register.last_name.label }}
-    {{ register.last_name }}<br>
-    {{ register.email.label }}
-    {{ register.email }}<br>
-    {{ register.password.label }}
-    {{ register.password }}<br>
-    {{ register.confirm_password.label }}
-    {{ register.confirm_password }}<br>
-    {{ register.submit }}
-</form>
+    <div class="section-container" id="login-register">
+        <div id="register">
+            <h2>Register</h2>
+            <form method="POST" action="{{ url_for('register') }}">
+                <div id="lr-items">
+                    {{ register.hidden_tag() }}
+                    {{ register.first_name.label }}
+                    {{ register.first_name }}<br>
+                    {{ register.last_name.label }}
+                    {{ register.last_name }}<br>
+                    {{ register.email.label }}
+                    {{ register.email }}<br>
+                    {{ register.password.label }}
+                    {{ register.password }}<br>
+                    {{ register.confirm_password.label }}
+                    {{ register.confirm_password }}<br>
+                    {{ register.submit(class="main-button", id="lr-btn") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
 
 
 {% endblock %}
