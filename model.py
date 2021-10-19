@@ -146,7 +146,7 @@ class Meetings_notes(db.Model):
 # Helper functions
 
 def connect_to_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL"]
+    app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
     
     db.app = app
     db.init_app(app)
