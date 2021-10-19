@@ -240,7 +240,7 @@ footer a {
     color: #FFEA00;
 }
 
-footer:hover a {
+#linkedin:hover {
     color: #00D4FF;
     text-decoration: none;
 }
