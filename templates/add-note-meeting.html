@@ -1,15 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
 {% from 'macros.html' import import_styles  %}
-{{ import_styles() }}
+{% from 'macros.html' import back_to_individual_meeting %}
 
-<a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
-    {% if meeting.meeting_title != none %}
-        back to {{ meeting.meeting_title.lower() }}
-    {% else %}
-        back to meeting
-    {% endif %}
-</a>
+{{ import_styles() }}
+{{ back_to_individual_meeting(meeting) }}
 
 <h1>
 {% if meeting.meeting_title != none %}

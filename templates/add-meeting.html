@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block body %}
-{% from 'macros.html' import back_to_contact %}
+{% from 'macros.html' import back_to_meetings %}
 {% from 'macros.html' import import_styles %}
 
 {{ import_styles() }}
+{{ back_to_meetings() }}
 
-<a href="{{ url_for('meetings') }}">back to meetings</a>
 
 <h1>Add A Meeting</h1>
 

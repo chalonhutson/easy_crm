@@ -40,10 +40,12 @@
 
 {% macro back_to_individual_meeting(meeting) %}
         <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
+            <button class="main-button">
             {% if meeting.meeting_title is not none %}
-                back to {{ meeting.meeting_title }}
+            back to {{ meeting.meeting_title.lower() }}
             {% else %}
-                back to meeting
+            back to meeting
             {% endif %}
+        </button>
         </a>
 {% endmacro %}

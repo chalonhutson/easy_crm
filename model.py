@@ -145,8 +145,13 @@ class Meetings_notes(db.Model):
 
 # Helper functions
 
+def init_app(app):
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
+
+
 def connect_to_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
+    app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL"]
     
     db.app = app
     db.init_app(app)
@@ -155,6 +160,5 @@ def connect_to_db(app):
 # Allows us to run code interactively and work with the database directly.
 if __name__ == "__main__":
     from server import app
-    # db.create_all()
     connect_to_db(app)
     print("Connected to Easy CRM database.")
