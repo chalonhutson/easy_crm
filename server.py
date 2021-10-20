@@ -485,4 +485,4 @@ connect_to_db(app)
 
     # DebugToolbarExtension(app)
 
-app.run()
+# app.run()
