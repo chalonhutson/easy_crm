@@ -2,19 +2,18 @@
 
 ####### IMPORTS BEGIN #############
 from os import environ
+import os
 from datetime import timedelta
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, url_for, abort, Response, make_response
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-from model import connect_to_db
-
-import sql_controller as ctrl
-import app_forms
 
 
 
@@ -29,14 +28,28 @@ login_manager.login_message = "Please login to continue."
 login_manager.login_message_category = "danger"
 
 # This line prevents (or allows if set to True) Flask from taking you to a separate screen during debug mode, when you are redirected.
+basedir = os.path.abspath(os.path.dirname(__file__))
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 app.config["REMEMBER_COOKIE_DURATION"] = timedelta(hours=24)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
+app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
 # Secret key is needed for each session, and here is set in separate secrets.sh file, which is ignored by git.
 app.secret_key = environ["SESSION_SECRET_KEY"]
 
 app.jinja_env.undefined = StrictUndefined
+
+
+db = SQLAlchemy(app)
+
+Migrate(app, db)
+
+
+
+
+import src.sql_controller as ctrl
+import src.app_forms
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -476,13 +489,15 @@ def update_contact():
 
 
 
+
+# connect_to_db(app)
+
 # Main run script
-if __name__ == "__main__":
-    # app.debug = False
-    # app.jinja_env.auto_reload = app.debug
+# if __name__ == "__main__":
+#     # app.debug = False
+#     # app.jinja_env.auto_reload = app.debug
 
-    connect_to_db(app)
 
-    # DebugToolbarExtension(app)
+#     # DebugToolbarExtension(app)
 
-    app.run()
+#     app.run()

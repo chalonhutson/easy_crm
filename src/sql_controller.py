@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from model import connect_to_db, db, User_info, Contacts, Contacts_phone_numbers, Contacts_emails, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
+from src.model import User_info, Contacts, Contacts_phone_numbers, Contacts_emails, Contacts_social_medias, Contacts_addresses, Contacts_notes, Meetings, Meetings_notes
+
+from src import db
 
 from werkzeug.security import check_password_hash
 
@@ -39,8 +41,11 @@ def attempt_login(email, password):
 
 def attempt_registration(first_name, last_name, email, password):
     new_user = User_info(first_name = first_name, last_name = last_name, email = email, password = password)
+    print(new_user)
     db.session.add(new_user)
+    print("added")
     db.session.commit()
+    print("commit")
     success = attempt_login(email, password)
     if success:
         print(f"New Registration || {new_user}")
@@ -713,7 +718,7 @@ def update_contact(user_id, form):
 
 
 # Runs the script in interactive mode
-if __name__ == "__main__":
-    from server import app
-    connect_to_db(app)
-    print("Connected to Easy CRM database.")
+# if __name__ == "__main__":
+#     from server import app
+#     connect_to_db(app)
+#     print("Connected to Easy CRM database.")

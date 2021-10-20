@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
 
-from sql_controller import get_all_contacts_by_user
+from src.sql_controller import get_all_contacts_by_user
 
 class LoginForm(FlaskForm):
     email = StringField("email", validators = [DataRequired(), Email()])

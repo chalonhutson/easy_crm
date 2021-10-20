@@ -7,8 +7,11 @@ from os import environ
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_login import LoginManager, UserMixin, login_user
+from src import db
 
-db = SQLAlchemy()
+# db = SQLAlchemy(app)
+
+# Migrate(app, db)
 
 
 #Model definition of tables for Easy CRM database.
@@ -145,20 +148,20 @@ class Meetings_notes(db.Model):
 
 # Helper functions
 
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+# def init_app(app):
+#     app.teardown_appcontext(close_db)
+#     app.cli.add_command(init_db_command)
 
 
-def connect_to_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
+# def connect_to_db(app):
+#     app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
     
-    db.app = app
-    db.init_app(app)
+#     db.app = app
+#     db.init_app(app)
 
 
 # Allows us to run code interactively and work with the database directly.
-if __name__ == "__main__":
-    from server import app
-    connect_to_db(app)
-    print("Connected to Easy CRM database.")
+# if __name__ == "__main__":
+#     from server import app
+#     connect_to_db(app)
+#     print("Connected to Easy CRM database.")
