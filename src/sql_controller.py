@@ -13,6 +13,7 @@ from werkzeug.security import check_password_hash
 def get_user_by_id(user_id):
     try:
         query = User_info.query.filter(User_info.id == user_id).one()
+        print(f"+++++++++This is the query -->>>  ")
         return query
     except:
         return False
@@ -22,6 +23,8 @@ def get_user_by_email(email):
 
     try:
         user = User_info.query.filter(User_info.email==email).one()
+        print(f"user from getuser is here dawg -->>>>> {user}")
+        print(f"User password =>> {user.password}")
         return user
     except:
         return False
@@ -32,7 +35,8 @@ def attempt_login(email, password):
     user = get_user_by_email(email)
 
     if user:
-        if check_password_hash(user.password, password):
+        check = check_password_hash(user.password, password)
+        if check:
             return user
         else:
             return False
@@ -41,16 +45,13 @@ def attempt_login(email, password):
 
 def attempt_registration(first_name, last_name, email, password):
     new_user = User_info(first_name = first_name, last_name = last_name, email = email, password = password)
-    print(new_user)
     db.session.add(new_user)
-    print("added")
-    db.session.commit()
-    print("commit")
-    success = attempt_login(email, password)
-    if success:
-        print(f"New Registration || {new_user}")
-        return success
-    else:
+    db.session.flush()
+    try:
+        db.session.commit()
+        user = get_user_by_email(email)
+        return user
+    except:
         return False
 
 

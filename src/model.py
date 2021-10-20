@@ -28,7 +28,7 @@ class User_info(UserMixin, db.Model):
     password = db.Column(db.String, nullable = False)
 
     def __repr__(self):
-        return f"User Info Row || user_info_aid={self.user_info_quitid}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
+        return f"User Info Row || user_info_aid={self.id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
 
 
 

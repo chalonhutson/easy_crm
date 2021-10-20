@@ -112,8 +112,12 @@ def register():
             pass_hash = generate_password_hash(password)
             registeration = ctrl.attempt_registration(first_name, last_name, email, pass_hash)
             if registeration:
-                login_user(registeration)
-                flash("You have successfully registered and are now logged in.", "success")
+                login = ctrl.attempt_login(email, password)
+                if login:
+                    login_user(registeration)
+                    flash("You have successfully registered and are now logged in.", "success")
+                else:
+                    flash("You have registered, please try and log in.", "success")
             else:
                 flash("You were not able to register.", "danger")
         else:
