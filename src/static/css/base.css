@@ -24,6 +24,22 @@ body {
     align-items: center;
 }
 
+body {
+    overflow-x:hidden;
+}
+/* 
+
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-y: scroll; 
+}
+
+body::-webkit-scrollbar {
+    display: none;
+} */
+
+
 
 header {
     width: 100vw;
