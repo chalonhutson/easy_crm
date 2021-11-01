@@ -15,8 +15,15 @@
   {% endif %}
 </h1>
 
+{% if form.phone.errors %}
+  {% for error in form.phone.errors %}
+    {{ error }}
+  {% endfor %}
+{% endif %}
+
 <div class="section-container">
   <form action="{{ url_for('add_phone', contact_id = contact.contact_id) }}" method="post">
+    <p>Format phone number as "1234567890" or "(123) 456-7890" or "123-456-7890"</p>
     {{ form.phone.label }}
     {{ form.phone }}
     {{ form.submit(class="main-button") }}

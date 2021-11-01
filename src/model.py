@@ -9,9 +9,6 @@ from sqlalchemy import func
 from flask_login import LoginManager, UserMixin, login_user
 from src import db
 
-# db = SQLAlchemy(app)
-
-# Migrate(app, db)
 
 
 #Model definition of tables for Easy CRM database.
@@ -146,7 +143,7 @@ class Meetings_notes(db.Model):
         return f"Meeting Note Row || id={self.meeting_note_id}, meeting_id={self.meeting_id}, note={self.note}"
 
 
-# Helper functions
+# Helper functions moved to __init__.py file during deployment of the web app.
 
 # def init_app(app):
 #     app.teardown_appcontext(close_db)

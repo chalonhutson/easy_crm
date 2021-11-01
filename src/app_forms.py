@@ -35,6 +35,7 @@ class MeetingForm(FlaskForm):
     submit = SubmitField("add meeting")
     submit2 = SubmitField("update meeting")
 
+    #This method needs to be called when the form is constructed on the page, in order to grab all of the user's contacts and display them on the drop down menu.
     def edit_contact_list(self, user_id):
         contacts = get_all_contacts_by_user(user_id, True)
         contacts_list = []
@@ -48,7 +49,7 @@ class MeetingForm(FlaskForm):
 
 
 class ContactPhone(FlaskForm):
-    phone = StringField("phone", validators=[Length(min=10, max=10)])
+    phone = StringField("phone", validators=[Length(min=10, max=14)])
     submit = SubmitField("add phone")
 
 class ContactEmail(FlaskForm):

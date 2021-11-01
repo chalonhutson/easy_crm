@@ -30,23 +30,23 @@
     <div class="section-container" id="login-register">
         <h2>Login</h2>
         <form method="POST" action="{{ url_for('login') }}">
-                <div id="lr-items">
-                    {{ login.hidden_tag() }}
-                    {{ login.email.label }}
-                    {{ login.email }}
-                    {{ login.password.label }}
-                    {{ login.password }}
-                    <div id="remember-me">
-                        <div>
-                            {{ login.remember.label }}
-                            {{ login.remember  }}
-                        </div>
-                        {{ login.submit(class='main-button', id="lr-btn") }}
+            <div id="lr-items">
+                {{ login.hidden_tag() }}
+                {{ login.email.label }}
+                {{ login.email }}
+                {{ login.password.label }}
+                {{ login.password }}
+                <div id="remember-me">
+                    <div>
+                        {{ login.remember.label }}
+                        {{ login.remember  }}
                     </div>
+                    {{ login.submit(class='main-button', id="lr-btn") }}
                 </div>
-            </form>
+            </div>
+        </form>
     </div>        
-
+    
     <div class="section-container" id="login-register">
         <div id="register">
             <h2>Register</h2>
@@ -68,9 +68,16 @@
             </form>
         </div>
     </div>
-
+    
 </div>
 
+<!-- Below test information only for testing purposes and will be removed upon app being full-production ready. -->
+
+<div id="test-information-container">
+    <h6 class="test-information">Just testing this website? Try this:</h6>
+    <h6 class="test-information">Email: "test@email.com"</h6>
+    <h6 class="test-information">Password:"password1234"</h6>
+</div>
 
 
 

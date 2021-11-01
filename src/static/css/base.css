@@ -239,8 +239,8 @@ select {
 
 
 footer {
-    margin-top: 250px;
-    margin-bottom: 250px;
+    margin-top: 75px;
+    margin-bottom: 75px;
 }
 
 footer h5 {
@@ -267,3 +267,19 @@ footer hr {
     background-color: #FFEA00;
 }
 
+ /* This is just for the test account information at the bottom of the login page. Will be removed when the app is fully moved to full-production ready state. */
+
+#test-information-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 75px;
+}
+
+.test-information {
+    color: #00D4FF;
+    font-family: 'PT Sans Narrow';
+    font-weight: 400;
+    font-size: 12pt;
+}

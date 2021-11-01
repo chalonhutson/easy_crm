@@ -13,7 +13,6 @@ from werkzeug.security import check_password_hash
 def get_user_by_id(user_id):
     try:
         query = User_info.query.filter(User_info.id == user_id).one()
-        print(f"+++++++++This is the query -->>>  ")
         return query
     except:
         return False
@@ -23,8 +22,6 @@ def get_user_by_email(email):
 
     try:
         user = User_info.query.filter(User_info.email==email).one()
-        print(f"user from getuser is here dawg -->>>>> {user}")
-        print(f"User password =>> {user.password}")
         return user
     except:
         return False
@@ -152,6 +149,25 @@ def add_phone(user_id, contact_id, phone):
         db.session.commit()
         print(f"Phone added || {new_phone}")
         return True
+    else:
+        return False
+
+def format_phone(phone):
+    if len(phone) == 10:
+        if phone.isnumeric():
+            return phone
+        else:
+            return False
+    elif len(phone) == 12:
+        if phone[:3].isnumeric() and phone[4:7].isnumeric() and phone[8:12].isnumeric():
+            return phone[:3] + phone[4:7] + phone[8:12]
+        else:
+            return False
+    elif len(phone) == 14:
+        if phone[1:4].isnumeric() and phone[6:9] and phone[10:14].isnumeric():
+            return phone[1:4] + phone[6:9] + phone[10:14]
+        else:
+            return False
     else:
         return False
 

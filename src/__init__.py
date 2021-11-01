@@ -1,6 +1,7 @@
 # Easy CRM main server file
 
 ####### IMPORTS BEGIN #############
+
 from os import environ
 import os
 from datetime import timedelta
@@ -13,11 +14,9 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
-
-
-
 ######### IMPORT END ###############
+
+
 
 # Invokes the main Flask class and sets it to variable app.
 app = Flask(__name__)
@@ -27,12 +26,14 @@ login_manager.login_view = "home"
 login_manager.login_message = "Please login to continue."
 login_manager.login_message_category = "danger"
 
-# This line prevents (or allows if set to True) Flask from taking you to a separate screen during debug mode, when you are redirected.
 basedir = os.path.abspath(os.path.dirname(__file__))
+# This line prevents (or allows if set to True) Flask from taking you to a separate screen during debug mode, when you are redirected.
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
-app.config["REMEMBER_COOKIE_DURATION"] = timedelta(hours=24)
+#Replacing the "remember me" time from one day to thirty days.
+# app.config["REMEMBER_COOKIE_DURATION"] = timedelta(hours=24)
+app.config["REMEMBER_COOKIE_DURATION"] = timedelta(days=30)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = environ["POSTGRES_URI"]
+app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
 # Secret key is needed for each session, and here is set in separate secrets.sh file, which is ignored by git.
 app.secret_key = environ["SESSION_SECRET_KEY"]
 
@@ -83,7 +84,12 @@ def login():
         
         if user:
             login_user(user, remember=login.remember.data)
-            flash("You are logged in.", "success")
+            print(f"User {user.first_name} {user.last_name} logged in with email = {user.email}.")
+            if user.email == "test@email.com":
+                print(user.email)
+                flash("You have logged in with a test account. Please don't post any private information using this email.", "success")
+            else:
+                flash("You are logged in.", "success")
             return redirect(url_for("home"))
         else:
             flash("Login failed. Please double check your email/password combo.", "danger")
@@ -159,7 +165,6 @@ def add_meeting():
 @login_required
 def add_note_meeting(meeting_id):
     meeting = ctrl.get_meeting_by_id(meeting_id)
-    print(f"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ |||| MEETING -->> {meeting}//// id ----{meeting_id}++++++++++++++")
     contact = ctrl.get_contact_by_id(meeting_id)
     if request.method == "POST":
         new_note = request.form
@@ -177,7 +182,6 @@ def add_note_meeting(meeting_id):
 @login_required
 def add_note_contact(contact_id):
     contact = ctrl.get_contact_by_id(contact_id)
-    print(f"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ |||| CONTACT -->> {contact}//// id ----{contact_id}++++++++++++++")
     contact = ctrl.get_contact_by_id(contact_id)
     if request.method == "POST":
         new_note = request.form
@@ -267,10 +271,15 @@ def add_phone(contact_id):
     form = app_forms.ContactPhone()
 
     if request.method == "POST":
-        print(request.form)
-        new_phone = request.form["phone"]
-        if ctrl.add_phone(current_user.id, contact_id, new_phone):
-            flash("Phone number added to contact.", "success")
+    # Validate on submit not working, investigate further.
+    # if form.validate_on_submit():
+        phone = form.phone.data
+        phone_formatted = ctrl.format_phone(phone)
+        if phone_formatted:
+            if ctrl.add_phone(current_user.id, contact_id, phone_formatted):
+                flash("Phone number added to contact.", "success")
+            else:
+                flash("Something went wrong. Ensure you are meeting the phone number requirements.", "danger")
         else:
             flash("Something went wrong. Ensure you are meeting the phone number requirements.", "danger")
         return render_template("add-phone.html", page_title = "Add Phone", form = form, contact = contact)
@@ -429,7 +438,6 @@ def delete_meeting(meeting_id):
 @login_required
 def delete_contact(contact_id):
     contact = ctrl.get_contact_by_id(contact_id)
-    print(f"++++++++++++++++++ contact -->> {contact} ---------------><<<<<<<")
     if not contact:
         return abort(404)
     if request.method == "POST":
