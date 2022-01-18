@@ -33,7 +33,8 @@ app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 # app.config["REMEMBER_COOKIE_DURATION"] = timedelta(hours=24)
 app.config["REMEMBER_COOKIE_DURATION"] = timedelta(days=30)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
+app.config["SQLALCHEMY_DATABASE_URI"] = environ["POSTGRES_URI"]
+# app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
 # Secret key is needed for each session, and here is set in separate secrets.sh file, which is ignored by git.
 app.secret_key = environ["SESSION_SECRET_KEY"]
 

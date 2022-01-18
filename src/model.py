@@ -25,9 +25,7 @@ class User_info(UserMixin, db.Model):
     password = db.Column(db.String, nullable = False)
 
     def __repr__(self):
-        return f"User Info Row || user_info_aid={self.id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
-
-
+        return f"User Info Row || user_info_id={self.id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
 
 
 class Contacts(db.Model):
@@ -46,6 +44,7 @@ class Contacts(db.Model):
     def __repr__(self):
         return f"Contact Row || contact_id={self.contact_id}, id={self.user_info_id}, fname={self.first_name}, lname={self.last_name}"
 
+
 class Contacts_phone_numbers(db.Model):
 
     __tablename__ = "contacts_phone_numbers"
@@ -57,6 +56,7 @@ class Contacts_phone_numbers(db.Model):
 
     def __repr__(self):
         return f"Contact Phone # Row || phone_id={self.contact_phone_number_id}, contact_id={self.contact_id}, phone={self.phone_number}"
+
 
 class Contacts_emails(db.Model):
 
@@ -70,6 +70,7 @@ class Contacts_emails(db.Model):
     def __repr__(self):
         return f"Contact Email Row || id={self.contact_email_id}, contact_id={self.contact_id}, email={self.email}"
 
+
 class Contacts_social_medias(db.Model):
 
     __tablename__ = "contacts_social_medias"
@@ -82,6 +83,7 @@ class Contacts_social_medias(db.Model):
 
     def __repr__(self):
         return f"Contact Social Media Row || id={self.contact_social_media_id}, contact_id={self.contact_id}, social_media={self.social_media}, social_media_address={self.social_media_address}"
+
 
 class Contacts_addresses(db.Model):
 
@@ -101,6 +103,7 @@ class Contacts_addresses(db.Model):
     def __repr__(self):
         return f"Contact Address Row || id={self.contact_address_id}, contact_id={self.contact_id}, street1={self.street_address_1}, street2={self.street_address_2}, city={self.city}, county={self.county}, state={self.state}, country={self.country}, zip={self.zip}"
 
+
 class Contacts_notes(db.Model):
 
     __tablename__ = "contacts_notes"
@@ -112,6 +115,7 @@ class Contacts_notes(db.Model):
 
     def __repr__(self):
         return f"Contact Note Row || id={self.contact_note_id}, contact_id={self.contact_id}, note={self.note}"
+
 
 class Meetings(db.Model):
 
