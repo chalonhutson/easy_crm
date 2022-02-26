@@ -62,7 +62,7 @@
 </div>
 
 
-<div class="section-container">
+<div id="phone-numbers-section" class="section-container">
     <div class="horizontal-section">
         <h2 class="contact-header">Phone Numbers</h2>
         <button class="main-button"><a href="{{ url_for('add_phone', contact_id = contact.contact_id) }}">
@@ -76,10 +76,16 @@
     
     {% if phones is not none %}
         {% for phone in phones %}
-            <div class="horizontal-section list-all-but-tables">
+            <div
+                id="{{ 'phone_num_' + phone.contact_phone_number_id|string }}" 
+                class="horizontal-section list-all-but-tables"
+                data-value="{{phone.phone_number}}">
                 ({{ phone.phone_number[0:3] }}) {{ phone.phone_number[3:6] }}-{{ phone.phone_number[6:10] }}
                 <div class="delete-btn">
                     <form  action="{{ url_for('delete_phone') }}" method="POST"><button class="main-button" name="delete_phone" value="{{ phone.contact_phone_number_id }}">delete</button></form>
+                <button id="{{phone.contact_phone_number_id}}" class="updatePhone + main-button">
+                    update
+                </button>
                 </div>
             </div>
         {% endfor %}
@@ -232,7 +238,7 @@
 
 </div>
 
-
+<script src="../static/javascript/individual-contact.js"></script>
 
 
 {% endblock %}
