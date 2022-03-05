@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional, AnyOf, Regexp
 
 from src.sql_controller import get_all_contacts_by_user
 
@@ -51,6 +51,10 @@ class MeetingForm(FlaskForm):
 class ContactPhone(FlaskForm):
     phone = StringField("phone", validators=[Length(min=10, max=14)])
     submit = SubmitField("add phone")
+
+class ContactPhone2(FlaskForm):
+    area_code = StringField("Area Code", validators=[Regexp("/d", message="Please type numbers")])
+    submit = SubmitField("edit phone")
 
 class ContactEmail(FlaskForm):
     email = StringField("email", validators=[Length(max=99)])

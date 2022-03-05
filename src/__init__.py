@@ -222,7 +222,7 @@ def individual_meeting(meeting_id):
 @login_required
 def individual_contact(contact_id):
     contact, phones, emails, addresses, socials, notes = ctrl.get_all_for_contact(contact_id)
-    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = phones, emails = emails, addresses = addresses, socials = socials, notes = notes, ynumber = 0, thing = "thing", do = "do")
+    return render_template("individual-contact.html", page_title = f"{contact.first_name} {contact.last_name}", contact = contact, phones = phones, emails = emails, addresses = addresses, socials = socials, notes = notes, phone_number_form = app_forms.ContactPhone2())
 
 @app.route("/add_contact", methods = ["GET", "POST"])
 @login_required
