@@ -4,3 +4,4 @@ src/__pycache__
 secrets.sh
 create.sql
 fake_data.sql
+easy_crm.db
