@@ -15,10 +15,16 @@ for (let i = 0; i < updatePhoneBtns.length; i++) {
         phoneNumElement.remove()
 
         const newInputField = document.createElement("input")
+        const newUpdateBtn = document.createElement("button")
         newInputField.setAttribute("type", "text")
         newInputField.setAttribute("value", formattedPhoneNumber)
+        
+        newUpdateBtn.innerHTML = "Confirm Update"
+        newUpdateBtn.setAttribute("class", "main-button")
+        newUpdateBtn.addEventListener("click", () => {console.log("testing button")})
 
         phoneContainer.appendChild(newInputField)
+        phoneContainer.appendChild(newUpdateBtn)
     })
 
 }
