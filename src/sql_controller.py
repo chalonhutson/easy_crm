@@ -728,6 +728,18 @@ def update_contact(user_id, form):
         return False
 
 
+def update_phone_number(contact_phone_id, new_phone_number):
+    contact_phone = contact_phone.query.get(contact_phone_id)
+    contact_phone.phone_number = new_phone_number
+
+    try:
+        db.session.add(contact_phone)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
 
 
 

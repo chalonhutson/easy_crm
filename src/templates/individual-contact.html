@@ -86,33 +86,33 @@
                 <button id="{{phone.contact_phone_number_id}}" class="updatePhone + main-button">
                     update
                 </button>
-                </div>
             </div>
+        </div>
         {% endfor %}
-    
-    {% else %}
+        
+        {% else %}
         <div class="phone-number">
             No phone numbers for this contact
         </div>
-
-    {% endif %}
-
-</div>
-
-
-<div class="section-container">
-    <div class="horizontal-section">
-        <h2 class="contact-header">Emails</h2>
-        <button class="main-button"><a href="{{ url_for('add_email', contact_id = contact.contact_id) }}">
-            {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
-            add email to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
-            {% else %}
-            add email to contact
-            {% endif %}
-        </a></button>
-    </div>
         
-    {% if emails is not none %}
+        {% endif %}
+        
+    </div>
+    
+    
+    <div class="section-container">
+        <div class="horizontal-section">
+            <h2 class="contact-header">Emails</h2>
+            <button class="main-button"><a href="{{ url_for('add_email', contact_id = contact.contact_id) }}">
+                {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
+                add email to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
+                {% else %}
+                add email to contact
+                {% endif %}
+            </a></button>
+        </div>
+        
+        {% if emails is not none %}
         {% for email in emails %}
         <div class="horizontal-section list-all-but-tables">
             <div class="emails">
@@ -120,6 +120,9 @@
             </div>
             <div class="delete-btn"><form action="{{ url_for('delete_email') }}" method="POST"><button class="main-button" name="delete_email" value="{{ email.contact_email_id }}">delete</button></form></div>
         </div>
+        <button id="{{email.contact_email_id}}" class="updateEmail + main-button">
+            update
+        </button>
         {% endfor %}
     
     {% else %}

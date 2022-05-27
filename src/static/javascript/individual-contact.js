@@ -1,6 +1,7 @@
 const phoneContainer = document.getElementById("phone-numbers-section")
 
 const updatePhoneBtns = document.getElementsByClassName("updatePhone")
+const updateEmailBtns = document.getElementsByClassName("updateEmail")
 
 // Removes phone number on click of "update" button and replaces it with an input field, prefilled with phone number.
 for (let i = 0; i < updatePhoneBtns.length; i++) {
@@ -21,10 +22,14 @@ for (let i = 0; i < updatePhoneBtns.length; i++) {
         
         newUpdateBtn.innerHTML = "Confirm Update"
         newUpdateBtn.setAttribute("class", "main-button")
-        newUpdateBtn.addEventListener("click", () => {console.log("testing button")})
+        newUpdateBtn.addEventListener("click", () => {
+            console.log("Attempting fetch request.")
+            fetch("localhost:5000/update-contact-phone")
+        })
 
         phoneContainer.appendChild(newInputField)
         phoneContainer.appendChild(newUpdateBtn)
     })
 
 }
+
