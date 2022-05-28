@@ -24,7 +24,7 @@ for (let i = 0; i < updatePhoneBtns.length; i++) {
         newUpdateBtn.setAttribute("class", "main-button")
         newUpdateBtn.addEventListener("click", () => {
             console.log("Attempting fetch request.")
-            fetch("localhost:5000/update-contact-phone")
+            fetch("http://localhost:5000/update-contact-phone").then(() => {console.log("testing")})
         })
 
         phoneContainer.appendChild(newInputField)
