@@ -13,6 +13,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_cors import CORS
 
 ######### IMPORT END ###############
 
@@ -20,6 +21,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # Invokes the main Flask class and sets it to variable app.
 app = Flask(__name__)
+CORS(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "home"
