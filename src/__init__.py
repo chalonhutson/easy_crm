@@ -506,11 +506,11 @@ def update_contact():
 @app.route("/update-contact-phone", methods = ["POST"])
 @login_required
 def update_contact_phone():
-    phone_id = request.form["phone_id"]
-    new_phone_number = request.form["new_phone_number"]
+    phone_id = request.get_json(force = True)
+    # new_phone_number = request.form["new_phone_number"]
 
     print(phone_id)
-    print(new_phone_number)
+    # print(new_phone_number)
 
     return "Cool story bro."
 
