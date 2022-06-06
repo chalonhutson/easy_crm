@@ -7,16 +7,15 @@ import os
 from datetime import timedelta
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session, url_for, abort, Response, make_response
+from flask import Flask, render_template, redirect, request, flash, session, url_for, abort, Response, make_response, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 ######### IMPORT END ###############
-
 
 
 # Invokes the main Flask class and sets it to variable app.
@@ -505,15 +504,16 @@ def update_contact():
 
 @app.route("/update-contact-phone", methods = ["POST"])
 @login_required
+@cross_origin
 def update_contact_phone():
     print("huh")
-    phone_id = request.get_json(force = True)
+    phone_id = request.get_json()
     # new_phone_number = request.form["new_phone_number"]
 
     print(phone_id)
     # print(new_phone_number)
 
-    return "Cool story bro."
+    return jsonfiy({"res": "cool story bro"}), 200
 
 
 
