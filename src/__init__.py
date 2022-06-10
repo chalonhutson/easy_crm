@@ -504,16 +504,16 @@ def update_contact():
 
 @app.route("/update-contact-phone", methods = ["POST"])
 @cross_origin(methods=["POST"])
-@login_required
+# @login_required
 def update_contact_phone():
     print("huh")
-    phone_id = request.get_json()
+    phone_id = request
     # new_phone_number = request.form["new_phone_number"]
 
-    print(phone_id)
+    print(phone_id.content_type)
     # print(new_phone_number)
 
-    return jsonify({"res": "cool story bro"}), 200
+    return jsonify({"res": "cool story bro"})
 
 
 

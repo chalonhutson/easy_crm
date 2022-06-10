@@ -25,7 +25,11 @@ for (let i = 0; i < updatePhoneBtns.length; i++) {
         newUpdateBtn.addEventListener("click", () => {
             console.log("Attempting fetch request.")
             fetch("http://localhost:5000/update-contact-phone", {
-                method:"POST", 
+                method:"POST",
+                mode: "no-cors",
+                headers: {
+                    'content-type': 'application/json'
+                },
                 body:JSON.stringify({phone_id: "hey"})
             }).then((res) => {console.log(res)})
         })
