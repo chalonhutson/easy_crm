@@ -507,10 +507,10 @@ def update_contact():
 # @login_required
 def update_contact_phone():
     print("huh")
-    phone_id = request
+    phone_id = request.get_json()
     # new_phone_number = request.form["new_phone_number"]
 
-    print(phone_id.content_type)
+    print(phone_id)
     # print(new_phone_number)
 
     return jsonify({"res": "cool story bro"})

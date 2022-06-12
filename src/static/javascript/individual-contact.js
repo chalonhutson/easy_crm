@@ -26,7 +26,7 @@ for (let i = 0; i < updatePhoneBtns.length; i++) {
             console.log("Attempting fetch request.")
             fetch("http://localhost:5000/update-contact-phone", {
                 method:"POST",
-                mode: "no-cors",
+                // mode: "no-cors",
                 headers: {
                     'content-type': 'application/json'
                 },
