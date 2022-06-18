@@ -31,7 +31,7 @@ for (let i = 0; i < updatePhoneBtns.length; i++) {
                     'content-type': 'application/json'
                 },
                 body:JSON.stringify({phone_id: "hey"})
-            }).then((res) => {console.log(res)})
+            }).then((res) => {console.log(res.status)})
         })
 
         phoneContainer.appendChild(newInputField)
