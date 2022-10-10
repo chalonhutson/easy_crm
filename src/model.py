@@ -13,10 +13,9 @@ from src import db
 
 #Model definition of tables for Easy CRM database.
 
-class User_info(UserMixin, db.Model):
+class User(UserMixin, db.Model):
 
-    __tablename__ = "user_info"
-    __table_args__ = {"extend_existing": True}
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     first_name = db.Column(db.String(25), nullable = False)
@@ -24,16 +23,21 @@ class User_info(UserMixin, db.Model):
     email = db.Column(db.String(99), nullable = False, unique = True)
     password = db.Column(db.String, nullable = False)
 
+    def __init__(self, first_name, last_name, email, password):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.password = password
+
     def __repr__(self):
-        return f"User Info Row || user_info_id={self.id}, fname={self.first_name}, lname={self.last_name}, email={self.email}"
+        return f"<User {self.first_name} {self.last_name} e={self.email}>"
 
 
-class Contacts(db.Model):
+class Contact(db.Model):
 
     __tablename__ = "contacts"
-    __table_args__ = {"extend_existing": True}
 
-    contact_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
+    id = db.Column(db.Integer, autoincrement = True, primary_key = True)
     user_info_id = db.Column(db.Integer, db.ForeignKey("user_info.id"))
     first_name = db.Column(db.String(25), nullable = True)
     last_name = db.Column(db.String(25), nullable = True)
@@ -41,8 +45,17 @@ class Contacts(db.Model):
     company = db.Column(db.String(50), nullable = True)
     bio = db.Column(db.String(2000), nullable = True)
 
+    def __init(self, contact_id, user_id, first_name, last_name, job_title, company, bio):
+        self.contact_id = contact_id
+        self.user_id = user_id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.job_title = job_title
+        self.company = company
+        self.bio = bio
+
     def __repr__(self):
-        return f"Contact Row || contact_id={self.contact_id}, id={self.user_info_id}, fname={self.first_name}, lname={self.last_name}"
+        return f"<Contact {self.first_name} {self.last_name}>"
 
 
 class Contacts_phone_numbers(db.Model):
