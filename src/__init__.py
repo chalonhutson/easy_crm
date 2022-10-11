@@ -46,11 +46,21 @@ db = SQLAlchemy(app)
 
 Migrate(app, db)
 
+##### CLOUDINARY
+import cloudinary
 
+cloudinary.config( 
+  cloud_name = environ["CLOUD_NAME"], 
+  api_key = environ["CLOUD_API_KEY"], 
+  api_secret = environ["CLOUD_API_SECRET_KEY"] 
+)
+
+import cloudinary.uploader
+import cloudinary.api
 
 
 import src.sql_controller as ctrl
-import src.app_forms
+import src.forms
 
 
 
@@ -73,14 +83,14 @@ def home():
         m_count = ctrl.return_count_meetings(current_user.id)
         return render_template("home.html", page_title = "Overview", first_name = current_user.first_name, last_name = current_user.last_name, contacts_count = c_count, meetings_count = m_count)
     else:
-        login = app_forms.LoginForm()
-        register = app_forms.RegisterForm()
+        login = forms.LoginForm()
+        register = forms.RegisterForm()
         user_dict = {"first_name": "My name is Jeff"}
         return render_template("index.html", page_title = "Home", login=login, register=register)
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
-    login = app_forms.LoginForm()
+    login = forms.LoginForm()
     if login.validate_on_submit():
         user = ctrl.attempt_login(login.email.data, login.password.data)
         
@@ -110,7 +120,7 @@ def logout():
     
 @app.route("/register", methods = ["GET", "POST"])
 def register():
-    register = app_forms.RegisterForm()
+    register = forms.RegisterForm()
     if register.validate_on_submit():
         first_name = register.first_name.data
         last_name = register.last_name.data
@@ -159,7 +169,7 @@ def add_meeting():
         return redirect(url_for("add_meeting"))
 
     else:
-        form = app_forms.MeetingForm()
+        form = forms.MeetingForm()
         form.edit_contact_list(current_user.id)
         return render_template("add-meeting.html", page_title="Add Meeting", form = form)
 
@@ -176,7 +186,7 @@ def add_note_meeting(meeting_id):
             flash("Something went wrong. Ensure you are meeting the note requirements.", "danger")
         return redirect(url_for("add_note_meeting", meeting_id = meeting_id))
     else:
-        form = app_forms.MeetingNote()
+        form = forms.MeetingNote()
         return render_template("add-note-meeting.html", page_title = f"Add Note to {meeting.meeting_title}", meeting = meeting, form = form)
 
 
@@ -193,7 +203,7 @@ def add_note_contact(contact_id):
             flash("Something went wrong. Ensure you are contact the note requirements.", "danger")
         return redirect(url_for("add_note_contact", contact_id = contact_id))
     else:
-        form = app_forms.ContactNote()
+        form = forms.ContactNote()
         return render_template("add-note-contact.html", page_title = f"Add Note for {contact.first_name} {contact.last_name}", contact = contact, form = form)
 
 
@@ -253,7 +263,7 @@ def add_contact():
 @login_required
 def add_email(contact_id):
     contact = ctrl.get_contact_by_id(contact_id)
-    form = app_forms.ContactEmail()
+    form = forms.ContactEmail()
 
     if request.method == "POST":
         new_email = request.form["email"]
@@ -270,7 +280,7 @@ def add_email(contact_id):
 @login_required
 def add_phone(contact_id):
     contact = ctrl.get_contact_by_id(contact_id)
-    form = app_forms.ContactPhone()
+    form = forms.ContactPhone()
 
     if request.method == "POST":
     # Validate on submit not working, investigate further.
@@ -301,7 +311,7 @@ def add_address(contact_id):
             flash("Something went wrong. Ensure you are meeting the address requirements.", "danger")
         return redirect(url_for("add_address", contact_id = contact_id))
     else:
-        form = app_forms.ContactAddress()
+        form = forms.ContactAddress()
         return render_template("add-address.html", page_title = "Add Address", contact = contact, form=form)
 
 @app.route("/add-social/<contact_id>", methods = ["GET", "POST"])
@@ -317,7 +327,7 @@ def add_social(contact_id):
             flash("Something went wrong. Ensure you are meeting the social requirements.", "danger")
         return redirect(url_for("add_social", contact_id = contact_id))
     else:
-        form = app_forms.ContactSocial()
+        form = forms.ContactSocial()
         return render_template("add-social.html", page_title = "Add Social", contact = contact, form=form)
 
 
@@ -465,7 +475,7 @@ def update_meeting():
                 flash("Something went wrong.", "danger")
             return redirect(url_for("individual_meeting", meeting_id = meeting.meeting_id))
         else:
-            form = app_forms.MeetingForm()
+            form = forms.MeetingForm()
             info = request.form["info"]
             if meeting.meeting_datetime is not None:
                 date, time = ctrl.get_readable_date_time(meeting.meeting_datetime)
@@ -496,36 +506,8 @@ def update_contact():
             else:
                 flash("Something went wrong.", "danger")
         else:
-            app_form = app_forms.ContactForm()
+            app_form = forms.ContactForm()
             return render_template("update-contact.html", page_title = f"Update {contact_full_name}'s {info}", contact_full_name = contact_full_name, contact = contact, info = info, form = app_form)
     flash("Something went wrong.", "danger")
     return redirect(url_for("contacts"))
 
-
-@app.route("/update-contact-phone", methods = ["POST"])
-@cross_origin(methods=["POST"])
-# @login_required
-def update_contact_phone():
-    print("huh")
-    phone_id = request.get_json()
-    # new_phone_number = request.form["new_phone_number"]
-
-    print(phone_id["phone_id"])
-    # print(new_phone_number)
-
-    return "updated", 201
-
-
-
-
-# connect_to_db(app)
-
-# Main run script
-# if __name__ == "__main__":
-#     # app.debug = False
-#     # app.jinja_env.auto_reload = app.debug
-
-
-#     # DebugToolbarExtension(app)
-
-#     app.run()
