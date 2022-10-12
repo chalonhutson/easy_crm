@@ -33,8 +33,8 @@ app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 #Replacing the "remember me" time from one day to thirty days.
 # app.config["REMEMBER_COOKIE_DURATION"] = timedelta(hours=24)
 app.config["REMEMBER_COOKIE_DURATION"] = timedelta(days=30)
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = environ["POSTGRES_URI"]
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+app.config["SQLALCHEMY_DATABASE_URI"] = environ["DATABASE_URI"]
 # app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
 # Secret key is needed for each session, and here is set in separate secrets.sh file, which is ignored by git.
 app.secret_key = environ["SESSION_SECRET_KEY"]
@@ -47,19 +47,10 @@ db = SQLAlchemy(app)
 Migrate(app, db)
 
 ##### CLOUDINARY
-import cloudinary
-
-cloudinary.config( 
-  cloud_name = environ["CLOUD_NAME"], 
-  api_key = environ["CLOUD_API_KEY"], 
-  api_secret = environ["CLOUD_API_SECRET_KEY"] 
-)
-
-import cloudinary.uploader
-import cloudinary.api
 
 
-import src.sql_controller as ctrl
+
+import src.controller as ctrl
 import src.forms
 
 
@@ -78,15 +69,8 @@ def page_not_found(e):
 @app.route("/home")
 @app.route("/")
 def home():
-    if current_user.is_authenticated:
-        c_count = ctrl.return_count_contacts(current_user.id)
-        m_count = ctrl.return_count_meetings(current_user.id)
-        return render_template("home.html", page_title = "Overview", first_name = current_user.first_name, last_name = current_user.last_name, contacts_count = c_count, meetings_count = m_count)
-    else:
-        login = forms.LoginForm()
-        register = forms.RegisterForm()
-        user_dict = {"first_name": "My name is Jeff"}
-        return render_template("index.html", page_title = "Home", login=login, register=register)
+    return ctrl.home()
+
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():

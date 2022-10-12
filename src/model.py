@@ -164,7 +164,7 @@ class Meeting(db.Model):
 
     notes = db.relationship("MeetingNote", backref="meeting", lazy=True)
 
-    def __init__(self, user_id, contact_id, title,, method, place, datetime):
+    def __init__(self, user_id, contact_id, title, method, place, datetime):
         self.user_id = user_id
         self.contact_id = contact_id
         self.title = title

@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
 
-from src.sql_controller import get_all_contacts_by_user
 
 class LoginForm(FlaskForm):
     email = StringField("email", validators = [DataRequired(), Email()])
@@ -36,16 +35,16 @@ class MeetingForm(FlaskForm):
     submit2 = SubmitField("update meeting")
 
     #This method needs to be called when the form is constructed on the page, in order to grab all of the user's contacts and display them on the drop down menu.
-    def edit_contact_list(self, user_id):
-        contacts = get_all_contacts_by_user(user_id, True)
-        contacts_list = []
-        contacts_list.append((None, "None"))
+    # def edit_contact_list(self, user_id):
+    #     contacts = get_all_contacts_by_user(user_id, True)
+    #     contacts_list = []
+    #     contacts_list.append((None, "None"))
 
-        for contact in contacts:
-            tuple = (contact.contact_id, f"{contact.first_name} {contact.last_name}")
-            contacts_list.append(tuple)
+    #     for contact in contacts:
+    #         tuple = (contact.contact_id, f"{contact.first_name} {contact.last_name}")
+    #         contacts_list.append(tuple)
 
-        self.contact.choices = contacts_list
+    #     self.contact.choices = contacts_list
 
 
 class ContactPhone(FlaskForm):
