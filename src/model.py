@@ -28,6 +28,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String, nullable = False)
 
     contacts = db.relationship("Contact", backref="user", lazy=True)
+    meetings = db.relationship("Meeting", backref="user", lazy=True)
 
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
