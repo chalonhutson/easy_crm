@@ -107,3 +107,17 @@ def register(app):
     else:
         flash("Something went wrong. Please double check the registration specifications and try again.", "danger")
         return redirect(url_for("home"))
+
+
+def contacts(app):
+  return render_template("contacts.html", page_title="Contacts")
+
+def meetings(app):
+  return render_template("meetings.html", page_title="Meetings")
+
+def add_contact(app, request, form):
+  if request.method == "GET":
+    return render_template("add-contact.html", page_title="Add Contact")
+  else:
+    print(form.first_name.data)
+    return "test"

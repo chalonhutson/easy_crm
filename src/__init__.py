@@ -81,6 +81,41 @@ def login():
 def logout():
     return ctrl.logout()
     
-@app.route("/register", methods = ["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     return ctrl.register(app)
+
+@app.route("/contacts")
+def contacts():
+    return ctrl.contacts(app)
+
+@app.route("/meetings")
+def meetings():
+    return "meetings"
+
+@app.route("/individual-contact/<contact_id>")
+def individual_contact(contact_id):
+    return str(contact_id)
+
+@app.route("/add-contact", methods=["GET", "POST"])
+def add_contact():
+    form = forms.ContactForm()
+    print(form.first_name.data)
+    return ctrl.add_contact(app, request, form)
+
+
+@app.route("/delete-contact/<contact_id>")
+def delete_contact(contact_id):
+    return f"Delete {contact_id}"
+
+@app.route("/add-meeting", methods=["GET", "POST"])
+def add_meeting():
+    return "add meeting"
+
+@app.route("/individual-meeting/<meeting_id>")
+def individual_meeting(meeting_id):
+    return f"Meeting {meeting_id}"
+
+@app.route("/delete-meeting/<meeting_id>")
+def delete_meeting(meeting_id):
+    return f"Delete meeting {meeting_id}"
