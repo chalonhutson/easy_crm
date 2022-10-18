@@ -7,7 +7,11 @@ from os import environ
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_login import LoginManager, UserMixin, login_user
-from src import db
+if __name__ == "__main__":
+    db = SQLAlchemy()
+else:
+    from src import db
+
 
 
 
@@ -24,6 +28,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String, nullable = False)
 
     contacts = db.relationship("Contact", backref="user", lazy=True)
+    meetings = db.relationship("Meeting", backref="user", lazy=True)
 
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
@@ -128,7 +133,12 @@ class ContactAddress(db.Model):
     county = db.Column(db.String(50), nullable = True)
     state = db.Column(db.String(50), nullable = True)
     country = db.Column(db.String(50), nullable = True)
-    zip = db.Column(db.String(9), nullable = True)
+    zipcode = db.Column(db.String(9), nullable = True)
+
+    def __init__(self, contact_id, street_address_1, street_address_2, city, county, state, country, zipcode):
+        self.contact_id = contact_id
+        self.street_address_1 = street_address_1
+        self.street_address_2 = street
 
     def __repr__(self):
         return f"Contact Address Row || id={self.contact_address_id}, contact_id={self.contact_id}, street1={self.street_address_1}, street2={self.street_address_2}, city={self.city}, county={self.county}, state={self.state}, country={self.country}, zip={self.zip}"
@@ -164,7 +174,7 @@ class Meeting(db.Model):
 
     notes = db.relationship("MeetingNote", backref="meeting", lazy=True)
 
-    def __init__(self, user_id, contact_id, title,, method, place, datetime):
+    def __init__(self, user_id, contact_id, title, method, place, datetime):
         self.user_id = user_id
         self.contact_id = contact_id
         self.title = title
@@ -181,7 +191,7 @@ class MeetingNote(db.Model):
     __tablename__ = "meetings_notes"
 
     id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    meeting_id = db.Column(db.Integer, db.ForeignKey("meetings.meeting_id"), nullable = False)
+    meeting_id = db.Column(db.Integer, db.ForeignKey("meetings.id"), nullable = False)
     note = db.Column(db.String(5000), nullable = False)
 
     def __init__(self, meeting_id, note):
@@ -190,3 +200,12 @@ class MeetingNote(db.Model):
 
     def __repr__(self):
         return f"<Meeting Note {self.id}>"
+
+if __name__ == "__main__":
+    from flask import Flask
+    app = Flask(__name__)
+    app.config["SQLALCHEMY_DATABASE_URI"] = environ["DATABASE_URI"]
+    db.app = app
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
