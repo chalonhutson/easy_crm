@@ -91,7 +91,7 @@ def contacts():
 
 @app.route("/meetings")
 def meetings():
-    return "meetings"
+    return ctrl.meetings(app)
 
 @app.route("/individual-contact/<contact_id>")
 def individual_contact(contact_id):
