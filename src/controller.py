@@ -20,10 +20,11 @@ cloudinary.config(
 def get_user_by_id(user_id):
   return User.query.get(user_id)
 
-def attempt_registration(app, first_name, last_name, email, pass_hash):
+def attempt_registration(app, db, first_name, last_name, email, password):
   try:
     with app.app_context():
-      new_user = User(first_name, last_name, email, pass_hash)
+      new_user = User(first_name, last_name, email, password)
+      print("attempted")
       db.session.add(new_user)
       print("here")
       db.session.commit()
@@ -79,21 +80,21 @@ def logout():
     flash("You are logged out.", "success")
     return redirect(url_for("home"))  
 
-def register(app):
-    register = forms.RegisterForm()
-    if register.validate_on_submit():
-        first_name = register.first_name.data
-        last_name = register.last_name.data
-        email = register.email.data
-        password = register.password.data
+def register(app, db):
+    register_form = forms.RegisterForm()
+    if register_form.validate_on_submit():
+        first_name = register_form.first_name.data
+        last_name = register_form.last_name.data
+        email = register_form.email.data
+        password = register_form.password.data
         with app.app_context():
           user = User.query.filter_by(email=email).first()
           # return str(user)
         if not user:
-            pass_hash = generate_password_hash(password)
-            new_user = attempt_registration(app, first_name, last_name, email, pass_hash)
+            # pass_hash = generate_password_hash(password)
+            new_user = attempt_registration(app, db, first_name, last_name, email, password)
             if new_user:
-                user = attempt_login(email, password)
+                user = attempt_login(app, email, password)
                 if login:
                     login_user(user)
                     flash("You have successfully registered and are now logged in.", "success")
@@ -109,15 +110,28 @@ def register(app):
         return redirect(url_for("home"))
 
 
+def individual_contact(contact_id):
+  contact = Contact.query.get(contact_id)
+  return render_template("individual-contact.html", page_title=contact.get_full_name(), contact=contact)
+
 def contacts(app):
-  return render_template("contacts.html", page_title="Contacts")
+  contacts = Contact.query.filter_by(user_id=current_user.id).all()
+  return render_template("contacts.html", page_title="Contacts", contacts=contacts)
 
 def meetings(app):
   return render_template("meetings.html", page_title="Meetings")
 
-def add_contact(app, request, form):
+def add_contact(app, db, request):
+  form = forms.ContactForm()
   if request.method == "GET":
-    return render_template("add-contact.html", page_title="Add Contact")
+    return render_template("add-contact.html", page_title="Add Contact", form=form)
   else:
-    print(form.first_name.data)
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+    job_title = form.job_title.data
+    company = form.company.data
+    bio = form.bio.data
+    new_contact = Contact(current_user.id, first_name, last_name, job_title, company, bio)
+    db.session.add(new_contact)
+    db.session.commit()
     return "test"

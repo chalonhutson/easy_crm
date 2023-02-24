@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block body %}
-{% from 'macros.html' import update_button %}
 {% from 'macros.html' import import_styles %}
 {% from 'macros.html' import back_to_contacts %}
 
@@ -17,14 +16,13 @@
         {% else %}
             <h1>no name for contact</h1>
             {% endif %}
-            {{  update_button("update_contact", "contact_id", contact.contact_id, "name", "POST")}}
+            
         </div>
         
     <div class="horizontal-section">
         <div class="contact-meeting-info" id="contact-title">
             <div class="contact-meeting-title">
                 <h2 class="contact-header">Title</h2>
-                {{ update_button("update_contact", "contact_id", contact.contact_id, "title", "POST")}} 
             </div>
             {% if contact.job_title|length > 0 %}
             {{ contact.job_title }}
@@ -36,7 +34,6 @@
         <div class="contact-meeting-info" id="contact-company">
             <div class="contact-meeting-title">
                 <h2 class="contact-header">Company</h2>
-                {{  update_button("update_contact", "contact_id", contact.contact_id, "company", "POST")}} 
             </div>
             {% if contact.company is not none %}
             {{ contact.company }}
@@ -50,7 +47,6 @@
         <div class="contact-meeting-info">
             <div class="contact-meeting-title" id="contact-bio">
                 <h2 class="contact-header">Bio</h2>
-                {{  update_button("update_contact", "contact_id", contact.contact_id, "bio", "POST")}} 
             </div>
             {% if contact.bio|length > 0 %}
             {{ contact.bio }}
@@ -65,7 +61,7 @@
 <div id="phone-numbers-section" class="section-container">
     <div class="horizontal-section">
         <h2 class="contact-header">Phone Numbers</h2>
-        <button class="main-button"><a href="{{ url_for('add_phone', contact_id = contact.contact_id) }}">
+        <button class="main-button"><a href="{{ url_for('add_phone', contact_id = contact.id) }}">
             {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
             add phone to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
             {% else %}
@@ -74,7 +70,7 @@
         </a></button>
     </div>
     
-    {% if phones is not none %}
+    {% if contact.phone_numbers|length > 0 %}
         {% for phone in phones %}
             <div
                 id="{{ 'phone_num_' + phone.contact_phone_number_id|string }}" 
@@ -83,9 +79,6 @@
                 ({{ phone.phone_number[0:3] }}) {{ phone.phone_number[3:6] }}-{{ phone.phone_number[6:10] }}
                 <div class="delete-btn">
                     <form  action="{{ url_for('delete_phone') }}" method="POST"><button class="main-button" name="delete_phone" value="{{ phone.contact_phone_number_id }}">delete</button></form>
-                <button id="{{phone.contact_phone_number_id}}" class="updatePhone + main-button">
-                    update
-                </button>
             </div>
         </div>
         {% endfor %}
@@ -103,7 +96,7 @@
     <div class="section-container">
         <div class="horizontal-section">
             <h2 class="contact-header">Emails</h2>
-            <button class="main-button"><a href="{{ url_for('add_email', contact_id = contact.contact_id) }}">
+            <button class="main-button"><a href="{{ url_for('add_email', contact_id = contact.id) }}">
                 {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
                 add email to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
                 {% else %}
@@ -112,19 +105,15 @@
             </a></button>
         </div>
         
-        {% if emails is not none %}
-        {% for email in emails %}
-        <div class="horizontal-section list-all-but-tables">
-            <div class="emails">
-                {{ email.email }}
+        {% if contact.emails|length > 0 %}
+            {% for email in emails %}
+            <div class="horizontal-section list-all-but-tables">
+                <div class="emails">
+                    {{ email.email }}
+                </div>
+                <div class="delete-btn"><form action="{{ url_for('delete_email') }}" method="POST"><button class="main-button" name="delete_email" value="{{ email.contact_email_id }}">delete</button></form></div>
             </div>
-            <div class="delete-btn"><form action="{{ url_for('delete_email') }}" method="POST"><button class="main-button" name="delete_email" value="{{ email.contact_email_id }}">delete</button></form></div>
-        </div>
-        <button id="{{email.contact_email_id}}" class="updateEmail + main-button">
-            update
-        </button>
-        {% endfor %}
-    
+            {% endfor %}
     {% else %}
         <div class="emails">
             No emails for this contact
@@ -137,7 +126,7 @@
 
     <div class="horizontal-section">
         <h2 class="contact-header">Addresses</h2>
-        <button class="main-button"><a href="{{ url_for('add_address', contact_id = contact.contact_id) }}">
+        <button class="main-button"><a href="{{ url_for('add_address', contact_id = contact.id) }}">
             {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
             add address to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
             {% else %}
@@ -147,7 +136,7 @@
     </div>
 
 
-    {% if addresses is not none %}
+    {% if contact.addresses|length > 0 %}
     <table>
         <tr>
             <th>address 1</th>
@@ -182,7 +171,7 @@
 
     <div class="horizontal-section">
         <h2 class="contact-header">Socials</h2>
-        <button class="main-button"><a href="{{ url_for('add_social', contact_id = contact.contact_id) }}">
+        <button class="main-button"><a href="{{ url_for('add_social', contact_id = contact.id) }}">
             {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
             add social to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
             {% else %}
@@ -190,25 +179,25 @@
             {% endif %}
         </a></button><br>
     </div>
-        {% if socials is not none %}
-    <table>
-        <tr>
-            <th>platform</th>
-            <th>address</th>
-        </tr>
-        {% for social in socials %}
-        <tr>
-            <td>{{ social.social_media }}</td>
-            <td>{{ social.social_media_address }}</td>
-            <td><form action="{{ url_for('delete_social') }}" method="POST"><button class="main-button" name="delete_social" value='{{ social.contact_social_media_id }}'>delete</button></form></td>
-        </tr>
-        {% endfor %}
-        {% else %}
-        no socials
+        {% if contact.social_medias|length > 0 %}
+            <table>
+                <tr>
+                    <th>platform</th>
+                    <th>address</th>
+                </tr>
+                    {% for social in contact.social_medias %}
+                    <tr>
+                            <td>{{ social.social_media }}</td>
+                            <td>{{ social.social_media_address }}</td>
+                            <td><form action="{{ url_for('delete_social') }}" method="POST"><button class="main-button" name="delete_social" value='{{ social.contact_social_media_id }}'>delete</button></form></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                no socials
+                
+                
+            </table>
         {% endif %}
-        
-        
-    </table>
     </div>
 </div>
 
@@ -217,7 +206,7 @@
 
     <div class="horizontal-section">
         <h2 class="contact-header">Notes</h2>
-        <button class="main-button"><a href="{{ url_for('add_note_contact', contact_id = contact.contact_id) }}">
+        <button class="main-button"><a href="{{ url_for('add_note_contact', contact_id = contact.id) }}">
             {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
             add note to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
             {% else %}
@@ -226,17 +215,17 @@
         </a></button>
     </div>
 
-    {% if notes is not none %}
-    {% for note in notes %}
-    <div class="horizontal-section list-all-but-tables">
-        {{ note.note }}
-        
-        <form action="{{ url_for('delete_note_contact') }}" method="POST"><button class="main-button delete-btn" name="delete_note_contact" value="{{ note.contact_note_id }}">delete</button></form>
-    </div>
-        
-    {% endfor %}
+    {% if contact.notes|length > 0 %}
+        {% for note in contact.notes %}
+            <div class="horizontal-section list-all-but-tables">
+                {{ note.note }}
+            
+                <form action="{{ url_for('delete_note_contact') }}" method="POST"><button class="main-button delete-btn"
+                        name="delete_note_contact" value="{{ note.contact_note_id }}">delete</button></form>
+            </div>
+        {% endfor %}
     {% else %}
-    no notes
+        no notes
     {% endif %}
 
 </div>

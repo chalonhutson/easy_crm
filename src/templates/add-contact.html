@@ -11,7 +11,19 @@
 
 <div class="section-container">
   
-  <form action="{{ url_for('add_contact') }}" method="post">
+  <form action="{{ url_for('add_contact') }}" method="POST">
+    {{ form.csrf_token }}
+    {{ form.first_name.label }}
+    {{ form.first_name }}
+    {{ form.last_name.label }}
+    {{ form.last_name }}
+    {{ form.job_title.label }}
+    {{ form.job_title }}
+    {{ form.company.label }}
+    {{ form.company }}
+    {{ form.bio.label }}
+    {{ form.bio }}
+    {{ form.submit }}
     <label for="fname">First name:</label><br>
     <input type="text" id="fname" name="fname"><br>
     <label for="lname">Last name:</label><br>

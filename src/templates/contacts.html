@@ -20,9 +20,9 @@
             <tr class = "contact-row">
                 
                 <td class = "contact-info" class = "first-name">
-                        <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
-                        {% if contact.name is not none %}
-                        {{ contact.name }}
+                        <a href="{{ url_for('individual_contact', contact_id=contact.id) }}">
+                        {% if contact.get_full_name() is not none %}
+                        {{ contact.get_full_name() }}
                         {% else %}
                         no name
                         {% endif %}
@@ -30,18 +30,18 @@
                     </td>
                     
                 <td class = "contact-info" class = "email">
-                    {% if contact.email is not none %}
-                        {{ contact.email.email }}
+                    {% if contact.emails|length > 0 %}
+                        {{ contact.emails[0] }}
                     {% else %}
                         no Email
                     {% endif %}
                 </td>
                 
                 <td class = "contact-info" class = "phone">
-                    {% if contact.phone is not none %}
-                    ({{ contact.phone.phone_number[0:3] }}) {{ contact.phone.phone_number[3:6] }}-{{ contact.phone.phone_number[6:10] }}
+                    {% if contact.phone_numbers|length > 0 %}
+                    ({{ contact.phone_numbers }}
                     {% else %}
-                    no Phone
+                    no phone
                     {% endif %}
                 </td>
                 
@@ -62,8 +62,8 @@
                 </td>
 
                 <td>
-                    <a href="{{ url_for('delete_contact', contact_id = contact.contact_id) }}">
-                        <button class="main-button" name="delete_contact" value="{{ contact.contact_id }}">DELETE</button>
+                    <a href="{{ url_for('delete_contact', contact_id=contact.id) }}">
+                        <button class="main-button" name="delete_contact" value="{{ contact.id }}">DELETE</button>
                     </a>
                 </td>
 

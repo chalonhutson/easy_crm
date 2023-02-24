@@ -83,7 +83,7 @@ def logout():
     
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    return ctrl.register(app)
+    return ctrl.register(app, db)
 
 @app.route("/contacts")
 def contacts():
@@ -95,13 +95,11 @@ def meetings():
 
 @app.route("/individual-contact/<contact_id>")
 def individual_contact(contact_id):
-    return str(contact_id)
+    return ctrl.individual_contact(contact_id)
 
 @app.route("/add-contact", methods=["GET", "POST"])
 def add_contact():
-    form = forms.ContactForm()
-    print(form.first_name.data)
-    return ctrl.add_contact(app, request, form)
+    return ctrl.add_contact(app, db, request)
 
 
 @app.route("/delete-contact/<contact_id>")
@@ -119,3 +117,23 @@ def individual_meeting(meeting_id):
 @app.route("/delete-meeting/<meeting_id>")
 def delete_meeting(meeting_id):
     return f"Delete meeting {meeting_id}"
+
+@app.route("/add-phone/<contact_id>")
+def add_phone(contact_id):
+    return "add phone"
+
+@app.route("/add-email/<contact_id>")
+def add_email(contact_id):
+    return "add email"
+
+@app.route("/add-address/<contact_id>")
+def add_address(contact_id):
+    return "add address"
+
+@app.route("/add-social/<contact_id>")
+def add_social(contact_id):
+    return "add social"
+
+@app.route("/add-note/<contact_id>")
+def add_note_contact(contact_id):
+    return "add note"
