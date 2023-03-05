@@ -18,7 +18,8 @@
 
 <div class="section-container">
     
-    <form action="{{ url_for('add_social', contact_id = contact.contact_id) }}" method="post">
+    <form action="{{ url_for('add_social', contact_id = contact.id) }}" method="post">
+        {{ form.csrf_token }}
         {{ form.social_media.label }}
         {{ form.social_media }}<br>
         {{ form.social_media_address.label }}

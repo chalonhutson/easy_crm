@@ -17,7 +17,8 @@
 
 <div class="section-container">
     
-    <form action="{{ url_for('add_note_contact', contact_id = contact.contact_id) }}" method="POST">
+    <form action="{{ url_for('add_note_contact', contact_id = contact.id) }}" method="POST">
+        {{ form.csrf_token }}
         {{ form.note.label }}
         {{ form.note }}
         {{ form.submit(class="main-button") }}

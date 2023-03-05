@@ -62,7 +62,7 @@ class ContactAddress(FlaskForm):
     county = StringField("county", validators=[Length(max=50)])
     state = StringField("state", validators=[Length(max=50)])
     country = StringField("country", validators=[Length(max=50)])
-    zip = StringField("zip", validators=[Length(max=9)])
+    zipcode = StringField("zip", validators=[Length(max=9)])
     submit = SubmitField("add address")
 
 

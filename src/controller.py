@@ -8,7 +8,7 @@ import cloudinary
 import cloudinary.api
 import cloudinary.uploader
 
-from src.model import User, Contact
+from src.model import User, Contact, ContactPhoneNumber, ContactEmail, ContactAddress, ContactSocialMedia, ContactNote
 import src.forms as forms
 
 cloudinary.config( 
@@ -134,4 +134,78 @@ def add_contact(app, db, request):
     new_contact = Contact(current_user.id, first_name, last_name, job_title, company, bio)
     db.session.add(new_contact)
     db.session.commit()
-    return "test"
+    flash("Contact added.")
+    return redirect(url_for("contacts"))
+
+def add_phone(app, db, contact_id, request):
+  form = forms.ContactPhone()
+
+  if form.validate_on_submit():
+    phone_number = form.phone.data
+    new_phone = ContactPhoneNumber(contact_id, phone_number)
+    db.session.add(new_phone)
+    db.session.commit()
+    return redirect(url_for("individual_contact", contact_id=contact_id))
+  else:
+    contact = Contact.query.get(contact_id)
+    return render_template("add-phone.html", form=form, contact=contact, page_title=f"Add Phone")
+
+def add_email(app, db, contact_id, request):
+  form = forms.ContactEmail()
+
+  if form.validate_on_submit():
+    email = form.email.data
+    new_email = ContactEmail(contact_id, email)
+    db.session.add(new_email)
+    db.session.commit()
+    return redirect(url_for("individual_contact", contact_id=contact_id))
+  else:
+    contact = Contact.query.get(contact_id)
+    return render_template("add-email.html", form=form, contact=contact, page_title=f"Add Email")
+
+
+def add_address(app, db, contact_id, request):
+  form = forms.ContactAddress()
+
+  if form.validate_on_submit():
+    address_1 = form.address_1.data
+    address_2 = form.address_2.data
+    city = form.city.data
+    county = form.county.data
+    state = form.state.data
+    country = form.country.data
+    zipcode = form.zipcode.data
+    new_address = ContactAddress(contact_id, address_1, address_2, city, county, state, country, zipcode)
+    db.session.add(new_address)
+    db.session.commit()
+    return redirect(url_for("individual_contact", contact_id=contact_id))
+  else:
+    contact = Contact.query.get(contact_id)
+    return render_template("add-address.html", form=form, contact=contact, page_title=f"Add Address")
+
+def add_social(app, db, contact_id, request):
+  form = forms.ContactSocial()
+
+  if form.validate_on_submit():
+    social_media = form.social_media.data
+    social_media_address = form.social_media_address.data
+    new_social = ContactSocialMedia(contact_id, social_media, social_media_address)
+    db.session.add(new_social)
+    db.session.commit()
+    return redirect(url_for("individual_contact", contact_id=contact_id))
+  else:
+    contact = Contact.query.get(contact_id)
+    return render_template("add-social.html", form=form, contact=contact, page_title=f"Add Social")
+
+def add_note_contact(app, db, contact_id, request):
+  form = forms.ContactNote()
+
+  if form.validate_on_submit():
+    note = form.note.data
+    new_note = ContactNote(contact_id, note)
+    db.session.add(new_note)
+    db.session.commit()
+    return redirect(url_for("individual_contact", contact_id=contact_id))
+  else:
+    contact = Contact.query.get(contact_id)
+    return render_template("add-note-contact.html", form=form, contact=contact, page_title=f"Add Note")

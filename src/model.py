@@ -121,7 +121,7 @@ class ContactSocialMedia(db.Model):
     def __init__(self, contact_id, social_media, social_media_address):
         self.contact_id = contact_id
         self.social_media = social_media
-        self.social_media_address = social
+        self.social_media_address = social_media_address
 
     def __repr__(self):
         return f"<Contact Social Media {self.social_media_address}>"
@@ -144,7 +144,12 @@ class ContactAddress(db.Model):
     def __init__(self, contact_id, street_address_1, street_address_2, city, county, state, country, zipcode):
         self.contact_id = contact_id
         self.street_address_1 = street_address_1
-        self.street_address_2 = street
+        self.street_address_2 = street_address_2
+        self.city = city
+        self.county = county
+        self.state = state
+        self.country = country
+        self.zipcode = zipcode
 
     def __repr__(self):
         return f"Contact Address Row || id={self.contact_address_id}, contact_id={self.contact_id}, street1={self.street_address_1}, street2={self.street_address_2}, city={self.city}, county={self.county}, state={self.state}, country={self.country}, zip={self.zip}"

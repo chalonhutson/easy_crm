@@ -118,22 +118,42 @@ def individual_meeting(meeting_id):
 def delete_meeting(meeting_id):
     return f"Delete meeting {meeting_id}"
 
-@app.route("/add-phone/<contact_id>")
+@app.route("/add-phone/<contact_id>", methods=["GET", "POST"])
 def add_phone(contact_id):
-    return "add phone"
+    return ctrl.add_phone(app, db, contact_id, request)
 
-@app.route("/add-email/<contact_id>")
+@app.route("/add-email/<contact_id>", methods=["GET", "POST"])
 def add_email(contact_id):
-    return "add email"
+    return ctrl.add_email(app, db, contact_id, request)
 
-@app.route("/add-address/<contact_id>")
+@app.route("/add-address/<contact_id>", methods=["GET", "POST"])
 def add_address(contact_id):
-    return "add address"
+    return ctrl.add_address(app, db, contact_id, request)
 
-@app.route("/add-social/<contact_id>")
+@app.route("/add-social/<contact_id>", methods=["GET", "POST"])
 def add_social(contact_id):
-    return "add social"
+    return ctrl.add_social(app, db, contact_id, request)
 
-@app.route("/add-note/<contact_id>")
+@app.route("/add-note-contact/<contact_id>", methods=["GET", "POST"])
 def add_note_contact(contact_id):
-    return "add note"
+    return ctrl.add_note_contact(app, db, contact_id, request)
+
+@app.route("/delete-phone/<phone_id>")
+def delete_phone(phone_id):
+    return "delete phone"
+
+@app.route("/delete-email/<email_id>")
+def delete_email(email_id):
+    return "delete email"
+
+@app.route("/delete-address/<address_id>")
+def delete_address(address_id):
+    return "delete address"
+
+@app.route("/delete-social/<social_id>")
+def delete_social(social_id):
+    return "delete social"
+
+@app.route("/delete-note/<note_id>")
+def delete_note(note_id):
+    return "delete note"

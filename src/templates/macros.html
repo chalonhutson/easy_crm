@@ -7,7 +7,7 @@
 {% endmacro %}
 
 {% macro back_to_contact(contact) %}
-<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}"><button class="main-button">
+<a href="{{ url_for('individual_contact', contact_id = contact.id) }}"><button class="main-button">
     {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
     back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
     {% else %}
