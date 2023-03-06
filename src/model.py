@@ -183,6 +183,8 @@ class Meeting(db.Model):
     place = db.Column(db.String(100), nullable = True)
     datetime = db.Column(db.DateTime, nullable = True)
 
+    contact = db.relationship("Contact", backref="meetings", lazy=False)
+
     notes = db.relationship("MeetingNote", backref="meeting", lazy=False)
 
     def __init__(self, user_id, contact_id, title, method, place, datetime):

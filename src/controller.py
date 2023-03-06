@@ -8,7 +8,7 @@ import cloudinary
 import cloudinary.api
 import cloudinary.uploader
 
-from src.model import User, Contact, ContactPhoneNumber, ContactEmail, ContactAddress, ContactSocialMedia, ContactNote
+from src.model import User, Contact, ContactPhoneNumber, ContactEmail, ContactAddress, ContactSocialMedia, ContactNote, Meeting
 import src.forms as forms
 
 cloudinary.config( 
@@ -118,8 +118,6 @@ def contacts(app):
   contacts = Contact.query.filter_by(user_id=current_user.id).all()
   return render_template("contacts.html", page_title="Contacts", contacts=contacts)
 
-def meetings(app):
-  return render_template("meetings.html", page_title="Meetings")
 
 def add_contact(app, db, request):
   form = forms.ContactForm()
@@ -209,3 +207,27 @@ def add_note_contact(app, db, contact_id, request):
   else:
     contact = Contact.query.get(contact_id)
     return render_template("add-note-contact.html", form=form, contact=contact, page_title=f"Add Note")
+
+# Meetings
+
+def meetings(app):
+  return render_template("meetings.html", page_title="Meetings")
+
+def add_meeting(app, db, request):
+  form = forms.MeetingForm()
+  form.update_contact_list(current_user.contacts)
+
+  if form.validate_on_submit():
+    title = form.title.data
+    contact_id = form.contact.data
+    method = form.method.data
+    place = form.place.data
+    datetime = form.datetime.data
+
+    new_meeting = Meeting(current_user.id, contact_id, title, method, place, datetime)
+    db.session.add(new_meeting)
+    db.session.commit()
+    return redirect(url_for("meetings"))
+
+  else:
+    return render_template("add-meeting.html", page_title="Add Meeting", form=form)

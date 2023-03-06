@@ -11,7 +11,8 @@
 
 <div class="section-container">
 
-    <form action="{{ url_for('add_meeting') }}" method="post">
+    <form action="{{ url_for('add_meeting') }}" method="POST">
+        {{ form.csrf_token }}
         {{ form.title.label }}
         {{ form.title }}<br>
         {{ form.contact.label }}
@@ -20,8 +21,8 @@
         {{ form.method }}<br>
         {{ form.place.label }}
         {{ form.place }}<br>
-        <label for="datetime">date and time</label>
-        <input type="datetime-local" id="datetime" name="datetime"><br>
+        {{ form.datetime.label }}
+        {{ form.datetime }}
         {{ form.submit(class="main-button") }}
     </form>
     

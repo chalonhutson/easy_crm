@@ -85,13 +85,12 @@ def logout():
 def register():
     return ctrl.register(app, db)
 
+# Contacts
+
 @app.route("/contacts")
 def contacts():
     return ctrl.contacts(app)
 
-@app.route("/meetings")
-def meetings():
-    return ctrl.meetings(app)
 
 @app.route("/individual-contact/<contact_id>")
 def individual_contact(contact_id):
@@ -106,17 +105,6 @@ def add_contact():
 def delete_contact(contact_id):
     return f"Delete {contact_id}"
 
-@app.route("/add-meeting", methods=["GET", "POST"])
-def add_meeting():
-    return "add meeting"
-
-@app.route("/individual-meeting/<meeting_id>")
-def individual_meeting(meeting_id):
-    return f"Meeting {meeting_id}"
-
-@app.route("/delete-meeting/<meeting_id>")
-def delete_meeting(meeting_id):
-    return f"Delete meeting {meeting_id}"
 
 @app.route("/add-phone/<contact_id>", methods=["GET", "POST"])
 def add_phone(contact_id):
@@ -157,3 +145,21 @@ def delete_social(social_id):
 @app.route("/delete-note/<note_id>")
 def delete_note(note_id):
     return "delete note"
+
+# Meetings
+
+@app.route("/meetings")
+def meetings():
+    return ctrl.meetings(app)
+
+@app.route("/add-meeting", methods=["GET", "POST"])
+def add_meeting():
+    return ctrl.add_meeting(app, db, request)
+
+@app.route("/individual-meeting/<meeting_id>")
+def individual_meeting(meeting_id):
+    return f"Meeting {meeting_id}"
+
+@app.route("/delete-meeting/<meeting_id>")
+def delete_meeting(meeting_id):
+    return f"Delete meeting {meeting_id}"
