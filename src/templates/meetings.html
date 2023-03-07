@@ -19,46 +19,39 @@
         
         <tr class = "meeting-row">
                 <td class = "meeting-info" class = "first-name">
-                    <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
-                    {% if meeting.meeting_title is not none %}
-                        {{ meeting.meeting_title }}
+                    <a href="{{ url_for('individual_meeting', meeting_id = meeting.id) }}">
+                    {% if meeting.title is not none %}
+                        {{ meeting.title }}
                     {% else %}
                         no meeting title
                     {% endif %}
                 </a>
                 </td>
                 <td class = "meeting-info" class = "contact">
-                    {% if meeting.meeting_contact is not none %}
-                        {{ meeting.meeting_contact.first_name }} {{ meeting.meeting_contact.last_name }}
+                    {% if meeting.contact is not none %}
+                        {{ meeting.contact.first_name }} {{ meeting.contact.last_name }}
                     {% else %}
                         no contact
                     {% endif %}
                 </td>
                 <td class = "meeting-info" class = "method">
-                    {% if meeting.meeting_method is not none %}
-                        {{ meeting.meeting_method }} 
+                    {% if meeting.method is not none %}
+                        {{ meeting.method }} 
                     {% else %}
                         no method
                     {% endif %}
                 </td>
                 <td class = "meeting-info" class = "place">
-                    {% if meeting.meeting_place is not none %}
-                        {{ meeting.meeting_place }} 
+                    {% if meeting.place is not none %}
+                        {{ meeting.place }} 
                     {% else %}
                         no place
                     {% endif %}
                 </td>
-                <td class = "meeting-info" class = "time">
-                    {% if meeting.meeting_date and meeting.meeting_time is not none %}
-                        {{ meeting.meeting_date }} 
-                        {{ meeting.meeting_time }} 
-                    {% else %}
-                        no time
-                    {% endif %}
-                </td>
+
                 <td>
-                    <a href="{{ url_for('delete_meeting', meeting_id = meeting.meeting_id) }}">
-                        <button class="main-button" name="delete_meeting" value="{{ meeting.meeting_id }}">DELETE</button>
+                    <a href="{{ url_for('delete_meeting', meeting_id = meeting.id) }}">
+                        <button class="main-button" name="delete_meeting" value="{{ meeting.id }}">DELETE</button>
                     </a>
                 </td>
 

@@ -83,38 +83,90 @@ def logout():
     
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    return ctrl.register(app)
+    return ctrl.register(app, db)
+
+# Contacts
 
 @app.route("/contacts")
 def contacts():
     return ctrl.contacts(app)
 
-@app.route("/meetings")
-def meetings():
-    return ctrl.meetings(app)
 
 @app.route("/individual-contact/<contact_id>")
 def individual_contact(contact_id):
-    return str(contact_id)
+    return ctrl.individual_contact(contact_id)
 
 @app.route("/add-contact", methods=["GET", "POST"])
 def add_contact():
-    form = forms.ContactForm()
-    print(form.first_name.data)
-    return ctrl.add_contact(app, request, form)
+    return ctrl.add_contact(app, db, request)
 
 
 @app.route("/delete-contact/<contact_id>")
 def delete_contact(contact_id):
     return f"Delete {contact_id}"
 
+
+@app.route("/add-phone/<contact_id>", methods=["GET", "POST"])
+def add_phone(contact_id):
+    return ctrl.add_phone(app, db, contact_id, request)
+
+@app.route("/add-email/<contact_id>", methods=["GET", "POST"])
+def add_email(contact_id):
+    return ctrl.add_email(app, db, contact_id, request)
+
+@app.route("/add-address/<contact_id>", methods=["GET", "POST"])
+def add_address(contact_id):
+    return ctrl.add_address(app, db, contact_id, request)
+
+@app.route("/add-social/<contact_id>", methods=["GET", "POST"])
+def add_social(contact_id):
+    return ctrl.add_social(app, db, contact_id, request)
+
+@app.route("/add-note-contact/<contact_id>", methods=["GET", "POST"])
+def add_note_contact(contact_id):
+    return ctrl.add_note_contact(app, db, contact_id, request)
+
+@app.route("/delete-phone/<phone_id>")
+def delete_phone(phone_id):
+    return "delete phone"
+
+@app.route("/delete-email/<email_id>")
+def delete_email(email_id):
+    return "delete email"
+
+@app.route("/delete-address/<address_id>")
+def delete_address(address_id):
+    return "delete address"
+
+@app.route("/delete-social/<social_id>")
+def delete_social(social_id):
+    return "delete social"
+
+@app.route("/delete-note/<note_id>")
+def delete_note(note_id):
+    return "delete note"
+
+# Meetings
+
+@app.route("/meetings")
+def meetings():
+    return ctrl.meetings(app)
+
 @app.route("/add-meeting", methods=["GET", "POST"])
 def add_meeting():
-    return "add meeting"
+    return ctrl.add_meeting(app, db, request)
+
+@app.route("/add-note-meeting/<meeting_id>", methods=["GET", "POST"])
+def add_note_meeting(meeting_id):
+    return ctrl.add_note_meeting(app, db, request, meeting_id)
+
+@app.route("/delete-note-meeting/<meeting_note_id>")
+def delete_note_meeting(meeting_note_id):
+    return ctrl.delete_note_meeting(app, db, meeting_note_id)
 
 @app.route("/individual-meeting/<meeting_id>")
 def individual_meeting(meeting_id):
-    return f"Meeting {meeting_id}"
+    return ctrl.individual_meeting(meeting_id)
 
 @app.route("/delete-meeting/<meeting_id>")
 def delete_meeting(meeting_id):

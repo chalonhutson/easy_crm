@@ -7,7 +7,7 @@
 {% endmacro %}
 
 {% macro back_to_contact(contact) %}
-<a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}"><button class="main-button">
+<a href="{{ url_for('individual_contact', contact_id = contact.id) }}"><button class="main-button">
     {% if contact.first_name|length > 0 and contact.last_name|length > 0 %}
     back to {{ contact.first_name.lower() }} {{ contact.last_name.lower() }}
     {% else %}
@@ -39,10 +39,10 @@
 {% endmacro %}
 
 {% macro back_to_individual_meeting(meeting) %}
-        <a href="{{ url_for('individual_meeting', meeting_id = meeting.meeting_id) }}">
+        <a href="{{ url_for('individual_meeting', meeting_id = meeting.id) }}">
             <button class="main-button">
-            {% if meeting.meeting_title is not none %}
-            back to {{ meeting.meeting_title.lower() }}
+            {% if meeting.title is not none %}
+            back to {{ meeting.title.lower() }}
             {% else %}
             back to meeting
             {% endif %}

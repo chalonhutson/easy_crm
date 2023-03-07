@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField, DateTimeField, DateField, DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
 
 
@@ -31,20 +31,16 @@ class MeetingForm(FlaskForm):
     contact = SelectField("contact", validators=[Optional()])
     method = StringField("method", validators=[Length(max=50), Optional()])
     place = StringField("place", validators=[Length(max=100), Optional()])
+    datetime = DateField("time")
     submit = SubmitField("add meeting")
     submit2 = SubmitField("update meeting")
 
     #This method needs to be called when the form is constructed on the page, in order to grab all of the user's contacts and display them on the drop down menu.
-    # def edit_contact_list(self, user_id):
-    #     contacts = get_all_contacts_by_user(user_id, True)
-    #     contacts_list = []
-    #     contacts_list.append((None, "None"))
+    def update_contact_list(self, contacts):
 
-    #     for contact in contacts:
-    #         tuple = (contact.contact_id, f"{contact.first_name} {contact.last_name}")
-    #         contacts_list.append(tuple)
+        contacts = [ (contact.id, f"{contact.first_name} {contact.last_name}") for contact in contacts ]
 
-    #     self.contact.choices = contacts_list
+        self.contact.choices = contacts
 
 
 class ContactPhone(FlaskForm):
@@ -62,7 +58,7 @@ class ContactAddress(FlaskForm):
     county = StringField("county", validators=[Length(max=50)])
     state = StringField("state", validators=[Length(max=50)])
     country = StringField("country", validators=[Length(max=50)])
-    zip = StringField("zip", validators=[Length(max=9)])
+    zipcode = StringField("zip", validators=[Length(max=9)])
     submit = SubmitField("add address")
 
 

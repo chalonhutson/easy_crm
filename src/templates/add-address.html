@@ -17,7 +17,8 @@
 
 <div class="section-container">
   
-  <form method="POST" action="{{ url_for('add_address', contact_id = contact.contact_id) }}">
+  <form method="POST" action="{{ url_for('add_address', contact_id = contact.id) }}">
+    {{ form.csrf_token }}
     <h2>New Address:</h2><br>
 
     <div class="horizontal-section">
@@ -39,8 +40,8 @@
     <div class="horizontal-section">
       {{ form.country.label }}
       {{ form.country }}
-      {{ form.zip.label(class="margin-left") }}
-      {{ form.zip }}
+      {{ form.zipcode.label(class="margin-left") }}
+      {{ form.zipcode }}
       {{ form.submit(class="main-button margin-left") }}
     </div>
   </form>
