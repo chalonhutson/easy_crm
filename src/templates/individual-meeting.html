@@ -14,12 +14,10 @@
 <div class="section-container">
 
     <div class="contact-meeting-title horizontal-section" id="meeting-title">
-        {% if meeting.meeting_title is not none and meeting.meeting_title|length > 0 %}
-            <h1>{{ meeting.meeting_title.lower() }}</h1>
-            {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "title", "POST")}}
+        {% if meeting.title is not none and meeting.title|length > 0 %}
+            <h1>{{ meeting.title.lower() }}</h1>
             {% else %}
             <h1>no meeting title</h1>
-            {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "title", "POST")}}
         {% endif %}
     </div>
 
@@ -28,12 +26,11 @@
         <div class="horizontal-section">
             <div class="contact-meeting-info contact-meeting-title">
                 <h2 class="contact-header">contact</h2>
-                {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "contact", "POST")}}
             </div>
         </div>
             {% if contact is not none %}
-                <a href="{{ url_for('individual_contact', contact_id = contact.contact_id) }}">
-                    <p>{{ contact.first_name }} {{ contact.last_name }}</p>
+                <a href="{{ url_for('individual_contact', contact_id = meeting.contact.id) }}">
+                    <p>{{ meeting.contact.first_name }} {{ meeting.contact.last_name }}</p>
                 </a>
             {% else %}
                 no contact for meeting
@@ -41,30 +38,14 @@
     </div>
 
 
-    <div id="meeting-coact">
-        <div class="horizontal-section">
-            <div class="contact-meeting-info contact-meeting-title">
-                <h2 class="contact-header">time</h2>
-                {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "time", "POST")}}
-            </div>
-        </div>
-            {% if date is not none %}
-            <div class="horizontal-section">
-                {{ date }}
-                <p class="margin-left">{{ time }}</p>
-            </div>    
-            {% else %}
-            no date set
-            {% endif %}
 
     <div id="meeting-method">
 
         <div class="horizontal-section contact-meeting-info contact-meeting-title">
             <h2 class="contact-header">method</h2>
-            {{  update_button("update_meeting", "meeting_id", meeting.meeting_id, "method", "POST")}}
         </div>
-            {% if meeting.meeting_method is not none %}
-                <p>{{ meeting.meeting_method }}</p>
+            {% if meeting.method is not none %}
+                <p>{{ meeting.method }}</p>
             {% else %}
                 no date set
             {% endif %}
@@ -77,21 +58,21 @@
 
     <div class="horizontal-section">
         <h2 class="contact-header">notes</h2>
-        <button class="main-button"><a href="{{ url_for('add_note_meeting', meeting_id = meeting.meeting_id) }}">
-            {% if meeting.meeting_title is not none %}
-                add note to {{ meeting.meeting_title.lower() }}
+        <button class="main-button"><a href="{{ url_for('add_note_meeting', meeting_id = meeting.id) }}">
+            {% if meeting.title is not none %}
+                add note to {{ meeting.title.lower() }}
             {% else %}
                 add note to meeting
             {% endif %}
         
         </a></button>
     </div>
-    {% if notes|length > 0 %}
-        {% for note in notes %}
+    {% if meeting.notes|length > 0 %}
+        {% for note in meeting.notes %}
         <div class="horizontal-section list-all-but-tables">
             {{ note.note }}
 
-            <form action="{{ url_for('delete_note_meeting') }}" method="POST"><button class="main-button delete-btn" name="delete_note_meeting" value="{{ note.meeting_note_id }}">delete</button></form>
+            <a href="{{ url_for('delete_note_meeting', meeting_note_id=note.id) }}"><button class="main-button delete-btn" name="delete_note_meeting" value="{{ note.id }}">delete</button></a>
         </div>
         {% endfor %}
     {% else %}

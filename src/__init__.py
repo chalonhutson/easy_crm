@@ -156,9 +156,17 @@ def meetings():
 def add_meeting():
     return ctrl.add_meeting(app, db, request)
 
+@app.route("/add-note-meeting/<meeting_id>", methods=["GET", "POST"])
+def add_note_meeting(meeting_id):
+    return ctrl.add_note_meeting(app, db, request, meeting_id)
+
+@app.route("/delete-note-meeting/<meeting_note_id>")
+def delete_note_meeting(meeting_note_id):
+    return ctrl.delete_note_meeting(app, db, meeting_note_id)
+
 @app.route("/individual-meeting/<meeting_id>")
 def individual_meeting(meeting_id):
-    return f"Meeting {meeting_id}"
+    return ctrl.individual_meeting(meeting_id)
 
 @app.route("/delete-meeting/<meeting_id>")
 def delete_meeting(meeting_id):

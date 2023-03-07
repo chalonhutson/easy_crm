@@ -8,7 +8,7 @@ import cloudinary
 import cloudinary.api
 import cloudinary.uploader
 
-from src.model import User, Contact, ContactPhoneNumber, ContactEmail, ContactAddress, ContactSocialMedia, ContactNote, Meeting
+from src.model import User, Contact, ContactPhoneNumber, ContactEmail, ContactAddress, ContactSocialMedia, ContactNote, Meeting, MeetingNote
 import src.forms as forms
 
 cloudinary.config( 
@@ -231,3 +231,28 @@ def add_meeting(app, db, request):
 
   else:
     return render_template("add-meeting.html", page_title="Add Meeting", form=form)
+
+def add_note_meeting(app, db, request, meeting_id):
+  form = forms.MeetingNote()
+
+  if form.validate_on_submit():
+    note = form.note.data
+    new_meeting_note = MeetingNote(meeting_id, note)
+    db.session.add(new_meeting_note)
+    db.session.commit()
+    return redirect(url_for("individual_meeting", meeting_id=meeting_id))
+  else:
+    meeting = Meeting.query.get(meeting_id)
+    return render_template("add-note-meeting.html", page_title="Add Meeting Note", meeting=meeting, form=form)
+
+def delete_note_meeting(app, db, meeting_note_id):
+  meeting_note = Meeting.query.get(meeting_note_id)
+  print(meeting_note)
+  db.session.delete(meeting_note)
+  db.session.commit()
+  flash("Message deleted.", "success")
+  return redirect(url_for("individual_meeting", meeting_id=meeting_id))
+
+def individual_meeting(meeting_id):
+  meeting = Meeting.query.get(meeting_id)
+  return render_template("individual-meeting.html", page_title="Meeting", meeting=meeting)
