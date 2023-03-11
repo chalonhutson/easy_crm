@@ -27,12 +27,11 @@ login_manager.login_view = "home"
 login_manager.login_message = "Please login to continue."
 login_manager.login_message_category = "danger"
 
-basedir = os.path.abspath(os.path.dirname(__file__))
 # This line prevents (or allows if set to True) Flask from taking you to a separate screen during debug mode, when you are redirected.
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 #Replacing the "remember me" time from one day to thirty days.
 # app.config["REMEMBER_COOKIE_DURATION"] = timedelta(hours=24)
-app.config["REMEMBER_COOKIE_DURATION"] = timedelta(days=30)
+app.config["REMEMBER_COOKIE_DURATION"] = timedelta(days=7)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = environ["DATABASE_URI"]
 # app.config["SQLALCHEMY_DATABASE_URI"] = environ["HEROKU_POSTGRESQL_JADE_URL2"]
