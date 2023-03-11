@@ -78,7 +78,7 @@
                 data-value="{{phone.phone_number}}">
                 ({{ phone.phone_number[0:3] }}) {{ phone.phone_number[3:6] }}-{{ phone.phone_number[6:10] }}
                 <div class="delete-btn">
-                    <form  action="{{ url_for('delete_phone', phone_id=phone.id) }}" method="POST"><button class="main-button" name="delete_phone" value="{{ phone.id }}">delete</button></form>
+                    <a href="{{ url_for('delete_phone', phone_id=phone.id) }}"><button class="main-button" name="delete_phone" value="{{ phone.id }}">delete</button></a>
             </div>
         </div>
         {% endfor %}
@@ -111,7 +111,7 @@
                 <div class="emails">
                     {{ email.email }}
                 </div>
-                <div class="delete-btn"><form action="{{ url_for('delete_email', email_id=email.id) }}" method="POST"><button class="main-button" name="delete_email" value="{{ email.id }}">delete</button></form></div>
+                <div class="delete-btn"><a href="{{ url_for('delete_email', email_id=email.id) }}"><button class="main-button" name="delete_email" value="{{ email.id }}">delete</button></a></div>
             </div>
             {% endfor %}
     {% else %}
@@ -156,7 +156,7 @@
             <td>{{ address.state }}</td>
             <td>{{ address.country }}</td>
             <td>{{ address.zipcode }}</td>
-            <td><form action="{{ url_for('delete_address', address_id=address.id) }}" method="POST"><button class="main-button" name="delete_address" value='{{ address.id }}'>delete</button></form></td>
+            <td><a href="{{ url_for('delete_address', address_id=address.id) }}"><button class="main-button" name="delete_address" value='{{ address.id }}'>delete</button></a></td>
         </tr>
         {% endfor %}
     </table>
@@ -179,8 +179,8 @@
                 {% endif %}
             </a></button><br>
     </div>
-        {% if contact.social_medias|length > 0 %}
         <table>
+        {% if contact.social_medias|length > 0 %}
             <tr>
                 <th>platform</th>
                 <th>address</th>
@@ -190,8 +190,8 @@
                 <td>{{ social.social_media }}</td>
                 <td>{{ social.social_media_address }}</td>
                 <td>
-                    <form action="{{ url_for('delete_social', social_id=social.id) }}" method="POST"><button
-                            class="main-button" name="delete_social" value='{{ social.id }}'>delete</button></form>
+                    <a href="{{ url_for('delete_social', social_id=social.id) }}"><button
+                            class="main-button" name="delete_social" value='{{ social.id }}'>delete</button></a>
                 </td>
             </tr>
             {% endfor %}
@@ -199,8 +199,8 @@
             no socials
 
 
+            {% endif %}
         </table>
-        {% endif %}
 </div>
 
 
@@ -222,8 +222,8 @@
     <div class="horizontal-section list-all-but-tables">
         {{ note.note }}
 
-        <form action="{{ url_for('delete_note', note_id=note.id) }}" method="POST"><button
-                class="main-button delete-btn" name="delete_note_contact" value="{{ note.id }}">delete</button></form>
+        <a href="{{ url_for('delete_note_contact', note_id=note.id) }}"><button
+                class="main-button delete-btn" name="delete_note_contact" value="{{ note.id }}">delete</button></a>
     </div>
     {% endfor %}
     {% else %}
