@@ -222,7 +222,7 @@
     <div class="horizontal-section list-all-but-tables">
         {{ note.note }}
 
-        <a href="{{ url_for('delete_note', note_id=note.id) }}"><button
+        <a href="{{ url_for('delete_note_contact', note_id=note.id) }}"><button
                 class="main-button delete-btn" name="delete_note_contact" value="{{ note.id }}">delete</button></a>
     </div>
     {% endfor %}

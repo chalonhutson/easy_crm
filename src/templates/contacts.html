@@ -31,7 +31,7 @@
                     
                 <td class = "contact-info" class = "email">
                     {% if contact.emails|length > 0 %}
-                        {{ contact.emails[0] }}
+                        {{ contact.emails[0].email }}
                     {% else %}
                         no Email
                     {% endif %}
@@ -39,7 +39,7 @@
                 
                 <td class = "contact-info" class = "phone">
                     {% if contact.phone_numbers|length > 0 %}
-                    ({{ contact.phone_numbers }}
+                        {{ contact.phone_numbers[0].get_readable_number() }}
                     {% else %}
                     no phone
                     {% endif %}

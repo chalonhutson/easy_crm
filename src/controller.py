@@ -208,6 +208,95 @@ def add_note_contact(app, db, contact_id, request):
     contact = Contact.query.get(contact_id)
     return render_template("add-note-contact.html", form=form, contact=contact, page_title=f"Add Note")
 
+
+# Contact delete functions
+
+def delete_contact(app, db, contact_id):
+
+  contact = Contact.query.get(contact_id)
+    
+  try:
+    for phone in contact.phone_numbers:
+      db.session.delete(phone)
+      db.session.commit()
+    
+    for email in contact.emails:
+      db.session.delete(email)
+      db.session.commit()
+
+    for social in contact.social_medias:
+      db.session.delete(social)
+      db.session.commit()
+
+    for address in contact.addresses:
+      db.session.delete(address)
+      db.session.commit()
+
+    for note in contact.notes:
+      db.session.delete(note)
+      db.session.commit()
+
+    for meeting in contact.meetings:
+      for note in meeting.notes:
+        db.session.delete(note)
+        db.session.commit()
+      db.session.delete(meeting)
+
+    db.session.delete(contact)
+    db.session.commit()
+    flash("Contact deleted.", "success")
+  except:
+    flash("Something went wrong with the deletion of the contact.", "danger")
+
+  return redirect(url_for("contacts"))
+
+
+def delete_phone(app, db, phone_id):
+  phone = ContactPhoneNumber.query.get(phone_id)
+  contact_id = phone.contact.id
+  db.session.delete(phone)
+  db.session.commit()
+  flash("Phone number deleted", "success")
+  return redirect(url_for("individual_contact", contact_id=contact_id))
+
+def delete_email(app, db, email_id):
+  email = ContactEmail.query.get(email_id)
+  contact_id = email.contact.id
+  db.session.delete(email)
+  db.session.commit()
+  flash("Email deleted", "success")
+  return redirect(url_for("individual_contact", contact_id=contact_id))
+
+def delete_address(app, db, address_id):
+  address = ContactAddress.query.get(address_id)
+  contact_id = address.contact.id
+  db.session.delete(address)
+  db.session.commit()
+  flash("Address deleted", "success")
+  return redirect(url_for("individual_contact", contact_id=contact_id))
+
+def delete_social(app, db, social_id):
+  social = ContactSocialMedia.query.get(social_id)
+  contact_id = social.contact.id
+  db.session.delete(social)
+  db.session.commit()
+  flash("Social deleted", "success")
+  return redirect(url_for("individual_contact", contact_id=contact_id))
+
+def delete_note_contact(app, db, note_id):
+  note = ContactNote.query.get(note_id)
+  contact_id = note.contact.id
+  db.session.delete(note)
+  db.session.commit()
+  flash("Note deleted", "success")
+  return redirect(url_for("individual_contact", contact_id=contact_id))
+
+
+
+
+
+
+
 # Meetings
 
 def meetings(app):
@@ -232,6 +321,18 @@ def add_meeting(app, db, request):
   else:
     return render_template("add-meeting.html", page_title="Add Meeting", form=form)
 
+def delete_meeting(app, db, meeting_id):
+  meeting = Meeting.query.get(meeting_id)
+
+  for note in meeting.notes:
+    db.session.delete(note)
+    db.session.commit()
+
+  db.session.delete(meeting)
+  db.session.commit()
+
+  return redirect(url_for("meetings"))
+
 def add_note_meeting(app, db, request, meeting_id):
   form = forms.MeetingNote()
 
@@ -246,7 +347,8 @@ def add_note_meeting(app, db, request, meeting_id):
     return render_template("add-note-meeting.html", page_title="Add Meeting Note", meeting=meeting, form=form)
 
 def delete_note_meeting(app, db, meeting_note_id):
-  meeting_note = Meeting.query.get(meeting_note_id)
+  meeting_note = MeetingNote.query.get(meeting_note_id)
+  meeting_id = meeting_note.meeting.id
   print(meeting_note)
   db.session.delete(meeting_note)
   db.session.commit()

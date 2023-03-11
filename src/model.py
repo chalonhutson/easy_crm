@@ -92,6 +92,9 @@ class ContactPhoneNumber(db.Model):
     def __repr__(self):
         return f"<Contact Phone Number {self.phone_number}>"
 
+    def get_readable_number(self):
+        return f"({self.phone_number[0:3]}) {self.phone_number[3:6]}-{self.phone_number[7:]}"
+
 
 class ContactEmail(db.Model):
 
